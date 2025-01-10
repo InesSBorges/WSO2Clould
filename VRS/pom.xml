@@ -9,7 +9,6 @@
   <name>VRS</name>
   <description>VRS</description>
   <modules>
-    <module>VRSRegistry</module>
     <module>VRSDataService</module>
   </modules>
   <scm>

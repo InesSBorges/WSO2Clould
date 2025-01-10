@@ -6,6 +6,10 @@
         {
             "name": "helloworld",
             "path": "HelloWorld"
+        },
+        {
+            "name": "vrs",
+            "path": "VRS"
         }
     ]
 }
