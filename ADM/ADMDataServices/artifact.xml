@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="ADM_ModuleDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_ModuleDB.dbs</file>
+    </artifact>
+    <artifact name="ADM_ConfigDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_ConfigDB.dbs</file>
+    </artifact>
+    <artifact name="ADM_CalculationTypeDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_CalculationTypeDB.dbs</file>
+    </artifact>
+    <artifact name="ADM_LanguageDescDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_LanguageDescDB.dbs</file>
+    </artifact>
+    <artifact name="ADM_TableDesc" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_TableDesc.dbs</file>
+    </artifact>
+    <artifact name="ADM_LanguageDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ADM_LanguageDB.dbs</file>
+    </artifact>
+    <artifact name="testeIN" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/testeIN.dbs</file>
+    </artifact>
+</artifacts>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="putLanguageDesc_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet extension-element-prefixes="date" version="2.0" xmlns:dat="http://ws.wso2.org/dataservice" xmlns:date="http://exslt.org/dates-and-times" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="id"/>
+        <xsl:template match="/">
+            <dat:putLanguageDesc>
+                <dat:IdLanguageDesc>
+                    <xsl:value-of select="$id"/>
+                </dat:IdLanguageDesc>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//smallDescription) > 0">
+                        <dat:DescriptionSmall>
+                            <xsl:value-of select="//requestModule//smallDescription"/>
+                        </dat:DescriptionSmall>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="string-length(//returnGetModule//dat:DescriptionSmall) > 0">
+                            <dat:DescriptionSmall>
+                                <xsl:value-of select="//returnGetModule//dat:DescriptionSmall"/>
+                            </dat:DescriptionSmall>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//mediumDescription) > 0">
+                        <dat:DescriptionMedium>
+                            <xsl:value-of select="//requestModule//mediumDescription"/>
+                        </dat:DescriptionMedium>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <dat:DescriptionMedium>
+                            <xsl:value-of select="//returnGetModule//dat:DescriptionMedium"/>
+                        </dat:DescriptionMedium>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//largeDescription) > 0">
+                        <dat:DescriptionLarge>
+                            <xsl:value-of select="//requestModule//largeDescription"/>
+                        </dat:DescriptionLarge>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="string-length(//returnGetModule//dat:DescriptionLarge) > 0">
+                            <dat:DescriptionSmall>
+                                <xsl:value-of select="//returnGetModule//dat:DescriptionLarge"/>
+                            </dat:DescriptionSmall>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <dat:LastUpdatedUser>
+                    <xsl:value-of select="//requestModule//operationUser"/>
+                </dat:LastUpdatedUser>
+                <dat:LastUpdatedDate>
+                    <xsl:value-of select="concat(translate(translate(date:date-time(), 'T', ' '), 'Z',''),'.000')"/>
+                </dat:LastUpdatedDate>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//active) > 0">
+                        <dat:Active>
+                            <xsl:value-of select="//requestModule//active"/>
+                        </dat:Active>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <dat:Active>
+                            <xsl:value-of select="//returnGetModule//dat:Active"/>
+                        </dat:Active>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </dat:putLanguageDesc>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

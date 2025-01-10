@@ -1,0 +1,1183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/ADM_REST/Module" name="ADM_Module" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET">
+        <inSequence>
+            <sequence key="validateToken"/>
+            <propertyGroup description="Define Variables">
+                <property expression="$ctx:query.param.operationUser" name="operationUser" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.offset" name="offset" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.pageSize" name="pageSize" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.id" name="id" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.code" name="code" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.userLanguage" name="userLanguage" scope="default" type="STRING"/>
+            </propertyGroup>
+            <filter regex="true" source="not($ctx:pageSize)">
+                <then>
+                    <payloadFactory description="getPageSize" media-type="xml">
+                        <format>
+                            <dat:getPageSize xmlns:dat="http://ws.wso2.org/dataservice"/>
+                        </format>
+                        <args/>
+                    </payloadFactory>
+                    <call>
+                        <endpoint>
+                            <http format="soap12" method="post" uri-template="local:///services/ADM_ConfigDB/">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <property expression="//*[local-name() = 'value']" name="pageSize" scope="default" type="STRING"/>
+                </then>
+                <else/>
+            </filter>
+            <log level="full"/>
+            <payloadFactory description="LanguageCode" media-type="xml">
+                <format>
+                    <dat:getLanguage xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:OperationUser>$1</dat:OperationUser>
+                    </dat:getLanguage>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:operationUser"/>
+                </args>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="count(//*[local-name() = 'LanguageCode']) = 1">
+                <then>
+                    <property expression="//*[local-name() = 'LanguageCode']" name="userLanguage" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <payloadFactory description="LanguageCode" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE','yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0100 - Language não existe.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="Bad Request"/>
+                            <arg value="400"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <xslt key="getModule_XSLT">
+                <property expression="$ctx:id" name="id"/>
+                <property expression="$ctx:code" name="code"/>
+                <property expression="$ctx:userLanguage" name="userLanguage"/>
+            </xslt>
+            <log level="full"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8280/services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <enrich description="returnGetModule">
+                <source clone="true" type="body"/>
+                <target property="returnGetModule" type="property"/>
+            </enrich>
+            <filter regex="true" source="count($ctx:returnGetModule//*[local-name() = 'IdModule']) != 0">
+                <then>
+                    <xslt key="getNumRecords_XSLT">
+                        <property expression="$ctx:returnGetModule/*[local-name() = 'IdModule']" name="id"/>
+                        <property expression="$ctx:returnGetModule/*[local-name() = 'ModuleCode']" name="code"/>
+                        <property expression="$ctx:offset" name="offset"/>
+                        <property expression="$ctx:pageSize" name="pageSize"/>
+                    </xslt>
+                    <log level="full"/>
+                    <call blocking="true">
+                        <endpoint>
+                            <http method="post" uri-template="http://localhost:8280/services/ADM_CalculationTypeDB">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                    <enrich description="returnGetModuleNumRecords">
+                        <source clone="true" type="body"/>
+                        <target property="returnGetModuleNumRecords" type="property"/>
+                    </enrich>
+                    <payloadFactory description="GetModuleOutput" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultDescription>$2</resultDescription>
+                                    <totalRecord>$5</totalRecord>
+                                    <hasmore>$6</hasmore>
+                                    <offset>$7</offset>
+                                    <message>$3</message>
+                                    <status>$4</status>
+                                </result>
+                                <modules xmlns="">
+                                    <module>
+                                        <id>$8</id>
+                                        <code>$9</code>
+                                        <idTableDesc>$10</idTableDesc>
+                                        <smallDescription>$11</smallDescription>
+                                        <mediumDescription>$12</mediumDescription>
+                                        <largeDescription>$13</largeDescription>
+                                    </module>
+                                    <image>$14</image>
+                                    <functional>$15</functional>
+                                    <audit>
+                                        <creationUser>$16</creationUser>
+                                        <creationDate>$17</creationDate>
+                                        <lastUpdatedUser>$18</lastUpdatedUser>
+                                        <lastUpdatedDate>$19</lastUpdatedDate>
+                                    </audit>
+                                    <active>$20</active>
+                                </modules>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0000 - Sucesso"/>
+                            <arg value="OK"/>
+                            <arg value="200"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModuleNumRecords/*[local-name() = 'numRecords']"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModuleNumRecords/*[local-name() = 'hasmore']"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModuleNumRecords/*[local-name() = 'nextOffset']"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'IdModule']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'ModuleCode']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'IdTableDesc']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'DescriptionSmall']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'DescriptionMedium']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'DescriptionLarge']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'Image']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'Functional']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'CreationUser']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'CreationDate']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'LastUpdatedUser']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'LastUpdatedDate']/text()"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule/*[local-name() = 'Active']/text()"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </then>
+                <else>
+                    <payloadFactory description="noRecords" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE','yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="''SustIMS0151 - Registo inativo ou inexistente.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="No Content"/>
+                            <arg value="204"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/getModuleByUser">
+        <inSequence>
+            <propertyGroup description="Define Variables">
+                <property expression="$ctx:query.param.operationUser" name="operationUser" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.functional" name="functional" scope="default" type="STRING"/>
+                <property expression="$ctx:query.param.userLanguage" name="userLanguage" scope="default" type="STRING"/>
+            </propertyGroup>
+            <payloadFactory description="LanguageCode" media-type="xml">
+                <format>
+                    <dat:getLanguage xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:OperationUser>$1</dat:OperationUser>
+                    </dat:getLanguage>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:operationUser"/>
+                </args>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="count(//*[local-name() = 'LanguageCode']) = 1">
+                <then>
+                    <property expression="//*[local-name() = 'LanguageCode']" name="userLanguage" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <payloadFactory description="LanguageCode" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0100 - Language não existe.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="Bad Request"/>
+                            <arg value="400"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <xslt key="getModuleByUser_XSLT">
+                <property expression="$ctx:operationUser" name="user"/>
+                <property expression="$ctx:functional" name="functional"/>
+                <property expression="$ctx:userLanguage" name="userLanguage"/>
+            </xslt>
+            <log level="full"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8280/services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <enrich description="returnGetModuleByUser">
+                <source clone="true" type="body"/>
+                <target property="returnGetModuleByUser" type="property"/>
+            </enrich>
+            <filter regex="true" source="count(//*[local-name() = 'IdModule']) != 0">
+                <then>
+                    <payloadFactory description="GetModuleOutput" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultDescription>$2</resultDescription>
+                                    <totalRecord>$3</totalRecord>
+                                    <hasmore>$4</hasmore>
+                                    <offset>$5</offset>
+                                    <message>$6</message>
+                                    <status>$7</status>
+                                </result>
+                                <moduleByUser>
+                                    <module/>
+                                    <user>
+                                        <id>$8</id>
+                                        <code>$9</code>
+                                    </user>
+                                </moduleByUser>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0000 - Sucesso"/>
+                            <arg evaluator="xml" expression="count(//*[local-name() = 'module'])"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="200"/>
+                            <arg evaluator="xml" expression="//dat:selectModuleByUserOutput/dat:module[1]/dat:IdUser" xmlns:dat="http://ws.wso2.org/dataservice"/>
+                            <arg evaluator="xml" expression="//dat:selectModuleByUserOutput/dat:module[1]/dat:UserCode" xmlns:dat="http://ws.wso2.org/dataservice"/>
+                        </args>
+                    </payloadFactory>
+                    <enrich description="respondGetModuleByUser">
+                        <source clone="true" type="body"/>
+                        <target property="respondGetModuleByUser" type="property"/>
+                    </enrich>
+                    <foreach expression="$ctx:returnGetModuleByUser//*[local-name() = 'module']">
+                        <sequence>
+                            <payloadFactory media-type="xml">
+                                <format>
+                                    <module>
+                                        <id>$1</id>
+                                        <code>$2</code>
+                                        <idTableDesc>$3</idTableDesc>
+                                        <smallDescription>$4</smallDescription>
+                                        <mediumDescription>$5</mediumDescription>
+                                        <largeDescription>$6</largeDescription>
+                                    </module>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'IdModule']/text()"/>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'ModuleCode']/text()"/>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'IdTableDesc']/text()"/>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionSmall']/text()"/>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionMedium']/text()"/>
+                                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionLarge']/text()"/>
+                                </args>
+                            </payloadFactory>
+                            <enrich description="add module respondGetModuleByUser">
+                                <source clone="true" xpath="//*[local-name() = 'module']"/>
+                                <target action="child" xpath="$ctx:respondGetModuleByUser//*[local-name() = 'module']"/>
+                            </enrich>
+                        </sequence>
+                    </foreach>
+                    <enrich description="respondGetModuleByUser for env">
+                        <source clone="true" property="respondGetModuleByUser" type="property"/>
+                        <target type="body"/>
+                    </enrich>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </then>
+                <else>
+                    <payloadFactory description="noRecords" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="''SustIMS0151 - Registo inativo ou inexistente.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="No Content"/>
+                            <arg value="204"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/post">
+        <inSequence>
+            <!-- GET LanguageDesc -->
+            <property name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+            <enrich description="requestModule">
+                <source clone="true" type="envelope"/>
+                <target property="requestModule" type="property"/>
+            </enrich>
+            <log level="custom">
+                <property expression="$ctx:requestModule" name="REQUEST"/>
+            </log>
+            <payloadFactory description="LanguageCode" media-type="xml">
+                <format>
+                    <dat:getLanguage xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:OperationUser>$1</dat:OperationUser>
+                    </dat:getLanguage>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'operationUser']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <filter regex="true" source="count(//*[local-name() = 'LanguageCode']) = 1">
+                <then>
+                    <propertyGroup>
+                        <property expression="//*[local-name() = 'LanguageCode']" name="userLanguage" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'IdLanguage']" name="IdLanguage" scope="default" type="STRING"/>
+                    </propertyGroup>
+                </then>
+                <else>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0100 - Language não existe.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="Bad Request"/>
+                            <arg value="400"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <payloadFactory description="insertLanguageDesc" media-type="xml">
+                <format>
+                    <dat:postLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdLanguage>$1</dat:IdLanguage>
+                        <dat:DescriptionSmall>$2</dat:DescriptionSmall>
+                        <dat:DescriptionMedium>$3</dat:DescriptionMedium>
+                        <dat:DescriptionLarge>$4</dat:DescriptionLarge>
+                        <dat:CreationUser>$5</dat:CreationUser>
+                        <dat:CreationDate>$6</dat:CreationDate>
+                        <dat:LastUpdatedUser>$5</dat:LastUpdatedUser>
+                        <dat:LastUpdatedDate>$6</dat:LastUpdatedDate>
+                        <dat:Active>$7</dat:Active>
+                    </dat:postLanguageDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:IdLanguage"/>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'smallDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'mediumDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'largeDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'operationUser']"/>
+                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')"/>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'active']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <property expression="//*[local-name() = 'IdLanguageDesc']" name="idLanguageDesc" scope="default" type="STRING"/>
+            <filter regex="true" source="$ctx:idLanguageDesc >= 1">
+                <then>
+                    <payloadFactory description="insertTableDesc" media-type="xml">
+                        <format>
+                            <dat:postTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                                <dat:IdLanguage>$2</dat:IdLanguage>
+                                <dat:CreationUser>$3</dat:CreationUser>
+                                <dat:CreationDate>$4</dat:CreationDate>
+                                <dat:LastUpdatedUser>$3</dat:LastUpdatedUser>
+                                <dat:LastUpdatedDate>$4</dat:LastUpdatedDate>
+                                <dat:Active>$5</dat:Active>
+                            </dat:postTableDesc>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="//*[local-name()='IdLanguageDesc']"/>
+                            <arg evaluator="xml" expression="$ctx:IdLanguage"/>
+                            <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'operationUser']"/>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')"/>
+                            <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'active']"/>
+                        </args>
+                    </payloadFactory>
+                    <call blocking="true">
+                        <endpoint>
+                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                    <property expression="//*[local-name() = 'IdTableDesc']" name="idTableDesc" scope="default" type="STRING"/>
+                    <filter regex="true" source="$ctx:idTableDesc >= 1">
+                        <then>
+                            <payloadFactory description="insertTableDesc" media-type="xml">
+                                <format>
+                                    <dat:postModule xmlns:dat="http://ws.wso2.org/dataservice">
+                                        <dat:ModuleCode>$1</dat:ModuleCode>
+                                        <dat:IdTableDesc>$2</dat:IdTableDesc>
+                                        <dat:Image>$3</dat:Image>
+                                        <dat:CreationUser>$4</dat:CreationUser>
+                                        <dat:CreationDate>$5</dat:CreationDate>
+                                        <dat:LastUpdatedUser>$4</dat:LastUpdatedUser>
+                                        <dat:LastUpdatedDate>$5</dat:LastUpdatedDate>
+                                        <dat:Active>1</dat:Active>
+                                        <dat:Functional>0</dat:Functional>
+                                    </dat:postModule>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'code']"/>
+                                    <arg evaluator="xml" expression="$ctx:idTableDesc"/>
+                                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name()='image']"/>
+                                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'operationUser']"/>
+                                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')"/>
+                                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'active']"/>
+                                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'functional']"/>
+                                </args>
+                            </payloadFactory>
+                            <log level="full"/>
+                            <call blocking="true">
+                                <endpoint>
+                                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                                        <suspendOnFailure>
+                                            <initialDuration>-1</initialDuration>
+                                            <progressionFactor>1</progressionFactor>
+                                        </suspendOnFailure>
+                                        <markForSuspension>
+                                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                        </markForSuspension>
+                                    </http>
+                                </endpoint>
+                            </call>
+                            <log level="full"/>
+                            <property expression="//*[local-name() = 'IdModule']" name="idModule" scope="default" type="STRING"/>
+                            <filter regex="true" source="$ctx:idModule >= 1">
+                                <then>
+                                    <payloadFactory description="GetModuleOutput" media-type="xml">
+                                        <format>
+                                            <jsonObject>
+                                                <result>
+                                                    <timestamp>$1</timestamp>
+                                                    <resultDescription>$2</resultDescription>
+                                                    <totalRecord>$3</totalRecord>
+                                                    <totalErrors>$4</totalErrors>
+                                                    <message>$5</message>
+                                                    <status>$6</status>
+                                                    <id>$7</id>
+                                                </result>
+                                            </jsonObject>
+                                        </format>
+                                        <args>
+                                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                                            <arg value="SustIMS0000 - Sucesso"/>
+                                            <arg value="1"/>
+                                            <arg value="0"/>
+                                            <arg value="OK"/>
+                                            <arg value="201"/>
+                                            <arg evaluator="xml" expression="$ctx:idModule"/>
+                                        </args>
+                                    </payloadFactory>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                    <respond/>
+                                </then>
+                                <else>
+                                    <payloadFactory description="deletLanguageDesc" media-type="xml">
+                                        <format>
+                                            <dat:deleteLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                                <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                                            </dat:deleteLanguageDesc>
+                                        </format>
+                                        <args>
+                                            <arg evaluator="xml" expression="$ctx:idLanguageDesc"/>
+                                        </args>
+                                    </payloadFactory>
+                                    <log level="full"/>
+                                    <call blocking="true">
+                                        <endpoint>
+                                            <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                                <suspendOnFailure>
+                                                    <initialDuration>-1</initialDuration>
+                                                    <progressionFactor>1</progressionFactor>
+                                                </suspendOnFailure>
+                                                <markForSuspension>
+                                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                                </markForSuspension>
+                                            </http>
+                                        </endpoint>
+                                    </call>
+                                    <!-- ROLLBACK TABLEDESC -->
+                                    <payloadFactory description="deletLanguageDesc" media-type="xml">
+                                        <format>
+                                            <dat:deleteTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                                <dat:IdTableDesc>$1</dat:IdTableDesc>
+                                            </dat:deleteTableDesc>
+                                        </format>
+                                        <args>
+                                            <arg evaluator="xml" expression="$ctx:idTableDesc"/>
+                                        </args>
+                                    </payloadFactory>
+                                    <log level="full"/>
+                                    <call blocking="true">
+                                        <endpoint>
+                                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                                                <suspendOnFailure>
+                                                    <initialDuration>-1</initialDuration>
+                                                    <progressionFactor>1</progressionFactor>
+                                                </suspendOnFailure>
+                                                <markForSuspension>
+                                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                                </markForSuspension>
+                                            </http>
+                                        </endpoint>
+                                    </call>
+                                    <!-- PAYLOAD ERRO INSERTMODULE -->
+                                    <payloadFactory description="returnErroTableDesc" media-type="xml">
+                                        <format>
+                                            <result>
+                                                <timestamp>$1</timestamp>
+                                                <resultDescription>$2</resultDescription>
+                                                <totalRecords>$3</totalRecords>
+                                                <hasmore>$4</hasmore>
+                                                <offset>$5</offset>
+                                                <message>$6</message>
+                                                <status>$7</status>
+                                            </result>
+                                        </format>
+                                        <args>
+                                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                                            <arg value="'SustIMS0100 - Erro ao inserir dados na ModuleDB.'"/>
+                                            <arg value="0"/>
+                                            <arg value="false"/>
+                                            <arg value="0"/>
+                                            <arg value="Bad Request"/>
+                                            <arg value="500"/>
+                                        </args>
+                                    </payloadFactory>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                    <respond/>
+                                </else>
+                            </filter>
+                        </then>
+                        <else>
+                            <payloadFactory description="deletLanguageDesc" media-type="xml">
+                                <format>
+                                    <dat:deleteLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                        <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                                    </dat:deleteLanguageDesc>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="$ctx:idLanguageDesc"/>
+                                </args>
+                            </payloadFactory>
+                            <call blocking="true">
+                                <endpoint>
+                                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                        <suspendOnFailure>
+                                            <initialDuration>-1</initialDuration>
+                                            <progressionFactor>1</progressionFactor>
+                                        </suspendOnFailure>
+                                        <markForSuspension>
+                                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                        </markForSuspension>
+                                    </http>
+                                </endpoint>
+                            </call>
+                            <payloadFactory description="returnErroTableDesc" media-type="xml">
+                                <format>
+                                    <result>
+                                        <timestamp>$1</timestamp>
+                                        <resultDescription>$2</resultDescription>
+                                        <totalRecords>$3</totalRecords>
+                                        <hasmore>$4</hasmore>
+                                        <offset>$5</offset>
+                                        <message>$6</message>
+                                        <status>$7</status>
+                                    </result>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                                    <arg value="'SustIMS0100 - Erro ao inserir dados na TableDesc.'"/>
+                                    <arg value="0"/>
+                                    <arg value="false"/>
+                                    <arg value="0"/>
+                                    <arg value="Bad Request"/>
+                                    <arg value="500"/>
+                                </args>
+                            </payloadFactory>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                            <respond/>
+                        </else>
+                    </filter>
+                </then>
+                <else>
+                    <payloadFactory description="LanguageCode" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0100 - Erro ao inserir dados na LanguageDesc.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="Bad Request"/>
+                            <arg value="500"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="PUT" uri-template="/{id}">
+        <inSequence>
+            <!-- GET LanguageDesc -->
+            <property name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+            <property expression="get-property('uri.var.id')" name="id" scope="default" type="STRING"/>
+            <enrich description="requestModule">
+                <source clone="true" type="envelope"/>
+                <target property="requestModule" type="property"/>
+            </enrich>
+            <log level="custom">
+                <property expression="$ctx:requestModule" name="REQUEST"/>
+                <property expression="$ctx:id" name="ID"/>
+            </log>
+            <payloadFactory description="LanguageCode" media-type="xml">
+                <format>
+                    <dat:getLanguage xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:OperationUser>$1</dat:OperationUser>
+                    </dat:getLanguage>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:requestModule//*[local-name() = 'operationUser']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="count(//*[local-name() = 'LanguageCode']) = 1">
+                <then>
+                    <propertyGroup>
+                        <property expression="//*[local-name() = 'LanguageCode']" name="userLanguage" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'IdLanguage']" name="IdLanguage" scope="default" type="STRING"/>
+                    </propertyGroup>
+                </then>
+                <else>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <totalRecords>$3</totalRecords>
+                                <hasmore>$4</hasmore>
+                                <offset>$5</offset>
+                                <message>$6</message>
+                                <status>$7</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0100 - Language não existe.'"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="Bad Request"/>
+                            <arg value="400"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <!-- GET Ids -->
+            <xslt key="getModule_XSLT">
+                <property expression="$ctx:id" name="id"/>
+                <property expression="$ctx:requestModule//code" name="code"/>
+                <property expression="$ctx:userLanguage" name="userLanguage"/>
+            </xslt>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8280/services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <enrich description="returnGetModule">
+                <source clone="true" type="body"/>
+                <target property="returnGetModule" type="property"/>
+            </enrich>
+            <payloadFactory description="updateLanguageDesc" media-type="xml">
+                <format>
+                    <dat:getTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdTableDesc>$1</dat:IdTableDesc>
+                    </dat:getTableDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:returnGetModule//*[local-name() = 'IdTableDesc']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <enrich description="returnTableDesc">
+                <source clone="true" type="body"/>
+                <target property="returnTableDesc" type="property"/>
+            </enrich>
+            <log level="custom">
+                <property name="idTableDesc" value="apos tabledesc return body"/>
+                <property expression="//IdLanguageDesc" name="idTableDesc"/>
+                <property expression="$ctx:returnTableDesc//dat:IdLanguageDesc" name="idTableDesc" xmlns:dat="http://ws.wso2.org/dataservice"/>
+            </log>
+            <log level="full"/>
+            <property expression="//dat:IdLanguageDesc" name="idTableDesc" scope="default" type="STRING" xmlns:dat="http://ws.wso2.org/dataservice"/>
+            <!-- Update LanguageDesc -->
+            <filter xpath="((string-length($ctx:requestModule//smallDescription) != 0) or (string-length($ctx:requestModule//mediumDescription) != 0) or (string-length($ctx:requestModule//largeDescription) != 0) or (string-length($ctx:requestModule//active) != 0)) ">
+                <then>
+                    <payloadFactory description="teste" media-type="xml">
+                        <format>
+                            <teste xmlns="">
+                                <requestModule>$1</requestModule>
+                                <returnGetModule>$2</returnGetModule>
+                            </teste>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:requestModule//jsonObject"/>
+                            <arg evaluator="xml" expression="$ctx:returnGetModule"/>
+                        </args>
+                    </payloadFactory>
+                    <xslt key="putLanguageDesc_XSLT">
+                        <property expression="$ctx:idTableDesc" name="id"/>
+                    </xslt>
+                    <call blocking="true">
+                        <endpoint>
+                            <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                </then>
+                <else/>
+            </filter>
+            <!-- Update Module -->
+            <payloadFactory description="teste" media-type="xml">
+                <format>
+                    <teste xmlns="">
+                        <requestModule>$1</requestModule>
+                        <returnGetModule>$2</returnGetModule>
+                    </teste>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:requestModule//jsonObject"/>
+                    <arg evaluator="xml" expression="$ctx:returnGetModule"/>
+                </args>
+            </payloadFactory>
+            <log>
+                <property name="antes pu module xslt" value="TESTE"/>
+            </log>
+            <xslt key="putModule_XSLT">
+                <property expression="$ctx:id" name="id"/>
+            </xslt>
+            <log>
+                <property name="pos pu module xslt" value="TESTE"/>
+            </log>
+            <log level="full"/>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <payloadFactory description="GetModuleOutput" media-type="xml">
+                <format>
+                    <jsonObject>
+                        <result>
+                            <timestamp>$1</timestamp>
+                            <resultDescription>$2</resultDescription>
+                            <totalRecord>$3</totalRecord>
+                            <totalErrors>$4</totalErrors>
+                            <message>$5</message>
+                            <status>$6</status>
+                            <id>$7</id>
+                        </result>
+                    </jsonObject>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                    <arg value="SustIMS0000 - Sucesso"/>
+                    <arg value="1"/>
+                    <arg value="0"/>
+                    <arg value="OK"/>
+                    <arg value="201"/>
+                    <arg evaluator="xml" expression="$ctx:id"/>
+                </args>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+    <resource methods="DELETE" uri-template="/{id}">
+        <inSequence>
+            <!-- GET LanguageDesc -->
+            <property expression="get-property('uri.var.id')" name="id" scope="default" type="STRING"/>
+            <log level="custom">
+                <property expression="$ctx:id" name="ID"/>
+            </log>
+            <!-- Validate Id -->
+            <payloadFactory description="getIDs" media-type="xml">
+                <format>
+                    <dat:getIDs xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdModule>$1</dat:IdModule>
+                    </dat:getIDs>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:id"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8280/services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <enrich description="returnGetIds">
+                <source clone="true" type="body"/>
+                <target property="returnGetIds" type="property"/>
+            </enrich>
+            <payloadFactory description="deleteModule" media-type="xml">
+                <format>
+                    <dat:deleteModule xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdModule>$1</dat:IdModule>
+                    </dat:deleteModule>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:id"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <!--  delete tabledesc -->
+            <payloadFactory description="deleteTableDesc" media-type="xml">
+                <format>
+                    <dat:deleteTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdTableDesc>$1</dat:IdTableDesc>
+                    </dat:deleteTableDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:returnGetIds//*[local-name() = 'IdTableDesc']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <!--  delete tabledesc -->
+            <payloadFactory description="deleteTableDesc" media-type="xml">
+                <format>
+                    <dat:deleteLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                    </dat:deleteLanguageDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:returnGetIds//*[local-name() = 'IdLanguageDesc']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <payloadFactory description="DeleteModuleOutput" media-type="xml">
+                <format>
+                    <jsonObject>
+                        <result>
+                            <timestamp>$1</timestamp>
+                            <resultDescription>$2</resultDescription>
+                            <totalRecord>$3</totalRecord>
+                            <totalErrors>$4</totalErrors>
+                            <message>$5</message>
+                            <status>$6</status>
+                            <id>$7</id>
+                        </result>
+                    </jsonObject>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                    <arg value="SustIMS0000 - Sucesso"/>
+                    <arg value="1"/>
+                    <arg value="0"/>
+                    <arg value="OK"/>
+                    <arg value="201"/>
+                    <arg evaluator="xml" expression="$ctx:id"/>
+                </args>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+</api>

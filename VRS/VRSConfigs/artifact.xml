@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="VRS_VerticalSign" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/VRS_VerticalSign.xml</file>
+    </artifact>
+    <artifact name="VRS_VerticalSign_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/VRS_VerticalSign_swagger.yaml</file>
+    </artifact>
+    <artifact name="VRS_VerticalSign_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/VRS_VerticalSign_metadata.yaml</file>
+    </artifact>
+    <artifact name="RemoveEmptyTags" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/RemoveEmptyTags.xml</file>
+    </artifact>
+    <artifact name="ValidadeLanguageCode" groupId="com.example.template" version="1.0.0" type="synapse/sequenceTemplate" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/templates/ValidadeLanguageCode.xml</file>
+    </artifact>
+    <artifact name="roadComponenteValidatePks_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/roadComponenteValidatePks_XSLT.xml</file>
+    </artifact>
+    <artifact name="insertVerticalSignOperation" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/insertVerticalSignOperation.xml</file>
+    </artifact>
+    <artifact name="updateVerticalSignOperation" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/updateVerticalSignOperation.xml</file>
+    </artifact>
+    <artifact name="putLanguageDescVerticalSign_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putLanguageDescVerticalSign_XSLT.xml</file>
+    </artifact>
+    <artifact name="putVerticalSign_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putVerticalSign_XSLT.xml</file>
+    </artifact>
+    <artifact name="putRoadComponente" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putRoadComponente.xml</file>
+    </artifact>
+    <artifact name="deleteVerticalSignOperation" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/deleteVerticalSignOperation.xml</file>
+    </artifact>
+    <artifact name="validateLanguageCode" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validateLanguageCode.xml</file>
+    </artifact>
+    <artifact name="validationFlowSetVerticalSing" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validationFlowSetVerticalSing.xml</file>
+    </artifact>
+    <artifact name="RetiraNamespace_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/RetiraNamespace_XSLT.xml</file>
+    </artifact>
+    <artifact name="getVRS_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getVRS_XSLT.xml</file>
+    </artifact>
+    <artifact name="getResponseVRS_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getResponseVRS_XSLT.xml</file>
+    </artifact>
+    <artifact name="getPostVRS_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getPostVRS_XSLT.xml</file>
+    </artifact>
+    <artifact name="VRS_VerticalSignSemToken" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/VRS_VerticalSignSemToken.xml</file>
+    </artifact>
+    <artifact name="VRS_VerticalSignSemToken_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/VRS_VerticalSignSemToken_swagger.yaml</file>
+    </artifact>
+    <artifact name="VRS_VerticalSignSemToken_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/VRS_VerticalSignSemToken_metadata.yaml</file>
+    </artifact>
+    <artifact name="nomeSequence" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/nomeSequence.xml</file>
+    </artifact>
+    <artifact name="putTablesDesc_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putTablesDesc_XSLT.xml</file>
+    </artifact>
+</artifacts>

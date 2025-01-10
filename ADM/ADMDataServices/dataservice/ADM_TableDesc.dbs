@@ -1,0 +1,100 @@
+<data name="ADM_TableDesc" serviceNamespace="" serviceGroup="" transports="http https local">
+	<config id="ReaderSustIMS" enableOData="false">
+		<property name="carbon_datasource_name">ReaderSustIMS</property>
+  	</config>
+  	<query id="insertTableDesc" useConfig="ReaderSustIMS">
+  		<sql>INSERT INTO ADM.TableDesc ( IdLanguageDesc, IdLanguage, CreationUser, CreationDate, LastUpdatedUser, LastUpdatedDate, Active, StartDate, EndDate) VALUES (:IdLanguageDesc, :IdLanguage, :CreationUser, :CreationDate, :LastUpdatedUser, :LastUpdatedDate, :Active , ISNULL(:StartDate, GETDATE()) , :EndDate) SELECT @@IDENTITY as ID;</sql>
+	    <result rowName="" element="insertTableDescOutput">
+	      <element name="IdTableDesc" xsdType="integer" column="ID" />      
+	    </result>
+	    <param name="IdLanguageDesc" sqlType="STRING" />
+	    <param name="IdLanguage" sqlType="INTEGER" />
+	    <param name="CreationUser" sqlType="STRING" />
+	    <param name="CreationDate" sqlType="STRING" />
+	    <param name="LastUpdatedUser" sqlType="STRING" />
+	    <param name="LastUpdatedDate" sqlType="STRING" />
+	    <param name="Active" sqlType="INTEGER" />
+	    <param name="StartDate" sqlType="DATE" defaultValue="#{NULL}" />
+	    <param name="EndDate" sqlType="DATE" defaultValue="#{NULL}" />
+	</query>
+	
+	<query id="updateTableDesc" useConfig="ReaderSustIMS">	 
+	    <sql>UPDATE ADM.TableDesc SET IdLanguageDesc= :IdLanguageDesc, IdLanguage= :IdLanguage, LastUpdatedUser= :LastUpdatedUser, LastUpdatedDate= :LastUpdatedDate, Active= :Active  WHERE IdTableDesc= :IdTableDesc SELECT SCOPE_IDENTITY() AS ID</sql>
+	    <result rowName="" element="updateModuleOutput">
+	      <element name="Value" xsdType="integer" column="ID" />
+	    </result>
+	    <param name="IdTableDesc" sqlType="INTEGER" />
+	    <param name="IdLanguageDesc" defaultValue="#{NULL}" sqlType="INTEGER" />
+	    <param name="IdLanguage" defaultValue="#{NULL}" sqlType="STRING" />	    
+	    <param name="LastUpdatedUser" sqlType="STRING" />
+	    <param name="LastUpdatedDate" sqlType="STRING" />
+	    <param name="Active" defaultValue="#{NULL}" sqlType="INTEGER" />
+	    
+	</query>
+	
+	<query id="deleteTableDesc" useConfig="ReaderSustIMS">
+	    <sql>DELETE FROM ADM.TableDesc OUTPUT deleted.* WHERE IdTableDesc= :IdTableDesc</sql>
+	    <result rowName="" element="deleteTableDescOutput">
+	      <element name="Value" xsdType="integer" column="IdTableDesc" />
+	    </result>
+	    <param name="IdTableDesc" sqlType="INTEGER" />
+	  </query> 
+	 
+	 
+	<query id="getTableDesc" useConfig="ReaderSustIMS">
+  		<sql>SELECT IdTableDesc, IdLanguageDesc, IdLanguage, CreationUser, CreationDate, LastUpdatedUser, LastUpdatedDate, Active FROM ADM.TableDesc WHERE IdTableDesc = :IdTableDesc</sql>
+	    <result rowName="" element="getTableDescOutput">
+	      <element name="IdTableDesc" xsdType="integer" column="IdTableDesc" />
+	      <element name="IdLanguageDesc" xsdType="integer" column="IdLanguageDesc" />
+	      <element name="IdLanguage" xsdType="integer" column="IdLanguage" />  
+	      <element name="CreationUser" xsdType="string" column="CreationUser" />  
+	      <element name="CreationDate" xsdType="string" column="CreationDate" />  
+	      <element name="LastUpdatedUser" xsdType="string" column="LastUpdatedUser" />  
+	      <element name="LastUpdatedDate" xsdType="string" column="LastUpdatedDate" />   
+	      <element name="Active" xsdType="integer" column="Active" />
+	    </result>
+	    <param name="IdTableDesc" sqlType="STRING" />
+	</query> 
+	 
+	 
+	<operation name="getTableDesc">
+	    <call-query href="getTableDesc">
+	      <with-param name="IdTableDesc" query-param="IdTableDesc" />
+	    </call-query>
+	  </operation>
+	  
+	   
+	<operation name="deleteTableDesc">
+	    <call-query href="deleteTableDesc">
+	      <with-param name="IdTableDesc" query-param="IdTableDesc" />
+	    </call-query>
+	  </operation>
+	  
+	<operation name="putTableDesc">
+	    <call-query href="updateTableDesc">
+	      <with-param name="IdTableDesc" query-param="IdTableDesc" />
+	      <with-param name="IdLanguageDesc" query-param="IdLanguageDesc" />
+	      <with-param name="IdLanguage" query-param="IdLanguage" />
+	      <with-param name="LastUpdatedUser" query-param="LastUpdatedUser" />
+	      <with-param name="LastUpdatedDate" query-param="LastUpdatedDate" />
+	      <with-param name="Active" query-param="Active" />
+	    </call-query>
+	  </operation>   
+	    
+	<operation name="postTableDesc">
+    <call-query href="insertTableDesc">
+      <with-param name="IdLanguageDesc" query-param="IdLanguageDesc" />
+      <with-param name="IdLanguage" query-param="IdLanguage" />
+      <with-param name="CreationUser" query-param="CreationUser" />
+      <with-param name="CreationDate" query-param="CreationDate" />
+      <with-param name="LastUpdatedUser"  query-param="LastUpdatedUser" />
+      <with-param name="LastUpdatedDate"  query-param="LastUpdatedDate" />
+      <with-param name="Active" query-param="Active" />
+       <with-param name="StartDate" query-param="StartDate" />
+      <with-param name="EndDate" query-param="EndDate" />
+    </call-query>
+  </operation>
+  
+  
+  
+</data>

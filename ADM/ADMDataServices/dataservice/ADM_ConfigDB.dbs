@@ -1,0 +1,14 @@
+<data transports="http https local" serviceGroup="" serviceNamespace="" name="ADM_ConfigDB" >
+  <config id="ReaderSustIMS">
+    <property name="carbon_datasource_name">ReaderSustIMS</property>
+  </config>
+  <query id="selectPageSize" useConfig="ReaderSustIMS" >
+    <sql>SELECT Value FROM ADM.Config WITH(NOLOCK) WHERE Config.ConfigCode = 'CT_PageSize'</sql>
+    <result rowName="getPageSizeOutput" element="pageSize">
+      <element name="value" xsdType="integer" column="value" />
+    </result>
+  </query>
+  <operation name="getPageSize">
+    <call-query href="selectPageSize" />
+  </operation>
+</data>

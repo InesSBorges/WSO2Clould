@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="getModule_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="2.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="id"/>
+        <xsl:param name="code"/>
+        <xsl:param name="userLanguage"/>
+        <xsl:template match="/">
+            <dat:getModule xmlns:dat="http://ws.wso2.org/dataservice">
+                <xsl:if test="string-length($id) > 0">
+                    <dat:IdModule>
+                        <xsl:value-of select="$id"/>
+                    </dat:IdModule>
+                </xsl:if>
+                <xsl:if test="string-length($code) > 0">
+                    <dat:ModuleCode>
+                        <xsl:value-of select="$code"/>
+                    </dat:ModuleCode>
+                </xsl:if>
+                <xsl:if test="string-length($userLanguage) > 0">
+                    <dat:LanguageCode>
+                        <xsl:value-of select="$userLanguage"/>
+                    </dat:LanguageCode>
+                </xsl:if>
+                <dat:offset>0</dat:offset>
+                <dat:pageSize>100</dat:pageSize>
+            </dat:getModule>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

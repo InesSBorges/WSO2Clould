@@ -1,0 +1,85 @@
+<data name="ADM_LanguageDescDB" serviceNamespace="" serviceGroup="" transports="http https local">
+   <config id="ReaderSustIMS" enableOData="false">
+		<property name="carbon_datasource_name">ReaderSustIMS</property>
+  	</config>
+  	<query id="insertLanguageDesc" useConfig="ReaderSustIMS">
+  		<sql>INSERT INTO ADM.LanguageDesc (IdLanguage, DescriptionSmall, DescriptionMedium, DescriptionLarge, CreationUser, CreationDate, LastUpdatedUser, LastUpdatedDate, Active, StartDate, EndDate) VALUES (:IdLanguage, :DescriptionSmall, :DescriptionMedium, :DescriptionLarge, :CreationUser, :CreationDate, :LastUpdatedUser, :LastUpdatedDate, :Active, ISNULL(:StartDate, GETDATE()), :EndDate) SELECT @@IDENTITY as ID;</sql>
+	    <result rowName="" element="insertLanguageDescOutput">
+	      <element name="IdLanguageDesc" xsdType="integer" column="ID" />      
+	    </result>	    
+	    <param name="IdLanguage" sqlType="INTEGER" />
+	    <param name="DescriptionSmall" defaultValue="#{NULL}" sqlType="STRING" />
+	    <param name="DescriptionMedium" sqlType="STRING" />
+	    <param name="DescriptionLarge" defaultValue="#{NULL}" sqlType="STRING" />
+	    <param name="CreationUser" sqlType="STRING" />
+	    <param name="CreationDate" sqlType="STRING" />
+	    <param name="LastUpdatedUser" sqlType="STRING" />
+	    <param name="LastUpdatedDate" sqlType="STRING" />
+	    <param name="Active" sqlType="INTEGER" />
+	    <param name="StartDate" sqlType="DATE" defaultValue="#{NULL}" />
+	    <param name="EndDate" sqlType="DATE" defaultValue="#{NULL}" />
+	</query>
+	
+	
+	<operation name="postLanguageDesc">
+    <call-query href="insertLanguageDesc">
+      <with-param name="IdLanguage" query-param="IdLanguage" />
+      <with-param name="DescriptionSmall" query-param="DescriptionSmall" />
+	  <with-param name="DescriptionMedium" query-param="DescriptionMedium" />
+	  <with-param name="DescriptionLarge" query-param="DescriptionLarge" />
+      <with-param name="CreationUser" query-param="CreationUser" />
+      <with-param name="CreationDate" query-param="CreationDate" />
+      <with-param name="LastUpdatedUser"  query-param="LastUpdatedUser" />
+      <with-param name="LastUpdatedDate"  query-param="LastUpdatedDate" />
+      <with-param name="Active" query-param="Active" />
+      <with-param name="StartDate" query-param="StartDate" />
+      <with-param name="EndDate" query-param="EndDate" />
+    </call-query>
+  </operation>
+  
+  <query id="updateLanguageDesc" useConfig="ReaderSustIMS">
+  		<sql>UPDATE ADM.LanguageDesc SET  IdLanguage = :IdLanguage, DescriptionSmall = :DescriptionSmall, DescriptionMedium = :DescriptionMedium, DescriptionLarge = :DescriptionLarge,  LastUpdatedUser = :LastUpdatedUser, LastUpdatedDate = :LastUpdatedDate, Active = :Active WHERE IdLanguageDesc = :IdLanguageDesc SELECT SCOPE_IDENTITY() AS ID </sql>
+	    <result rowName="" element="updateLanguageDescOutput">
+	    	<element name="Value" xsdType="integer" column="ID" />
+	    </result>
+	    <param name="IdLanguageDesc" sqlType="INTEGER" />
+	    <param name="IdLanguage" sqlType="INTEGER" />
+	    <param name="DescriptionSmall" defaultValue="#{NULL}" sqlType="STRING" />
+	    <param name="DescriptionMedium" sqlType="STRING" />
+	    <param name="DescriptionLarge" defaultValue="#{NULL}" sqlType="STRING" />	    
+	    <param name="LastUpdatedUser" sqlType="STRING" />
+	    <param name="LastUpdatedDate" sqlType="STRING" />
+	    <param name="Active" sqlType="INTEGER" />
+	</query>
+	
+	<operation name="putLanguageDesc">
+	    <call-query href="updateLanguageDesc">
+	      <with-param name="IdLanguageDesc" query-param="IdLanguageDesc" />
+	      <with-param name="IdLanguage" query-param="IdLanguage" />
+	      <with-param name="DescriptionSmall" query-param="DescriptionSmall" />
+		  <with-param name="DescriptionMedium" query-param="DescriptionMedium" />
+		  <with-param name="DescriptionLarge" query-param="DescriptionLarge" />     
+	      <with-param name="LastUpdatedUser"  query-param="LastUpdatedUser" />
+	      <with-param name="LastUpdatedDate"  query-param="LastUpdatedDate" />
+	      <with-param name="Active" query-param="Active" />
+	    </call-query>
+	  </operation>
+  
+  	<query id="deleteLanguageDesc" useConfig="ReaderSustIMS">
+		<sql>DELETE FROM ADM.LanguageDesc  WHERE IdLanguageDesc= :IdLanguageDesc SELECT @@ROWCOUNT AS RowsDeleted;</sql>
+		<result element="deleteLanguageDescOutput" rowName="">
+			<element name="Value" column="RowsDeleted"
+				xsdType="string" />
+		</result>
+		<param name="IdLanguageDesc" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+	</query>
+	
+  		<operation name="deleteLanguageDesc">
+	    <call-query href="deleteLanguageDesc">
+	      <with-param name="IdLanguageDesc" query-param="IdLanguageDesc" />	      
+	    </call-query>
+	  </operation>
+  
+  
+</data>

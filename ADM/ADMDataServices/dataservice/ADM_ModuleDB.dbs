@@ -1,0 +1,169 @@
+<data transports="http https local" name="ADM_ModuleDB">
+  <config id="optimizerDB" enableOData="false">
+    <property name="carbon_datasource_name">optimizerDB</property>
+  </config>
+  <query id="selectModule" useConfig="optimizerDB">
+    <sql>SELECT t1.IdModule, t1.ModuleCode, t1.Image, t1.CreationUser, t1.CreationDate, t1.LastUpdatedUser, t1.LastUpdatedDate, t1.Active, t1.Functional, t1.IdTableDesc, t0.IdTableDesc, t0.DescriptionSmall, t0.DescriptionMedium, t0.DescriptionLarge FROM integtst01.ADM."Module" t1 WITH(NOLOCK) LEFT OUTER JOIN integtst01.ADM.VIEW_TABLEDESC_ALL_LANG t0 WITH(NOLOCK) ON (t0.IdTableDesc = t1.IdTableDesc) WHERE t1.IdModule = ISNULL(:IdModule, t1.IdModule) AND t1.ModuleCode = ISNULL(:ModuleCode, t1.ModuleCode) AND ISNULL(t0.IdLanguageLanguageDesc, - 1) = ISNULL(ISNULL(integtst01.ADM.getIdLanguage(t0.IdLanguageDesc, :LanguageCode), t0.IdLanguageDefault), - 1) ORDER BY t1.IdModule</sql>
+    <result rowName="" element="selectModuleOutput">
+      <element name="IdModule" xsdType="integer" column="IdModule" />
+      <element name="ModuleCode" xsdType="string" column="ModuleCode" />
+      <element name="Image" xsdType="string" column="Image" />
+      <element name="CreationUser" xsdType="string" column="CreationUser" />
+      <element name="CreationDate" xsdType="dateTime" column="CreationDate" />
+      <element name="LastUpdatedUser" xsdType="string" column="LastUpdatedUser" />
+      <element name="LastUpdatedDate" xsdType="dateTime" column="LastUpdatedDate" />
+      <element name="Active" xsdType="integer" column="Active" />
+      <element name="Functional" xsdType="integer" column="Functional" />
+      <element name="IdTableDesc" xsdType="integer" column="IdTableDesc" />
+      <element name="DescriptionSmall" xsdType="string" column="DescriptionSmall" />
+      <element name="DescriptionMedium" xsdType="string" column="DescriptionMedium" />
+      <element name="DescriptionLarge" xsdType="string" column="DescriptionLarge" />
+    </result>
+    <param name="IdModule"  defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="ModuleCode" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="LanguageCode" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="offset" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="pageSize" defaultValue="#{NULL}" sqlType="INTEGER" />
+  </query>
+  
+   <query id="selectModuleByUser" useConfig="optimizerDB">
+    <sql>SELECT DISTINCT M.IdModule ,M.ModuleCode ,M.IdTableDesc ,MDESC.DescriptionSmall ,MDESC.DescriptionMedium ,MDESC.DescriptionLarge ,U.IdUser ,U.UserCode FROM integtst01.ADM.Module M WITH (NOLOCK) INNER JOIN integtst01.ADM.VIEW_TABLEDESC_ALL_LANG MDESC WITH (NOLOCK) ON MDESC.IdTableDesc = M.IdTableDesc INNER JOIN integtst01.ADM.Permission P WITH (NOLOCK) ON P.IdModule = M.IdModule INNER JOIN integtst01.ADM.Permission_Profile PP WITH (NOLOCK) ON PP.IdPermission = P.IdPermission INNER JOIN integtst01.ADM.User_Profile UP WITH (NOLOCK) ON UP.IdProfile = PP.IdProfile INNER JOIN integtst01.ADM."User" U WITH (NOLOCK) ON U.IdUser = UP.IdUser WHERE U.UserCode = ISNULL(:UserCode, U.UserCode) AND M.Functional = ISNULL(:Functional, M.Functional) AND MDESC.IdLanguageLanguageDesc = ISNULL(integtst01.ADM.getIdLanguage(MDESC.IdLanguageDesc, :LanguageCode), MDESC.IdLanguageDefault)</sql>
+    <result rowName="module" element="selectModuleByUserOutput" maxOccurs="unbounded">
+      <element name="IdModule" xsdType="integer" column="IdModule" />
+      <element name="ModuleCode" xsdType="string" column="ModuleCode" />
+      <element name="IdTableDesc" xsdType="integer" column="IdTableDesc" />
+      <element name="DescriptionSmall" xsdType="string" column="DescriptionSmall" />
+      <element name="DescriptionMedium" xsdType="string" column="DescriptionMedium" />
+      <element name="DescriptionLarge" xsdType="string" column="DescriptionLarge" />
+      <element name="IdUser" xsdType="integer" column="IdUser" />
+      <element name="UserCode" xsdType="string" column="UserCode" />
+    </result>
+    <param name="UserCode" sqlType="STRING" />
+    <param name="Functional" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="LanguageCode" sqlType="STRING" />
+  </query>
+  
+  <query id="updateModule" useConfig="optimizerDB">
+    <sql>UPDATE integtst01.ADM.Module SET ModuleCode= :ModuleCode, IdTableDesc= :IdTableDesc, Image= :Image, LastUpdatedUser= :LastUpdatedUser, LastUpdatedDate= :LastUpdatedDate, Active= :Active, Functional= :Functional WHERE IdModule= :IdModule SELECT SCOPE_IDENTITY() AS ID</sql>
+    <result rowName="" element="updateModuleOutput">
+      <element name="Value" xsdType="integer" column="1" />
+    </result>
+    <param name="IdModule" sqlType="INTEGER" />
+    <param name="ModuleCode" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="IdTableDesc" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="Image" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="CreationUser" defaultValue="#{NULL}" sqlType="STRING" />
+    <param name="CreationDate"  defaultValue="#{NULL}" sqlType="DATETIME" />
+    <param name="LastUpdatedUser" sqlType="STRING" />
+    <param name="LastUpdatedDate" sqlType="STRING" />
+    <param name="Active" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="Functional" defaultValue="#{NULL}" sqlType="INTEGER" />
+  </query>
+  
+  <query id="insertModule" useConfig="optimizerDB">
+    <sql>INSERT into integtst01.ADM.Module (ModuleCode, IdTableDesc, [Image], CreationUser, CreationDate, LastUpdatedUser, LastUpdatedDate, Active, Functional) VALUES ( :ModuleCode , :IdTableDesc, :Image, :CreationUser, :CreationDate, :LastUpdatedUser, :LastUpdatedDate, :Active, :Functional) SELECT SCOPE_IDENTITY() AS ID</sql>
+    <result rowName="" element="insertModuleOutput">
+      <element name="IdModule" xsdType="integer" column="ID" />      
+    </result>
+    <param name="ModuleCode" sqlType="STRING" />
+    <param name="IdTableDesc" sqlType="INTEGER" />
+    <param name="Image" sqlType="STRING" />
+    <param name="CreationUser" sqlType="STRING" />
+    <param name="CreationDate" sqlType="STRING" />
+    <param name="LastUpdatedUser" sqlType="STRING" />
+    <param name="LastUpdatedDate" sqlType="STRING" />
+    <param name="Active" sqlType="INTEGER" />
+    <param name="Functional" sqlType="INTEGER" />
+  </query>
+  
+ 
+  <query id="deleteModule" useConfig="optimizerDB">
+    <sql>DELETE FROM integtst01.ADM.Module OUTPUT deleted.* WHERE IdModule= :IdModule</sql>
+    <result rowName="" element="deleteModuleOutput">
+      <element name="Value" xsdType="integer" column="1" />
+    </result>
+    <param name="IdModule" sqlType="INTEGER" />
+  </query>
+  <query id="selectModuleId" useConfig="optimizerDB">
+    <sql>SELECT IdModule FROM integtst01.ADM.Module WITH(NOLOCK) WHERE ModuleCode = :ModuleCode</sql>
+    <result rowName="" element="selectModuleIdOutput">
+      <element name="IdModule" xsdType="integer" column="IdModule" />
+    </result>
+    <param name="ModuleCode" sqlType="INTEGER" />
+  </query>
+  
+  <query id="selectIDs" useConfig="optimizerDB">
+    <sql>SELECT m.IdModule, m.IdTableDesc, td.IdLanguageDesc from integtst01.ADM.Module m Left join integtst01.ADM.TableDesc td ON (m.IdTableDesc = td.IdTableDesc) Where m.IdModule = :IdModule</sql>
+    <result rowName="" element="selectIDs">
+      <element name="IdModule" xsdType="integer" column="IdModule" />
+      <element name="IdTableDesc" xsdType="integer" column="IdTableDesc" />
+      <element name="IdLanguageDesc" xsdType="integer" column="IdLanguageDesc" />
+    </result>
+    <param name="IdModule" sqlType="INTEGER" />
+  </query>
+  
+  <operation name="getIDs">
+    <call-query href="selectIDs">
+      <with-param name="IdModule" query-param="IdModule" />
+    </call-query>
+  </operation>
+  
+  <operation name="getModule">
+    <call-query href="selectModule">
+     	<with-param name="IdModule" query-param="IdModule" />
+	    <with-param name="ModuleCode" query-param="ModuleCode" />
+	    <with-param name="LanguageCode" query-param="LanguageCode" />
+	    <with-param name="offset" query-param="offset" />
+	    <with-param name="pageSize" query-param="pageSize" />
+    </call-query>
+  </operation>
+  
+  <operation name="getModuleByUser">
+    <call-query href="selectModuleByUser">
+      <with-param name="UserCode" query-param="UserCode" />
+      <with-param name="Functional" query-param="Functional" />
+      <with-param name="LanguageCode" query-param="LanguageCode" />
+    </call-query>
+  </operation>
+ 
+ <operation name="postModule">
+    <call-query href="insertModule">
+      <with-param name="ModuleCode" query-param="ModuleCode" />
+      <with-param name="IdTableDesc" query-param="IdTableDesc" />
+      <with-param name="Image" query-param="Image" />
+      <with-param name="CreationUser" query-param="CreationUser" />
+      <with-param name="CreationDate" query-param="CreationDate" />
+      <with-param name="LastUpdatedUser"  query-param="LastUpdatedUser" />
+      <with-param name="LastUpdatedDate"  query-param="LastUpdatedDate" />
+      <with-param name="Active" query-param="Active" />
+      <with-param name="Functional" query-param="Functional" />
+    </call-query>
+  </operation>
+  
+  <operation name="putModule">
+    <call-query href="updateModule">
+      <with-param name="IdModule" query-param="IdModule" />
+      <with-param name="ModuleCode" query-param="ModuleCode" />
+      <with-param name="IdTableDesc" query-param="IdTableDesc" />
+      <with-param name="Image" query-param="Image" />
+      <with-param name="LastUpdatedUser" query-param="LastUpdatedUser" />
+      <with-param name="LastUpdatedDate" query-param="LastUpdatedDate" />
+      <with-param name="Active" query-param="Active" />
+      <with-param name="Functional" query-param="Functional" />
+    </call-query>
+  </operation>
+  
+  <operation name="deleteModule">
+    <call-query href="deleteModule">
+      <with-param name="IdModule" query-param="IdModule" />
+    </call-query>
+  </operation>
+  <operation name="getModuleId">
+    <call-query href="selectModuleId">
+      <with-param name="ModuleCode" query-param="ModuleCode" />
+    </call-query>
+  </operation>
+  
+  
+  
+</data>

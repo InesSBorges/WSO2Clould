@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="validateToken" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <log level="custom">
+        <property expression="$trp:Authorization" name="Recebido e repassado"/>
+        <property expression="$trp:token" name="Token"/>
+        <property expression="$axis2:REST_URL_POSTFIX" name="querystrings"/>
+    </log>
+    <filter xpath="($trp:token != '') and ($trp:Authorization != '')">
+        <then/>
+        <else>
+            <payloadFactory description="returnError Token" media-type="xml">
+                <format>
+                    <result>
+                        <timestamp>$1</timestamp>
+                        <resultDescription>$2</resultDescription>
+                        <message>$3</message>
+                        <status>$4</status>
+                    </result>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property(&quot;SYSTEM_DATE&quot;,&quot;yyyy-MM-dd'T'HH:mm:ss.SSSXXX&quot;)"/>
+                    <arg value="Realizar envio do Token e credenciais"/>
+                    <arg value="Unauthorized"/>
+                    <arg value="401"/>
+                </args>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <respond/>
+        </else>
+    </filter>
+    <payloadFactory description="token" media-type="xml">
+        <format>
+            <params xmlns="">
+                <token>$1</token>
+            </params>
+        </format>
+        <args>
+            <arg evaluator="xml" expression="$trp:token"/>
+        </args>
+    </payloadFactory>
+    <!-- <property expression="$trp:Authorization" name="Autenticador" scope="default" type="STRING"/>
+    <property expression="$ctx:Autenticador" name="Authorization" scope="transport" type="STRING"/> -->
+    <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+    <property name="messageType" scope="axis2" type="STRING" value="application/x-www-form-urlencoded"/>
+    <call blocking="true">
+        <endpoint>
+            <http method="post" uri-template="https://srvpocwso201.gca.ad.root:9445/oauth2/introspect">
+                <suspendOnFailure>
+                    <initialDuration>-1</initialDuration>
+                    <progressionFactor>-1</progressionFactor>
+                    <maximumDuration>0</maximumDuration>
+                </suspendOnFailure>
+                <markForSuspension>
+                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                </markForSuspension>
+            </http>
+        </endpoint>
+    </call>
+    <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+    <filter regex="true" source="(//*[local-name() = 'active'] != 'true')">
+        <then>
+            <payloadFactory description="returnError Token" media-type="xml">
+                <format>
+                    <result>
+                        <timestamp>$1</timestamp>
+                        <resultDescription>$2</resultDescription>
+                        <message>$3</message>
+                        <status>$4</status>
+                    </result>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property(&quot;SYSTEM_DATE&quot;,&quot;yyyy-MM-dd'T'HH:mm:ss.SSSXXX&quot;)"/>
+                    <arg value="Token invalido ou inativo"/>
+                    <arg value="Unauthorized"/>
+                    <arg value="401"/>
+                </args>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <respond/>
+        </then>
+        <else/>
+    </filter>
+</sequence>

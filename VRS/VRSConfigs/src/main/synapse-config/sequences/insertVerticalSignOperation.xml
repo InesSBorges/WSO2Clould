@@ -442,7 +442,7 @@
                                 </format>
                                 <args>
                                     <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
-                                    <arg value="SustIMS0100 - Erro ao inserir dados na VRS_VerticalSign.2"/>
+                                    <arg value="SustIMS0100 - Erro ao inserir dados na VRS_VerticalSign."/>
                                     <arg value="Bad Request"/>
                                     <arg value="400"/>
                                     <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>

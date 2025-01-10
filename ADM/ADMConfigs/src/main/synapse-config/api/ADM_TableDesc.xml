@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/ADM_REST/TableDesc" name="ADM_TableDesc" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET">
+        <inSequence>
+            <property description="input" name="input" scope="default" type="STRING" value="body"/>
+            <payloadFactory description="getTableDesc_input" media-type="xml">
+                <format>
+                    <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Header/>
+                        <soapenv:Body>
+                            <dat:getTableDescLanguage>
+                                <dat:IdTableDesc>$1</dat:IdTableDesc>
+                            </dat:getTableDescLanguage>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'id']"/>
+                </args>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <address uri="local:///services/ADM_TableDescDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </address>
+                </endpoint>
+            </call>
+            <filter regex="true" source="count(//*[local-name() = 'TableDesc']) = 1">
+                <then>
+                    <payloadFactory description="getTableDesc_output" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultCode>$2</resultCode>
+                                    <totalRecord>$3</totalRecord>
+                                    <totalErrors>$4</totalErrors>
+                                    <hasmore>$5</hasmore>
+                                    <offset>$6</offset>
+                                    <message>$7</message>
+                                    <status>$8</status>
+                                    <messageDescription>$9</messageDescription>
+                                    <clientMessageDescription>$10</clientMessageDescription>
+                                </result>
+                                <getTableDescLanguageOutput xmlns="">
+                                    <TableDesc>
+                                        <IdTableDesc>$10</IdTableDesc>
+                                        <IdLanguageDesc>$12</IdLanguageDesc>
+                                        <IdLanguage>$11</IdLanguage>
+                                        <creationUser>$13</creationUser>
+                                        <creationDate>$14</creationDate>
+                                        <lastUpdatedUser>$15</lastUpdatedUser>
+                                        <lastUpdatedDate>$16</lastUpdatedDate>
+                                        <active>$17</active>
+                                    </TableDesc>
+                                    <LanguageDesc>
+                                        <IdLanguageDesc>$18</IdLanguageDesc>
+                                        <IdLanguage>$19</IdLanguage>
+                                        <SmallDescription>$20</SmallDescription>
+                                        <MediumDescription>$21</MediumDescription>
+                                        <LargeDescription>$22</LargeDescription>
+                                        <creationUser>$23</creationUser>
+                                        <creationDate>$24</creationDate>
+                                        <lastUpdatedUser>$25</lastUpdatedUser>
+                                        <lastUpdatedDate>$26</lastUpdatedDate>
+                                        <active>$27</active>
+                                    </LanguageDesc>
+                                </getTableDescLanguageOutput>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0000"/>
+                            <arg evaluator="xml" expression="count(//*[local-name() = 'TableDesc'])"/>
+                            <arg value="0"/>
+                            <arg value="false"/>
+                            <arg value="OK"/>
+                            <arg value="200"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'IdTableDesc']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'IdLanguageDesc']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'IdLanguage']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'CreationUser']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'CreationDate']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'LastUpdatedUser']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'LastUpdatedDate']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'Active']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'DescriptionSmall']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'DescriptionMedium']"/>
+                            <arg evaluator="xml" expression="//*[local-name() = 'DescriptionLarge']"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </then>
+                <else>
+                    <payloadFactory description="noRecords" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultCode>$2</resultCode>
+                                    <totalRecord>$3</totalRecord>
+                                    <totalErrors>$4</totalErrors>
+                                    <hasmore>$5</hasmore>
+                                    <offset>$6</offset>
+                                    <message>$7</message>
+                                    <status>$8</status>
+                                    <messageDescription>$9</messageDescription>
+                                    <clientMessageDescription>$10</clientMessageDescription>
+                                </result>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0002"/>
+                            <arg value="0"/>
+                            <arg value="1"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="200"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/post">
+        <inSequence>
+            <property name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+            <enrich description="input">
+                <source clone="true" type="envelope"/>
+                <target property="input" type="property"/>
+            </enrich>
+            <filter regex="true" source="$ctx:input//*[local-name() = 'id'] != '' or $ctx:input//*[local-name() = 'code'] != ''">
+                <then>
+                    <payloadFactory description="languageValidate" media-type="xml">
+                        <format>
+                            <dat:getLanguageID xmlns:dat="http://ws.wso2.org/dataservice">
+                                <dat:IdLanguage>$1</dat:IdLanguage>
+                                <dat:LanguageCode>$2</dat:LanguageCode>
+                            </dat:getLanguageID>
+                        </format>
+                        <args/>
+                    </payloadFactory>
+                    <call blocking="true">
+                        <endpoint>
+                            <http method="post" uri-template="local:///services/ADM_LanguageDB/">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <filter regex="true" source="count(//*[local-name() = 'IdLanguage']) = 1">
+                        <then>
+                            <property description="Language" expression="//*[local-name() = 'IdLanguage']" name="IdLanguage" scope="default" type="STRING"/>
+                        </then>
+                        <else>
+                            <payloadFactory description="errorlanguageValidate" media-type="xml">
+                                <format>
+                                    <jsonObject>
+                                        <result>
+                                            <timestamp>$1</timestamp>
+                                            <resultCode>$2</resultCode>
+                                            <totalRecord>$3</totalRecord>
+                                            <totalErrors>$4</totalErrors>
+                                            <hasmore>$5</hasmore>
+                                            <offset>$6</offset>
+                                            <message>$7</message>
+                                            <status>$8</status>
+                                            <messageDescription>$9</messageDescription>
+                                            <clientMessageDescription>$10</clientMessageDescription>
+                                        </result>
+                                    </jsonObject>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                                    <arg value="SustIMS0100"/>
+                                    <arg value="0"/>
+                                    <arg value="1"/>
+                                    <arg value="false"/>
+                                    <arg value="0"/>
+                                    <arg value="OK"/>
+                                    <arg value="202"/>
+                                </args>
+                            </payloadFactory>
+                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                            <respond/>
+                        </else>
+                    </filter>
+                </then>
+                <else>
+                    <payloadFactory description="noLanguage" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultCode>$2</resultCode>
+                                    <totalRecord>$3</totalRecord>
+                                    <totalErrors>$4</totalErrors>
+                                    <hasmore>$5</hasmore>
+                                    <offset>$6</offset>
+                                    <message>$7</message>
+                                    <status>$8</status>
+                                    <messageDescription>$9</messageDescription>
+                                    <clientMessageDescription>$10</clientMessageDescription>
+                                </result>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0100"/>
+                            <arg value="0"/>
+                            <arg value="1"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="202"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <payloadFactory description="insertLanguageDesc" media-type="xml">
+                <format>
+                    <dat:postLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdLanguage>$1</dat:IdLanguage>
+                        <dat:DescriptionSmall>$2</dat:DescriptionSmall>
+                        <dat:DescriptionMedium>$3</dat:DescriptionMedium>
+                        <dat:DescriptionLarge>$4</dat:DescriptionLarge>
+                        <dat:CreationUser>$5</dat:CreationUser>
+                        <dat:CreationDate>$6</dat:CreationDate>
+                        <dat:LastUpdatedUser>$5</dat:LastUpdatedUser>
+                        <dat:LastUpdatedDate>$6</dat:LastUpdatedDate>
+                        <dat:Active>$7</dat:Active>
+                    </dat:postLanguageDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:IdLanguage"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'smallDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'mediumDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'largeDescription']"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'operationUser']"/>
+                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'active']"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="$ctx:idLanguageDesc >= 1">
+                <then>
+                    <property description="languageDesc" expression="//*[local-name() = 'IdLanguageDesc']" name="IdLanguageDesc" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <payloadFactory description="errorLanguageDesc" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultCode>$2</resultCode>
+                                    <totalRecord>$3</totalRecord>
+                                    <totalErrors>$4</totalErrors>
+                                    <hasmore>$5</hasmore>
+                                    <offset>$6</offset>
+                                    <message>$7</message>
+                                    <status>$8</status>
+                                    <messageDescription>$9</messageDescription>
+                                    <clientMessageDescription>$10</clientMessageDescription>
+                                </result>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0100"/>
+                            <arg value="0"/>
+                            <arg value="1"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="202"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+            <payloadFactory description="insertTableDesc" media-type="xml">
+                <format>
+                    <dat:postTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                        <dat:IdLanguage>$2</dat:IdLanguage>
+                        <dat:CreationUser>$3</dat:CreationUser>
+                        <dat:CreationDate>$4</dat:CreationDate>
+                        <dat:LastUpdatedUser>$3</dat:LastUpdatedUser>
+                        <dat:LastUpdatedDate>$4</dat:LastUpdatedDate>
+                        <dat:Active>$5</dat:Active>
+                    </dat:postTableDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:IdLanguageDesc"/>
+                    <arg evaluator="xml" expression="$ctx:IdLanguage"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'operationUser']"/>
+                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')"/>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'active']"/>
+                </args>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="$ctx:IdTableDesc >= 1">
+                <then>
+                    <property description="tableDesc" expression="//*[local-name() = 'IdTableDesc']" name="IdTableDesc" scope="default" type="STRING"/>
+                    <payloadFactory description="sucesso" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <insertTableDescOutput>
+                                    <result>
+                                        <timestamp>$1</timestamp>
+                                        <resultCode>$2</resultCode>
+                                        <totalRecord>$3</totalRecord>
+                                        <totalErrors>$4</totalErrors>
+                                        <hasmore>$5</hasmore>
+                                        <offset>$6</offset>
+                                        <message>$7</message>
+                                        <status>$8</status>
+                                        <messageDescription>$9</messageDescription>
+                                        <clientMessageDescription>$10</clientMessageDescription>
+                                        <id>$11</id>
+                                    </result>
+                                </insertTableDescOutput>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0004"/>
+                            <arg value="0"/>
+                            <arg value="1"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="201"/>
+                            <arg evaluator="xml" expression="$ctx:IdTableDesc"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </then>
+                <else>
+                    <payloadFactory description="rollbackLanguageDesc" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <deleteLanguageDesc>
+                                    <IdLanguageDesc>$1</IdLanguageDesc>
+                                </deleteLanguageDesc>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:IdLanguageDesc"/>
+                        </args>
+                    </payloadFactory>
+                    <call>
+                        <endpoint>
+                            <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <payloadFactory description="errorInsertTableDesc" media-type="xml">
+                        <format>
+                            <jsonObject>
+                                <result>
+                                    <timestamp>$1</timestamp>
+                                    <resultCode>$2</resultCode>
+                                    <totalRecord>$3</totalRecord>
+                                    <totalErrors>$4</totalErrors>
+                                    <hasmore>$5</hasmore>
+                                    <offset>$6</offset>
+                                    <message>$7</message>
+                                    <status>$8</status>
+                                    <messageDescription>$9</messageDescription>
+                                    <clientMessageDescription>$10</clientMessageDescription>
+                                </result>
+                            </jsonObject>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE' ,'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0006"/>
+                            <arg value="0"/>
+                            <arg value="1"/>
+                            <arg value="false"/>
+                            <arg value="0"/>
+                            <arg value="OK"/>
+                            <arg value="409"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

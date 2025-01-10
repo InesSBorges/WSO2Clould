@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="ADM_Module" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/ADM_Module.xml</file>
+    </artifact>
+    <artifact name="ADM_Module_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_Module_swagger.yaml</file>
+    </artifact>
+    <artifact name="ADM_Module_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_Module_metadata.yaml</file>
+    </artifact>
+    <artifact name="getModule_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getModule_XSLT.xml</file>
+    </artifact>
+    <artifact name="getNumRecords_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getNumRecords_XSLT.xml</file>
+    </artifact>
+    <artifact name="getModuleByUser_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/getModuleByUser_XSLT.xml</file>
+    </artifact>
+    <artifact name="putLanguageDesc_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putLanguageDesc_XSLT.xml</file>
+    </artifact>
+    <artifact name="putModule_XSLT" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/putModule_XSLT.xml</file>
+    </artifact>
+    <artifact name="testeOauth" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/testeOauth.xml</file>
+    </artifact>
+    <artifact name="testeOauth_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/testeOauth_swagger.yaml</file>
+    </artifact>
+    <artifact name="testeOauth_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/testeOauth_metadata.yaml</file>
+    </artifact>
+    <artifact name="validateToken" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validateToken.xml</file>
+    </artifact>
+    <artifact name="userADMModule" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/userADMModule.xml</file>
+    </artifact>
+    <artifact name="passADMMODULE" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/passADMMODULE.xml</file>
+    </artifact>
+    <artifact name="testeProxy" groupId="com.example.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/proxy-services/testeProxy.xml</file>
+    </artifact>
+    <artifact name="validateTokenESB" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/validateTokenESB.xml</file>
+    </artifact>
+    <artifact name="tableDesc" groupId="com.example.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/proxy-services/tableDesc.xml</file>
+    </artifact>
+    <artifact name="ADM_TableDesc" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/ADM_TableDesc.xml</file>
+    </artifact>
+    <artifact name="ADM_TableDesc_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_TableDesc_swagger.yaml</file>
+    </artifact>
+    <artifact name="ADM_TableDesc_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_TableDesc_metadata.yaml</file>
+    </artifact>
+    <artifact name="ADM_SaveReport" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/ADM_SaveReport.xml</file>
+    </artifact>
+    <artifact name="ADM_SaveReport_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_SaveReport_swagger.yaml</file>
+    </artifact>
+    <artifact name="ADM_SaveReport_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/ADM_SaveReport_metadata.yaml</file>
+    </artifact>
+</artifacts>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/test" name="testeOauth" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" url-mapping="/test">
+        <inSequence>
+            <property expression="$axis2:TransportHeaders.Authorization" name="AuthorizationHeader" scope="axis2" type="STRING"/>
+            <log level="custom">
+                <property expression="$axis2:TransportHeaders.Authorization" name="AuthorizationHeader"/>
+            </log>
+            <oauthService password="b4Tv6sVrRR49sSJ5JyRAfxXpBGp9kzVtACjEH57VrXca" remoteServiceUrl="https://integtst01.optimizer.lan:9444/oauth2/token/" username="wjL4tl_OapidRCjKJc2nrXgDrU8a"/>
+            <log level="full"/>
+            <log level="custom">
+                <property name="TESTE" value="feito a autorização"/>
+            </log>
+            <loopback/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

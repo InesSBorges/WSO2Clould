@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="putModule_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet extension-element-prefixes="date" version="2.0" xmlns:dat="http://ws.wso2.org/dataservice" xmlns:date="http://exslt.org/dates-and-times" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="id"/>
+        <xsl:template match="/">
+            <dat:putModule>
+                <dat:IdModule>
+                    <xsl:value-of select="$id"/>
+                </dat:IdModule>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//code) > 0">
+                        <dat:ModuleCode>
+                            <xsl:value-of select="//requestModule//code"/>
+                        </dat:ModuleCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="string-length(//returnGetModule//dat:ModuleCode) > 0">
+                            <dat:ModuleCode>
+                                <xsl:value-of select="//returnGetModule//dat:ModuleCode"/>
+                            </dat:ModuleCode>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <dat:IdTableDesc>
+                    <xsl:value-of select="//returnGetModule//dat:IdTableDesc"/>
+                </dat:IdTableDesc>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//image) > 0">
+                        <dat:Image>
+                            <xsl:value-of select="//requestModule//image"/>
+                        </dat:Image>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="string-length(//returnGetModule//dat:Image) > 0">
+                            <dat:Image>
+                                <xsl:value-of select="//returnGetModule//dat:Image"/>
+                            </dat:Image>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <dat:LastUpdatedUser>
+                    <xsl:value-of select="//requestModule//operationUser"/>
+                </dat:LastUpdatedUser>
+                <dat:LastUpdatedDate>
+                    <xsl:value-of select="concat(translate(translate(date:date-time(), 'T', ' '), 'Z',''),'.000')"/>
+                </dat:LastUpdatedDate>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//active) > 0">
+                        <dat:Active>
+                            <xsl:value-of select="//requestModule//active"/>
+                        </dat:Active>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <dat:Active>
+                            <xsl:value-of select="//returnGetModule//dat:Active"/>
+                        </dat:Active>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length(//requestModule//functional) > 0">
+                        <dat:Functional>
+                            <xsl:value-of select="//requestModule//functional"/>
+                        </dat:Functional>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="string-length(//returnGetModule//dat:Functional) > 0">
+                            <dat:Functional>
+                                <xsl:value-of select="//returnGetModule//dat:Functional"/>
+                            </dat:Functional>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </dat:putModule>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

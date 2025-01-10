@@ -1,0 +1,10 @@
+---
+key: "ADM_Module-1.0.0"
+name : "ADM_Module"
+displayName : "ADM_Module"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/ADM_REST/Module"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

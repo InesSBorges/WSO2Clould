@@ -1,0 +1,20 @@
+<data name="ADM_LanguageDB" serviceNamespace="" serviceGroup="" transports="http https local">
+  <config id="ReaderSustIMS">
+    <property name="carbon_datasource_name">ReaderSustIMS</property>
+  </config>
+  <query id="selectLanguage" useConfig="ReaderSustIMS" >
+    <sql>SELECT DISTINCT L.LanguageCode , L.IdLanguage FROM ADM.LANGUAGE AS L WITH (NOLOCK) LEFT JOIN (  SELECT U.IdLanguage, L2.LanguageCode FROM ADM.[User] AS U WITH (NOLOCK) INNER JOIN ADM.LANGUAGE AS L2 WITH (NOLOCK) ON L2.IdLanguage = U.IdLanguage WHERE U.UserCode = :OperationUser ) UL ON UL.IdLanguage = L.IdLanguage WHERE L.LanguageCode = ISNULL(:UserLanguage, UL.LanguageCode)</sql>
+    <result rowName="" element="getLanguageOutput">
+      <element name="IdLanguage" xsdType="integer" column="IdLanguage" />
+      <element name="LanguageCode" xsdType="string" column="LanguageCode" />
+    </result>
+    <param name="OperationUser" sqlType="STRING" />
+    <param name="UserLanguage" defaultValue="#{NULL}" sqlType="STRING" />
+  </query>
+  <operation name="getLanguage">
+    <call-query href="selectLanguage">
+      <with-param name="OperationUser" query-param="OperationUser" />
+      <with-param name="UserLanguage" query-param="UserLanguage" />
+    </call-query>
+  </operation>
+</data>

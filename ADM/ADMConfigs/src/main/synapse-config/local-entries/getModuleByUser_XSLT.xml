@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="getModuleByUser_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="2.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="user"/>
+        <xsl:param name="functional"/>
+        <xsl:param name="userLanguage"/>
+        <xsl:template match="/">
+            <dat:getModuleByUser xmlns:dat="http://ws.wso2.org/dataservice">
+                <dat:UserCode>
+                    <xsl:value-of select="$user"/>
+                </dat:UserCode>
+                <xsl:if test="string-length($functional) > 0">
+                    <dat:Functional>
+                        <xsl:value-of select="$functional"/>
+                    </dat:Functional>
+                </xsl:if>
+                <dat:LanguageCode>
+                    <xsl:value-of select="$userLanguage"/>
+                </dat:LanguageCode>
+            </dat:getModuleByUser>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

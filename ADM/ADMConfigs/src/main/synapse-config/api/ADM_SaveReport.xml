@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/ADM_SaveReport" name="ADM_SaveReport" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <log level="full"/>
+            <class name="wso2libs.readURL">
+                <property expression="json-eval($.link)" name="link"/>
+                <property expression="json-eval($.source)" name="path"/>
+                <property expression="json-eval($.namefile)" name="namefile"/>
+                <property name="compression" value="0.0"/>
+            </class>
+            <log level="full">
+                <property expression="get-property('messagestatus')" name="Teste"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

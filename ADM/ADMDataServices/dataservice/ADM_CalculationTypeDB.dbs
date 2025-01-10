@@ -1,0 +1,30 @@
+<data transports="http https local" serviceGroup="" serviceNamespace="" name="ADM_CalculationTypeDB">
+  <config id="ReaderSustIMS" enableOData="false">
+    <property name="carbon_datasource_name">ReaderSustIMS</property>
+  </config>
+  <operation name="getNumRecords">
+    <call-query href="selectNumRecords">
+      <with-param name="offset1" query-param="offset1" />
+      <with-param name="offset2" query-param="offset2" />
+      <with-param name="pageSize1" query-param="pageSize1" />
+      <with-param name="pageSize2" query-param="pageSize2" />
+      <with-param name="IdCalculationType" query-param="IdCalculationType" />
+      <with-param name="CalculationTypeCode" query-param="CalculationTypeCode" />
+    </call-query>
+  </operation>
+  <query id="selectNumRecords" useConfig="ReaderSustIMS">
+    <sql><![CDATA[SELECT *  ,IIF(hasmore = 'true', CAST(ISNULL(:offset1, 0) AS INT) + CAST(ISNULL(:pageSize1, 50) AS INT), 0) nextOffset FROM (SELECT COUNT(t1.IdModule) numRecords,CASE WHEN (CAST(ISNULL(:offset2, 0) AS INT) + CAST(ISNULL(:pageSize2, 50) AS INT)) < COUNT(t1.IdModule) THEN 'true'    ELSE 'false'    END hasmore  FROM integtst01.ADM."Module" t1 WITH (NOLOCK)  WHERE t1.IdModule = ISNULL(:IdCalculationType, t1.IdModule) AND t1.ModuleCode = ISNULL(:CalculationTypeCode, t1.ModuleCode)  ) TBL]]></sql>
+    <param name="offset1" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="offset2" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="pageSize1" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="pageSize2" defaultValue="#{NULL}" sqlType="INTEGER" />
+    <param name="IdCalculationType" sqlType="INTEGER" />
+    <param name="CalculationTypeCode" sqlType="STRING" />
+    <result element="selectNumRecordsOutput">
+      <element name="numRecords" xsdType="integer" column="numRecords" />
+      <element name="hasmore" xsdType="string" column="hasmore" />
+      <element name="nextOffset" xsdType="integer" column="nextOffset" />
+    </result>
+    
+  </query>
+</data>

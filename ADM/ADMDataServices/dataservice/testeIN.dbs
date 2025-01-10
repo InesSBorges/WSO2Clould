@@ -1,0 +1,17 @@
+<data name="testeIN" serviceNamespace="" serviceGroup="" transports="http https">
+<config id="optimizerDB">
+    <property name="carbon_datasource_name">optimizerDB</property>
+  </config>
+  <query id="selectIN" useConfig="optimizerDB" >
+    <sql>SELECT IdModule FROM integtst01.ADM."Module" WITH(NOLOCK) WHERE ModuleCode IN (:ModuleCode)</sql>
+    <result rowName="teste" element="selectIN">
+      <element name="IdModule" xsdType="integer" column="IdModule" />      
+    </result>
+    <param name="ModuleCode" defaultValue="#{NULL}" type="IN" paramType="ARRAY" sqlType="STRING" />
+  </query>
+  <operation name="getIN">
+    <call-query href="selectIN">
+    	<with-param name="ModuleCode" query-param="ModuleCode" />
+    </call-query>
+  </operation>
+</data>

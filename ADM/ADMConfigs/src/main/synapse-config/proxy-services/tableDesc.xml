@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="tableDesc" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <property description="input" name="input" scope="default" type="STRING" value="body"/>
+            <payloadFactory description="getTableDesc" media-type="xml">
+                <format>
+                    <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Header/>
+                        <soapenv:Body>
+                            <dat:getTableDescLanguage>
+                                <dat:IdTableDesc>$1</dat:IdTableDesc>
+                            </dat:getTableDescLanguage>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:input//*[local-name() = 'id']"/>
+                </args>
+            </payloadFactory>
+            <call>
+                <endpoint>
+                    <address uri="local:///services/ADM_TableDescDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </address>
+                </endpoint>
+            </call>
+            <payloadFactory description="output" media-type="xml">
+                <format>
+                    <jsonObject>
+                        <result>
+                            <timestamp>$1</timestamp>
+                            <resultDescription>$2</resultDescription>
+                            <totalRecord>$3</totalRecord>
+                            <hasmore>$4</hasmore>
+                            <offset>$5</offset>
+                            <messageDescription>$6</messageDescription>
+                            <clientMessageDescription>$7</clientMessageDescription>
+                            <message>$8</message>
+                            <status>$9</status>
+                        </result>
+                        <getTableDescLanguageOutput xmlns="">
+                            <IdTableDesc>$10</IdTableDesc>
+                            <IdLanguage>$11</IdLanguage>
+                            <LanguageDesc>
+                                <IdLanguageDesc>$12</IdLanguageDesc>
+                                <DescriptionSmall>$13</DescriptionSmall>
+                                <DescriptionMedium>$14</DescriptionMedium>
+                                <DescriptionLarge>$15</DescriptionLarge>
+                            </LanguageDesc>
+                            <audit>
+                                <creationUser>$16</creationUser>
+                                <creationDate>$17</creationDate>
+                                <lastUpdatedUser>$18</lastUpdatedUser>
+                                <lastUpdatedDate>$19</lastUpdatedDate>
+                            </audit>
+                            <active>$20</active>
+                        </getTableDescLanguageOutput>
+                    </jsonObject>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="//*[local-name() = 'IdTableDesc']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'CreationUser']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'CreationDate']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'LastUpdatedUser']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'LastUpdatedDate']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'Active']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'IdLanguage']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'IdLanguageDesc']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionSmall']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionMedium']"/>
+                    <arg evaluator="xml" expression="//*[local-name() = 'DescriptionLarge']"/>
+                </args>
+            </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </target>
+</proxy>

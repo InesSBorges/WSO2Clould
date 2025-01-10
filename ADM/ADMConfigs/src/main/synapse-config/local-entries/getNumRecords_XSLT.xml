@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="getNumRecords_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="2.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="offset"/>
+        <xsl:param name="pageSize"/>
+        <xsl:param name="id"/>
+        <xsl:param name="code"/>
+        <xsl:template match="/">
+            <dat:getNumRecords xmlns:dat="http://ws.wso2.org/dataservice">
+                <xsl:if test="string-length($offset) > 0">
+                    <offset1>
+                        <xsl:value-of select="$offset"/>
+                    </offset1>
+                    <offset2>
+                        <xsl:value-of select="$offset"/>
+                    </offset2>
+                </xsl:if>
+                <xsl:if test="string-length($pageSize) > 0">
+                    <pageSize1>
+                        <xsl:value-of select="$pageSize"/>
+                    </pageSize1>
+                    <pageSize2>
+                        <xsl:value-of select="$pageSize"/>
+                    </pageSize2>
+                </xsl:if>
+                <IdCalculationType>
+                    <xsl:value-of select="$id"/>
+                </IdCalculationType>
+                <CalculationTypeCode>
+                    <xsl:value-of select="$code"/>
+                </CalculationTypeCode>
+            </dat:getNumRecords>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>
