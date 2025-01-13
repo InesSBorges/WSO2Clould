@@ -114,6 +114,9 @@
     </resource>
     <resource methods="GET" uri-template="/verticalSign">
         <inSequence>
+            <log level="full">
+                <property name="message" value="Processing /verticalSign request"/>
+            </log>
             <filter regex="true" source="$ctx:query.param.verticalSignId != '' or $ctx:query.param.verticalSignCode != '' or $ctx:query.param.roadComponentId != '' or $ctx:query.param.roadComponentCode != ''">
                 <then>
                     <payloadFactory media-type="xml">
@@ -240,8 +243,13 @@
                 </else>
             </filter>
         </inSequence>
-        <outSequence/>
+         <outSequence>
+            <send/>
+        </outSequence>
         <faultSequence>
+            <log level="full">
+                <property name="message" value="Error processing /verticalSign request"/>
+            </log>
             <payloadFactory description="returnError Token" media-type="xml">
                 <format>
                     <result>
