@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <artifactId>VRS</artifactId>
@@ -10,41 +12,17 @@
   <description>VRS</description>
   <repositories>
     <repository>
-        <id>wso2-nexus</id>
-        <name>WSO2 internal Repository</name>
-        <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-        <releases>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-          <checksumPolicy>ignore</checksumPolicy>
-        </releases>
+      <id>wso2-releases</id>
+      <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
     </repository>
     <repository>
-        <id>wso2.releases</id>
-        <name>WSO2 internal Repository</name>
-        <url>https://maven.wso2.org/nexus/content/repositories/releases/</url>
-        <releases>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-          <checksumPolicy>ignore</checksumPolicy>
-        </releases>
-    </repository>
-    <repository>
-        <id>wso2.snapshots</id>
-        <name>Apache Snapshot Repository</name>
-        <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-        <snapshots>
-          <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
-        </snapshots>
-        <releases>
-          <enabled>false</enabled>
-        </releases>
+      <id>wso2-public</id>
+      <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-      <id>wso2.snapshots</id>
+      <id>wso2-snapshots</id>
       <name>Apache Snapshot Repository</name>
       <url>https://maven.wso2.org/nexus/content/repositories/snapshots/</url>
       <snapshots>
@@ -56,13 +34,13 @@
       </releases>
     </pluginRepository>
     <pluginRepository>
+      <id>wso2-nexus</id>
+      <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>daily</updatePolicy>
         <checksumPolicy>ignore</checksumPolicy>
       </releases>
-      <id>wso2-nexus</id>
-      <url>https://maven.wso2.org/nexus/content/groups/wso2-public/</url>
     </pluginRepository>
   </pluginRepositories>
   <profiles>
@@ -74,7 +52,7 @@
       <build>
         <plugins>
           <!-- Download dependency jars to the deployment/libs folder -->
-          <plugin>
+         <!-- <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <version>3.5.0</version>
@@ -87,21 +65,22 @@
                 <configuration>
                   <outputDirectory>${basedir}/deployment/libs</outputDirectory>
                   <excludeTransitive>true</excludeTransitive>
-                  <!-- exclude dependencies which already available in MI -->
+
                   <excludeGroupIds>org.apache.synapse,org.apache.axis2</excludeGroupIds>
                 </configuration>
               </execution>
             </executions>
-          </plugin>
+          </plugin>-->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Add the version here -->
             <configuration>
               <source>1.8</source>
               <target>1.8</target>
             </configuration>
           </plugin>
-          <plugin>
+         <!--<plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>vscode-car-plugin</artifactId>
             <version>5.2.75</version>
@@ -112,7 +91,7 @@
                 <goals>
                   <goal>car</goal>
                 </goals>
-                <configuration/>
+                <configuration />
               </execution>
             </executions>
           </plugin>
@@ -133,12 +112,12 @@
                   <groupId>${project.groupId}</groupId>
                   <version>${project.version}</version>
                   <file>${project.build.directory}/${project.artifactId}_${project.version}.car</file>
-                  <!-- Use the following configuration when archiveLocation is configured -->
-                  <!-- <file>${archiveLocation}/${project.artifactId}_${project.version}.car</file> -->
+
+
                 </configuration>
               </execution>
             </executions>
-          </plugin>
+          </plugin>-->
         </plugins>
       </build>
       <properties>
@@ -152,7 +131,7 @@
     </profile>
     <profile>
       <id>test</id>
-      <build/>
+      <build />
       <properties>
         <server.type>${testServerType}</server.type>
         <server.host>${testServerHost}</server.host>
@@ -164,8 +143,8 @@
       <id>docker</id>
       <build>
         <plugins>
-            <!-- Compile and build the class mediator jars -->
-            <plugin>
+          <!-- Compile and build the class mediator jars -->
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <executions>
@@ -196,7 +175,7 @@
             </executions>
           </plugin>
           <!-- Build the Carbon Application -->
-          <plugin>
+          <!--<plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>vscode-car-plugin</artifactId>
             <version>5.2.75</version>
@@ -210,9 +189,9 @@
                 <configuration></configuration>
               </execution>
             </executions>
-          </plugin>
+          </plugin>-->
           <!-- Download dependency jars to the deployment/libs folder -->
-          <plugin>
+         <!-- <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <version>3.5.0</version>
@@ -225,14 +204,14 @@
                 <configuration>
                   <outputDirectory>${basedir}/deployment/libs</outputDirectory>
                   <excludeTransitive>true</excludeTransitive>
-                  <!-- exclude dependencies which already available in MI -->
+
                   <excludeGroupIds>org.apache.synapse,org.apache.axis2</excludeGroupIds>
                 </configuration>
               </execution>
             </executions>
-          </plugin>
+          </plugin>-->
           <!-- Run config mapper to transform configuration files -->
-          <plugin>
+          <!--<plugin>
             <groupId>org.wso2.maven</groupId>
             <artifactId>mi-container-config-mapper</artifactId>
             <version>5.2.75</version>
@@ -255,8 +234,8 @@
                 </configuration>
               </execution>
             </executions>
-            <configuration/>
-          </plugin>
+            <configuration />
+          </plugin>-->
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <version>3.0.0</version>
@@ -272,14 +251,14 @@
                   <target>
                     <copy todir="${basedir}/target/tmp_docker/CompositeApps">
                       <fileset dir="${basedir}/target">
-                        <include name="*.car"/>
+                        <include name="*.car" />
                       </fileset>
                     </copy>
                   </target>
                 </configuration>
               </execution>
             </executions>
-            <configuration/>
+            <configuration />
           </plugin>
           <!-- Build docker image -->
           <plugin>
@@ -316,7 +295,7 @@
                 </configuration>
               </execution>
             </executions>
-            <configuration/>
+            <configuration />
           </plugin>
         </plugins>
       </build>
@@ -332,7 +311,7 @@
   </profiles>
   <build>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>org.wso2.maven</groupId>
         <artifactId>synapse-unit-test-maven-plugin</artifactId>
         <version>5.2.75</version>
@@ -357,12 +336,12 @@
           <testCasesFilePath>${project.basedir}/src/test/wso2mi/${testFile}</testCasesFilePath>
           <mavenTestSkip>${maven.test.skip}</mavenTestSkip>
         </configuration>
-      </plugin>
+      </plugin>-->
     </plugins>
   </build>
   <properties>
     <projectType>integration-project</projectType>
-    <uuid>9257c9c1-584f-42d4-b0d6-1b30000a41dd</uuid>
+    <uuid>abf3ad65-2a8b-407c-888c-44adb54b2206</uuid>
     <!-- <archiveLocation>configure a custom target directory for CAPP</archiveLocation> -->
     <keystore.type>JKS</keystore.type>
     <keystore.name>wso2carbon.jks</keystore.name>
