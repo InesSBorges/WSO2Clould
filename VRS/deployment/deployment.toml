@@ -37,8 +37,7 @@ algorithm = "AES"
 # parameter.connection_factory_type = "queue"
 # parameter.cache_level = "producer"
 
-
-#[[transport.jms.listener]]
+# [[transport.jms.listener]]
 # name = "myQueueConnectionFactory"
 # parameter.initial_naming_factory = "org.apache.activemq.jndi.ActiveMQInitialContextFactory"
 # parameter.provider_url = "tcp://localhost:61616"
