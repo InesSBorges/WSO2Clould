@@ -1,0 +1,741 @@
+<data name="verticalSignDBR" transports="http https local"
+	enableBatchRequests="true">
+	<config id="ReaderSustIMS">
+		<property name="carbon_datasource_name">ReaderSustIMS</property>
+	</config>
+	<query id="selectVerticalSign" useConfig="ReaderSustIMS">
+		<sql>SELECT DISTINCT t1.IdVerticalSign, t1.VerticalSignCode,
+			t1.IdTableDescVerticalSign, t1.DescSmallVerticalSign,
+			t1.DescMediumVerticalSign, t1.DescLargeVerticalSign,
+			t1.IdVerticalSignType, t1.VerticalSignTypeCode,
+			t1.IdTableDescVerticalSignType, t1.DescSmallVerticalSignType,
+			t1.DescMediumVerticalSignType, t1.DescLargeVerticalSignType,
+			t1.IdCalculationTypeCS, t1.CalculationTypeCodeCS,
+			t1.IdTableDescCalculationTypeCS, t1.DescSmallCalculationTypeCS,
+			t1.DescMediumCalculationTypeCS, t1.DescLargeCalculationTypeCS,
+			t1.IdCalculationTypeMS, t1.CalculationTypeCodeMS,
+			t1.IdTableDescCalculationTypeMS, t1.DescSmallCalculationTypeMS,
+			t1.DescMediumCalculationTypeMS, t1.DescLargeCalculationTypeMS,
+			t1.IdDirection, t1.DirectionCode, t1.IdTableDescDirection,
+			t1.DescSmallDirection, t1.DescMediumDirection, t1.DescLargeDirection,
+			t1.IdSide, t1.SideCode, t1.IdTableDescSide, t1.DescSmallSide,
+			t1.DescMediumSide, t1.DescLargeSide, t1.IdRoadComponent,
+			t1.IdComponent, t1.CodeComponent, t1.IdTableDescComponent,
+			t1.DescSmallComponent, t1.DescMediumComponent, t1.DescLargeComponent,
+			t1.IdRoadComponentType, t1.RoadComponentTypeCode,
+			t1.IdTableDescRCType, t1.DescSmallRCType, t1.DescMediumRCType,
+			t1.DescLargeRCType, t1.IdRoad, t1.RoadCode, t1.IdTableDescRoad,
+			t1.DescSmallRoad, t1.DescMediumRoad, t1.DescLargeRoad,
+			t1.IdConcession, t1.ConcessionCode, t1.IdTableDescConcession,
+			t1.DescSmallConcession, t1.DescMediumConcession,
+			t1.DescLargeConcession, t1.IdMasterObject, t1.Km, t1.GPSCoordinateM,
+			t1.GPSCoordinateP, t1.ConstructionDate, t1.Lot, t1.KmProject,
+			t1.FlagReEstablishment, t1.FlagRegulator, t1.FlagPortico, t1.Image1,
+			t1.Image2, t1.Image3, t1.Observations, t1.FlagForValidation,
+			t1.FlagInspectionOpen, t1.IdLastGlobal,
+			t1.LastIdStatusModuleEventInspStatus, t1.LastIdInspStatus,
+			t1.LastInspStatusCode, t1.LastIdTableDescInspStatus,
+			t1.LastDescSmallInspStatus, t1.LastDescMediumInspStatus,
+			t1.LastDescLargeInspStatus, t1.LastIdStatusModuleEventValidStatus,
+			t1.LastValidStatus, t1.LastValidStatusCode,
+			t1.LastIdTableDescValidStatus, t1.LastDescSmallValidStatus,
+			t1.LastDescMediumValidStatus, t1.LastDescLargeValidStatus,
+			t1.CreationUser, t1.CreationDate, t1.LastUpdatedUser,
+			t1.LastUpdatedDate, t1.Active FROM VRS.VIEW_VERTICALSIGN t1
+			WITH(NOLOCK)
+			LEFT OUTER JOIN ADM.User_Concession t0 WITH(NOLOCK) ON (t0.IdConcession =
+			t1.IdConcession)
+			LEFT OUTER JOIN ADM."User" t2 WITH(NOLOCK) ON (t2.IdUser = t0.IdUser)
+			WHERE ISNULL(t2.UserCode, 0) = ISNULL(:UserCode, ISNULL(t2.UserCode,
+			0))
+			AND IdVerticalSign = ISNULL(:IdVerticalSign, IdVerticalSign)
+			AND VerticalSignCode = ISNULL(:VerticalSignCode, VerticalSignCode)
+			AND ISNULL(IdMasterObject, 0) = ISNULL(:IdMasterObject,
+			ISNULL(IdMasterObject, 0))
+			AND ISNULL(IdRoadComponent, 0) = ISNULL(:IdRoadComponent,
+			ISNULL(IdRoadComponent, 0))
+			AND ISNULL(CodeComponent, 1) = ISNULL(:CodeComponent,
+			ISNULL(CodeComponent, 1))
+			AND IdVerticalSignType = ISNULL(:IdVerticalSignType, IdVerticalSignType)
+			AND VerticalSignTypeCode = ISNULL(:VerticalSignTypeCode,
+			VerticalSignTypeCode)
+			AND ISNULL(IdCalculationTypeCS, 0) = ISNULL(:IdCalculationTypeCS,
+			ISNULL(IdCalculationTypeCS, 0))
+			AND ISNULL(CalculationTypeCodeCS, 1) = ISNULL(:CalculationTypeCodeCS,
+			ISNULL(CalculationTypeCodeCS, 1))
+			AND ISNULL(IdCalculationTypeMS, 0) = ISNULL(:IdCalculationTypeMS,
+			ISNULL(IdCalculationTypeMS, 0))
+			AND ISNULL(CalculationTypeCodeMS, 1) = ISNULL(:CalculationTypeCodeMS,
+			ISNULL(CalculationTypeCodeMS, 1))
+			AND ISNULL(IdDirection, 0) = ISNULL(:IdDirection, ISNULL(IdDirection,
+			0))
+			AND ISNULL(DirectionCode, 1) = ISNULL(:DirectionCode,
+			ISNULL(DirectionCode, 1))
+			AND ISNULL(IdSide, 0) = ISNULL(:IdSide, ISNULL(IdSide, 0))
+			AND ISNULL(SideCode, 1) = ISNULL(:SideCode, ISNULL(SideCode, 1))
+			AND ISNULL(FlagRegulator, 1) = ISNULL(:FlagRegulator,
+			ISNULL(FlagRegulator, 1))
+			AND t1.Active = ISNULL(:Active, t1.Active)
+			AND ISNULL(FlagInspectionOpen, 2) = ISNULL(:FlagInspectionOpen,
+			ISNULL(FlagInspectionOpen, 2))
+		</sql>
+		<param name="UserCode" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="IdVerticalSign" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="VerticalSignCode" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="IdMasterObject" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="IdRoadComponent" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="CodeComponent" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="IdVerticalSignType" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="VerticalSignTypeCode" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeCS" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="CalculationTypeCodeCS" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeMS" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="CalculationTypeCodeMS" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="IdDirection" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="DirectionCode" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="IdSide" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="FlagRegulator" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="Active" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="FlagInspectionOpen" sqlType="STRING"
+			paramType="SCALAR" defaultValue="#{NULL}" />
+		<param name="StartDateBegin" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="StartDateEnd" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="EndDateBegin" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="EndDateEnd" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<param name="SideCode" sqlType="STRING" paramType="SCALAR"
+			defaultValue="#{NULL}" />
+		<result element="VerticalSignOutput" rowName="verticalSing">
+			<element name="IdVerticalSign" column="IdVerticalSign"
+				xsdType="string" />
+			<element name="VerticalSignCode" column="VerticalSignCode"
+				xsdType="string" />
+			<element name="IdTableDescVerticalSign"
+				column="IdTableDescVerticalSign" xsdType="string" />
+			<element name="DescSmallVerticalSign"
+				column="DescSmallVerticalSign" xsdType="string" />
+			<element name="DescMediumVerticalSign"
+				column="DescMediumVerticalSign" xsdType="string" />
+			<element name="DescLargeVerticalSign"
+				column="DescLargeVerticalSign" xsdType="string" />
+			<element name="IdVerticalSignType"
+				column="IdVerticalSignType" xsdType="string" />
+			<element name="VerticalSignTypeCode"
+				column="VerticalSignTypeCode" xsdType="string" />
+			<element name="IdTableDescVerticalSignType"
+				column="IdTableDescVerticalSignType" xsdType="string" />
+			<element name="DescSmallVerticalSignType"
+				column="DescSmallVerticalSignType" xsdType="string" />
+			<element name="DescMediumVerticalSignType"
+				column="DescMediumVerticalSignType" xsdType="string" />
+			<element name="DescLargeVerticalSignType"
+				column="DescLargeVerticalSignType" xsdType="string" />
+			<element name="IdCalculationTypeCS"
+				column="IdCalculationTypeCS" xsdType="string" />
+			<element name="CalculationTypeCodeCS"
+				column="CalculationTypeCodeCS" xsdType="string" />
+			<element name="IdTableDescCalculationTypeCS"
+				column="IdTableDescCalculationTypeCS" xsdType="string" />
+			<element name="DescSmallCalculationTypeCS"
+				column="DescSmallCalculationTypeCS" xsdType="string" />
+			<element name="DescMediumCalculationTypeCS"
+				column="DescMediumCalculationTypeCS" xsdType="string" />
+			<element name="DescLargeCalculationTypeCS"
+				column="DescLargeCalculationTypeCS" xsdType="string" />
+			<element name="IdCalculationTypeMS"
+				column="IdCalculationTypeMS" xsdType="string" />
+			<element name="CalculationTypeCodeMS"
+				column="CalculationTypeCodeMS" xsdType="string" />
+			<element name="IdTableDescCalculationTypeMS"
+				column="IdTableDescCalculationTypeMS" xsdType="string" />
+			<element name="DescSmallCalculationTypeMS"
+				column="DescSmallCalculationTypeMS" xsdType="string" />
+			<element name="DescMediumCalculationTypeMS"
+				column="DescMediumCalculationTypeMS" xsdType="string" />
+			<element name="DescLargeCalculationTypeMS"
+				column="DescLargeCalculationTypeMS" xsdType="string" />
+			<element name="IdDirection" column="IdDirection"
+				xsdType="string" />
+			<element name="DirectionCode" column="DirectionCode"
+				xsdType="string" />
+			<element name="IdTableDescDirection"
+				column="IdTableDescDirection" xsdType="string" />
+			<element name="DescSmallDirection"
+				column="DescSmallDirection" xsdType="string" />
+			<element name="DescMediumDirection"
+				column="DescMediumDirection" xsdType="string" />
+			<element name="DescLargeDirection"
+				column="DescLargeDirection" xsdType="string" />
+			<element name="IdSide" column="IdSide" xsdType="string" />
+			<element name="SideCode" column="SideCode" xsdType="string" />
+			<element name="IdTableDescSide" column="IdTableDescSide"
+				xsdType="string" />
+			<element name="DescSmallSide" column="DescSmallSide"
+				xsdType="string" />
+			<element name="DescMediumSide" column="DescMediumSide"
+				xsdType="string" />
+			<element name="DescLargeSide" column="DescLargeSide"
+				xsdType="string" />
+			<element name="IdRoadComponent" column="IdRoadComponent"
+				xsdType="string" />
+			<element name="IdComponent" column="IdComponent"
+				xsdType="string" />
+			<element name="CodeComponent" column="CodeComponent"
+				xsdType="string" />
+			<element name="IdTableDescComponent"
+				column="IdTableDescComponent" xsdType="string" />
+			<element name="DescSmallComponent"
+				column="DescSmallComponent" xsdType="string" />
+			<element name="DescMediumComponent"
+				column="DescMediumComponent" xsdType="string" />
+			<element name="DescLargeComponent"
+				column="DescLargeComponent" xsdType="string" />
+			<element name="IdRoadComponentType"
+				column="IdRoadComponentType" xsdType="string" />
+			<element name="RoadComponentTypeCode"
+				column="RoadComponentTypeCode" xsdType="string" />
+			<element name="IdTableDescRCType" column="IdTableDescRCType"
+				xsdType="string" />
+			<element name="DescSmallRCType" column="DescSmallRCType"
+				xsdType="string" />
+			<element name="DescMediumRCType" column="DescMediumRCType"
+				xsdType="string" />
+			<element name="DescLargeRCType" column="DescLargeRCType"
+				xsdType="string" />
+			<element name="IdRoad" column="IdRoad" xsdType="string" />
+			<element name="RoadCode" column="RoadCode" xsdType="string" />
+			<element name="IdTableDescRoad" column="IdTableDescRoad"
+				xsdType="string" />
+			<element name="DescSmallRoad" column="DescSmallRoad"
+				xsdType="string" />
+			<element name="DescMediumRoad" column="DescMediumRoad"
+				xsdType="string" />
+			<element name="DescLargeRoad" column="DescLargeRoad"
+				xsdType="string" />
+			<element name="IdConcession" column="IdConcession"
+				xsdType="string" />
+			<element name="ConcessionCode" column="ConcessionCode"
+				xsdType="string" />
+			<element name="IdTableDescConcession"
+				column="IdTableDescConcession" xsdType="string" />
+			<element name="DescSmallConcession"
+				column="DescSmallConcession" xsdType="string" />
+			<element name="DescMediumConcession"
+				column="DescMediumConcession" xsdType="string" />
+			<element name="DescLargeConcession"
+				column="DescLargeConcession" xsdType="string" />
+			<element name="IdMasterObject" column="IdMasterObject"
+				xsdType="string" />
+			<element name="Km" column="Km" xsdType="string" />
+			<element name="GPSCoordinateM" column="GPSCoordinateM"
+				xsdType="string" />
+			<element name="GPSCoordinateP" column="GPSCoordinateP"
+				xsdType="string" />
+			<element name="ConstructionDate" column="ConstructionDate"
+				xsdType="string" />
+			<element name="Lot" column="Lot" xsdType="string" />
+			<element name="KmProject" column="KmProject" xsdType="string" />
+			<element name="FlagReEstablishment"
+				column="FlagReEstablishment" xsdType="string" />
+			<element name="FlagRegulator" column="FlagRegulator"
+				xsdType="string" />
+			<element name="FlagPortico" column="FlagPortico"
+				xsdType="string" />
+			<element name="Image1" column="Image1" xsdType="string" />
+			<element name="Image2" column="Image2" xsdType="string" />
+			<element name="Image3" column="Image3" xsdType="string" />
+			<element name="Observations" column="Observations"
+				xsdType="string" />
+			<element name="FlagForValidation" column="FlagForValidation"
+				xsdType="string" />
+			<element name="FlagInspectionOpen"
+				column="FlagInspectionOpen" xsdType="string" />
+			<element name="IdLastGlobal" column="IdLastGlobal"
+				xsdType="string" />
+			<element name="LastIdStatusModuleEventInspStatus"
+				column="LastIdStatusModuleEventInspStatus" xsdType="string" />
+			<element name="LastIdInspStatus" column="LastIdInspStatus"
+				xsdType="string" />
+			<element name="LastInspStatusCode"
+				column="LastInspStatusCode" xsdType="string" />
+			<element name="LastIdTableDescInspStatus"
+				column="LastIdTableDescInspStatus" xsdType="string" />
+			<element name="LastDescSmallInspStatus"
+				column="LastDescSmallInspStatus" xsdType="string" />
+			<element name="LastDescMediumInspStatus"
+				column="LastDescMediumInspStatus" xsdType="string" />
+			<element name="LastDescLargeInspStatus"
+				column="LastDescLargeInspStatus" xsdType="string" />
+			<element name="LastIdStatusModuleEventValidStatus"
+				column="LastIdStatusModuleEventValidStatus" xsdType="string" />
+			<element name="LastValidStatus" column="LastValidStatus"
+				xsdType="string" />
+			<element name="LastValidStatusCode"
+				column="LastValidStatusCode" xsdType="string" />
+			<element name="LastIdTableDescValidStatus"
+				column="LastIdTableDescValidStatus" xsdType="string" />
+			<element name="LastDescSmallValidStatus"
+				column="LastDescSmallValidStatus" xsdType="string" />
+			<element name="LastDescMediumValidStatus"
+				column="LastDescMediumValidStatus" xsdType="string" />
+			<element name="LastDescLargeValidStatus"
+				column="LastDescLargeValidStatus" xsdType="string" />
+			<element name="CreationUser" column="CreationUser"
+				xsdType="string" />
+			<element name="CreationDate" column="CreationDate"
+				xsdType="string" />
+			<element name="LastUpdatedUser" column="LastUpdatedUser"
+				xsdType="string" />
+			<element name="LastUpdatedDate" column="LastUpdatedDate"
+				xsdType="string" />
+			<element name="Active" column="Active" xsdType="string" />
+		</result>
+	</query>
+	<operation name="getVerticalSign">
+		<call-query href="selectVerticalSign">
+			<with-param name="UserCode" query-param="UserCode" />
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+			<with-param name="VerticalSignCode"
+				query-param="VerticalSignCode" />
+			<with-param name="IdMasterObject"
+				query-param="IdMasterObject" />
+			<with-param name="IdRoadComponent"
+				query-param="IdRoadComponent" />
+			<with-param name="CodeComponent"
+				query-param="CodeComponent" />
+			<with-param name="IdVerticalSignType"
+				query-param="IdVerticalSignType" />
+			<with-param name="VerticalSignTypeCode"
+				query-param="VerticalSignTypeCode" />
+			<with-param name="IdCalculationTypeCS"
+				query-param="IdCalculationTypeCS" />
+			<with-param name="CalculationTypeCodeCS"
+				query-param="CalculationTypeCodeCS" />
+			<with-param name="IdCalculationTypeMS"
+				query-param="IdCalculationTypeMS" />
+			<with-param name="CalculationTypeCodeMS"
+				query-param="CalculationTypeCodeMS" />
+			<with-param name="IdDirection" query-param="IdDirection" />
+			<with-param name="DirectionCode"
+				query-param="DirectionCode" />
+			<with-param name="IdSide" query-param="IdSide" />
+			<with-param name="FlagRegulator"
+				query-param="FlagRegulator" />
+			<with-param name="Active" query-param="Active" />
+			<with-param name="FlagInspectionOpen"
+				query-param="FlagInspectionOpen" />
+			<with-param name="StartDateBegin"
+				query-param="StartDateBegin" />
+			<with-param name="StartDateEnd" query-param="StartDateEnd" />
+			<with-param name="EndDateBegin" query-param="EndDateBegin" />
+			<with-param name="EndDateEnd" query-param="EndDateEnd" />
+			<with-param name="SideCode" query-param="SideCode" />
+		</call-query>
+	</operation>
+	<query id="verticalSignRCDBSelect" useConfig="ReaderSustIMS">
+		<sql>SELECT IdVerticalSign, IdRoadComponent, CreationUser,
+			CreationDate, LastUpdatedUser, LastUpdatedDate, Active, StartDate,
+			EndDate FROM VRS.VerticalSignRoadComponent WHERE
+			ISNULL(IdVerticalSign,0) =
+			ISNULL(:IdVerticalSign,ISNULL(IdVerticalSign,0)) AND
+			ISNULL(IdRoadComponent,0) =
+			ISNULL(:IdRoadComponent,ISNULL(IdRoadComponent,0))</sql>
+		<result element="getVerticalSignRCDBOutput" rowName="">
+			<element name="IdVerticalSign" column="IdVerticalSign"
+				xsdType="string" />
+			<element name="IdRoadComponent" column="IdRoadComponent"
+				xsdType="string" />
+			<element name="creationUser" column=" creationUser"
+				xsdType="string" />
+			<element name="creationDate" column=" creationDate"
+				xsdType="string" />
+			<element name="LastUpdatedUser" column="LastUpdatedUser"
+				xsdType="string" />
+			<element name="LastUpdatedDate" column="LastUpdatedDate"
+				xsdType="string" />
+			<element name="Active" column="Active" xsdType="string" />
+			<element name="StartDate" column="StartDate" xsdType="string" />
+			<element name="EndDate" column="EndDate" xsdType="string" />
+		</result>
+		<param name="IdVerticalSign" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="IdRoadComponent" sqlType="STRING"
+			defaultValue="#{NULL}" />
+	</query>
+	<operation name="selectVerticalSignRCDB">
+		<call-query href="verticalSignRCDBSelect">
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+			<with-param name="IdRoadComponent"
+				query-param="IdRoadComponent" />
+		</call-query>
+	</operation>
+	<query id="verticalSignRCDBInsert" useConfig="ReaderSustIMS">
+		<sql>
+		INSERT INTO VRS.VerticalSign (
+			[VerticalSignCode]
+			,[IdMasterObject]
+			,[IdTableDesc]
+			,[IdVerticalSignType]
+			,[IdCalculationTypeCS]
+			,[IdCalculationTypeMS]
+			,[Km]
+			,[GPSCoordinateM]
+			,[GPSCoordinateP]
+			,[ConstructionDate]
+			,[IdDirection]
+			,[IdSide]
+			,[FlagRegulator]
+			,[Image1]
+			,[Image2]
+			,[Image3]
+			,[Observations]
+			,[CreationUser]
+			,[CreationDate]
+			,[LastUpdatedUser]
+			,[LastUpdatedDate]
+			,[Active]
+			,[KmProject]
+			,[Lot]
+			,[FlagReEstablishment]
+			,[StartDate]
+			,[EndDate]
+			)			 
+			VALUES (
+			:VerticalSignCode
+			,:IdMasterObject
+			,:IdTableDesc
+			,:IdVerticalSignType
+			,:IdCalculationTypeCS
+			,:IdCalculationTypeMS
+			,:Km
+			,:GPSCoordinateM
+			,:GPSCoordinateP
+			,:ConstructionDate
+			,:IdDirection
+			,:IdSide
+			,:FlagRegulator
+			,:Image1
+			,:Image2
+			,:Image3
+			,:Observations
+			,:CreationUser
+			,:CreationDate
+			,:LastUpdatedUser
+			,:LastUpdatedDate
+			,:Active
+			,:KmProject
+			,:Lot
+			,:FlagReEstablishment
+			,ISNULL(:StartDate, GETDATE())
+			,:EndDate
+			)
+			
+			SELECT @@IDENTITY as ID;
+			
+		</sql>
+		<result element="setSignRCDBInsertOutput" rowName="">
+			<element name="IdVerticalSign" column="ID" xsdType="string" />
+		</result>
+		<param name="VerticalSignCode" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="IdMasterObject" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdTableDesc" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdVerticalSignType" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeCS" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeMS" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="Km" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="GPSCoordinateM" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="GPSCoordinateP" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="ConstructionDate" sqlType="DATE"
+			defaultValue="#{NULL}" />
+		<param name="IdDirection" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdSide" sqlType="INTEGER" defaultValue="#{NULL}" />
+		<param name="FlagRegulator" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="Image1" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Image2" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Image3" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Observations" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationDate" sqlType="DATE" defaultValue="#{NULL}" />
+		<param name="LastUpdatedUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="LastUpdatedDate" sqlType="DATE"
+			defaultValue="#{NULL}" />
+		<param name="Active" sqlType="INTEGER" defaultValue="#{NULL}" />
+		<param name="KmProject" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Lot" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="FlagReEstablishment" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="StartDate" sqlType="DATE" defaultValue="#{NULL}" />
+		<param name="EndDate" sqlType="DATE" defaultValue="#{NULL}" />
+		
+	</query>
+	<operation name="setVerticalSignRCDB">
+		<call-query href="verticalSignRCDBInsert">
+			<with-param name="VerticalSignCode"
+				query-param="VerticalSignCode" />
+			<with-param name="IdMasterObject"
+				query-param="IdMasterObject" />
+			<with-param name="IdTableDesc" query-param="IdTableDesc" />
+			<with-param name="IdVerticalSignType"
+				query-param="IdVerticalSignType" />
+			<with-param name="IdCalculationTypeCS"
+				query-param="IdCalculationTypeCS" />
+			<with-param name="IdCalculationTypeMS"
+				query-param="IdCalculationTypeMS" />
+			<with-param name="Km" query-param="Km" />
+			<with-param name="GPSCoordinateM"
+				query-param="GPSCoordinateM" />
+			<with-param name="GPSCoordinateP"
+				query-param="GPSCoordinateP" />
+			<with-param name="ConstructionDate"
+				query-param="ConstructionDate" />
+			<with-param name="IdDirection" query-param="IdDirection" />
+			<with-param name="IdSide" query-param="IdSide" />
+			<with-param name="FlagRegulator"
+				query-param="FlagRegulator" />
+			<with-param name="Image1" query-param="Image1" />
+			<with-param name="Image2" query-param="Image2" />
+			<with-param name="Image3" query-param="Image3" />
+			<with-param name="Observations" query-param="Observations" />
+			<with-param name="CreationUser" query-param="CreationUser" />
+			<with-param name="CreationDate" query-param="CreationDate" />
+			<with-param name="LastUpdatedUser"
+				query-param="LastUpdatedUser" />
+			<with-param name="LastUpdatedDate"
+				query-param="LastUpdatedDate" />
+			<with-param name="Active" query-param="Active" />
+			<with-param name="KmProject" query-param="KmProject" />
+			<with-param name="Lot" query-param="Lot" />
+			<with-param name="FlagReEstablishment"
+				query-param="FlagReEstablishment" />
+			<with-param name="StartDate" query-param="StartDate" />
+			<with-param name="EndDate" query-param="EndDate" />			
+		</call-query>
+	</operation>
+	<query id="verticalSignRoadComponentInsert"
+		useConfig="ReaderSustIMS">
+		<sql>INSERT INTO VRS.VerticalSignRoadComponent
+			([IdVerticalSign]
+			,[IdRoadComponent]
+			,[CreationUser]
+			,[CreationDate]
+			,[LastUpdatedUser]
+			,[LastUpdatedDate]
+			,[Active], [StartDate],[EndDate])
+			VALUES
+			(:IdVerticalSign,
+			:IdRoadComponent,
+			:CreationUser,
+			:CreationDate,
+			:LastUpdatedUser,
+			:LastUpdatedDate,
+			:Active, ISNULL(:StartDate, GETDATE()), :EndDate);
+
+			SELECT IdVerticalSign FROM VRS.VerticalSignRoadComponent Where
+			IdVerticalSign = :IdVerticalSign
+		</sql>
+		<result element="setVerticalSignRoadComponentOutput" rowName="">
+			<element name="IdVerticalSignRoadComponent"
+				column="IdVerticalSign" xsdType="string" />
+		</result>
+		<param name="IdVerticalSign" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdRoadComponent" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationDate" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="LastUpdatedUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="LastUpdatedDate" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="Active" sqlType="INTEGER" defaultValue="#{NULL}" />
+		<param name="StartDate" sqlType="DATE" defaultValue="#{NULL}" />
+		<param name="EndDate" sqlType="DATE" defaultValue="#{NULL}" />
+	</query>
+	<operation name="setVerticalSignRoadComponent">
+		<call-query href="verticalSignRoadComponentInsert">
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+			<with-param name="IdRoadComponent"
+				query-param="IdRoadComponent" />
+			<with-param name="CreationUser" query-param="CreationUser" />
+			<with-param name="CreationDate" query-param="CreationDate" />
+			<with-param name="LastUpdatedUser"
+				query-param="LastUpdatedUser" />
+			<with-param name="LastUpdatedDate"
+				query-param="LastUpdatedDate" />
+			<with-param name="Active" query-param="Active" />
+			<with-param name="StartDate" query-param="StartDate" />
+      <with-param name="EndDate" query-param="EndDate" />
+		</call-query>
+	</operation>
+	<query id="deleteVerticalSignRCDB" useConfig="ReaderSustIMS">
+		<sql>DELETE FROM VRS.VerticalSignRoadComponent WHERE IdVerticalSign = :IdVerticalSign   SELECT @@ROWCOUNT AS RowsDeleted;
+		</sql>
+		<result element="deleteVerticalSignRCDBOutput" rowName="">
+			<element name="Value" column="RowsDeleted"
+				xsdType="string" />
+		</result>
+		<param name="IdVerticalSign" sqlType="INTEGER" />
+	</query>
+	<operation name="deleteVerticalSignRCDB">
+		<call-query href="deleteVerticalSignRCDB">
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+		</call-query>
+	</operation>
+	<query id="verticalSignDelete" useConfig="ReaderSustIMS">
+		<sql>DELETE FROM VRS.VerticalSign  WHERE IdVerticalSign= :IdVerticalSign SELECT @@ROWCOUNT AS RowsDeleted;</sql>
+		<result element="deleteVerticalSignOutput" rowName="">
+			<element name="Value" column="RowsDeleted"
+				xsdType="string" />
+		</result>
+		<param name="IdVerticalSign" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+	</query>
+	<operation name="deleteVerticalSign">
+		<call-query href="verticalSignDelete">
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+		</call-query>
+	</operation>
+	<query id="verticalSignUpdate" useConfig="ReaderSustIMS">
+		<sql>UPDATE VRS.VerticalSign SET VerticalSignCode = ? ,IdMasterObject
+			= ? ,IdTableDesc = ?,IdVerticalSignType = ? ,IdCalculationTypeCS = ?
+			,IdCalculationTypeMS = ? ,Km = ? ,GPSCoordinateM = ?,GPSCoordinateP =
+			? ,ConstructionDate = ? ,IdDirection = ? ,IdSide = ? ,FlagRegulator =
+			? ,Image1 = ? ,Image2 = ? ,Image3 = ?,Observations = ? ,CreationUser
+			= ? ,CreationDate = ? ,LastUpdatedUser = ? ,LastUpdatedDate = ?
+			,Active = ? ,KmProject = ? ,Lot = ? ,FlagReEstablishment = ? WHERE
+			IdVerticalSign = ?
+			SELECT SCOPE_IDENTITY() AS ID
+		</sql>
+		<result element="putVerticalSignOutput" rowName="">
+			<element name="IdVerticalSign" column="ID" xsdType="string" />
+		</result>
+		<param name="VerticalSignCode" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="IdMasterObject" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdTableDesc" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdVerticalSignType" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeCS" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdCalculationTypeMS" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="Km" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="GPSCoordinateM" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="GPSCoordinateP" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="ConstructionDate" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="IdDirection" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdSide" sqlType="INTEGER" defaultValue="#{NULL}" />
+		<param name="FlagRegulator" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="Image1" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Image2" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Image3" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Observations" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="CreationDate" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="LastUpdatedUser" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="LastUpdatedDate" sqlType="STRING"
+			defaultValue="#{NULL}" />
+		<param name="Active" sqlType="INTEGER" defaultValue="#{NULL}" />
+		<param name="KmProject" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="Lot" sqlType="STRING" defaultValue="#{NULL}" />
+		<param name="FlagReEstablishment" sqlType="INTEGER"
+			defaultValue="#{NULL}" />
+		<param name="IdVerticalSign" sqlType="STRING"
+			defaultValue="#{NULL}" />
+	</query>
+	<operation name="putVerticalSign">
+		<call-query href="verticalSignUpdate">
+			<with-param name="IdVerticalSign"
+				query-param="IdVerticalSign" />
+			<with-param name="VerticalSignCode"
+				query-param="VerticalSignCode" />
+			<with-param name="IdMasterObject"
+				query-param="IdMasterObject" />
+			<with-param name="IdTableDesc" query-param="IdTableDesc" />
+			<with-param name="IdVerticalSignType"
+				query-param="IdVerticalSignType" />
+			<with-param name="IdCalculationTypeCS"
+				query-param="IdCalculationTypeCS" />
+			<with-param name="IdCalculationTypeMS"
+				query-param="IdCalculationTypeMS" />
+			<with-param name="Km" query-param="Km" />
+			<with-param name="GPSCoordinateM"
+				query-param="GPSCoordinateM" />
+			<with-param name="GPSCoordinateP"
+				query-param="GPSCoordinateP" />
+			<with-param name="ConstructionDate"
+				query-param="ConstructionDate" />
+			<with-param name="IdDirection" query-param="IdDirection" />
+			<with-param name="IdSide" query-param="IdSide" />
+			<with-param name="FlagRegulator"
+				query-param="FlagRegulator" />
+			<with-param name="Image1" query-param="Image1" />
+			<with-param name="Image2" query-param="Image2" />
+			<with-param name="Image3" query-param="Image3" />
+			<with-param name="Observations" query-param="Observations" />
+			<with-param name="CreationUser" query-param="CreationUser" />
+			<with-param name="CreationDate" query-param="CreationDate" />
+			<with-param name="LastUpdatedUser"
+				query-param="LastUpdatedUser" />
+			<with-param name="LastUpdatedDate"
+				query-param="LastUpdatedDate" />
+			<with-param name="Active" query-param="Active" />
+			<with-param name="KmProject" query-param="KmProject" />
+			<with-param name="Lot" query-param="Lot" />
+			<with-param name="FlagReEstablishment"
+				query-param="FlagReEstablishment" />
+
+		</call-query>
+	</operation>
+</data>
