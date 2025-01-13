@@ -1,0 +1,43 @@
+openapi: 3.0.1
+info:
+  title: VRS_VerticalSignSemToken
+  description: API Definition of VRS_VerticalSignSemToken
+  version: 1.0.0
+servers:
+- url: http://localhost:8290/VRS_VerticalSignSemToken
+paths:
+  /getVerticalSign:
+    post:
+      requestBody:
+        description: Sample Payload
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payload:
+                  type: object
+        required: false
+      responses:
+        default:
+          description: Default response
+  /verticalSign:
+    get:
+      responses:
+        default:
+          description: Default response
+  /setVerticalSing:
+    post:
+      requestBody:
+        description: Sample Payload
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payload:
+                  type: object
+        required: false
+      responses:
+        default:
+          description: Default response
