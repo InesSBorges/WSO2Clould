@@ -10,10 +10,6 @@
         {
             "name": "vrs",
             "path": "VRS"
-        },
-        {
-            "name": "vrsdataservice",
-            "path": "VRS\\VRSDataService"
         }
     ]
 }
