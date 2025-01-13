@@ -23,6 +23,11 @@ paths:
           description: Default response
   /verticalSign:
     get:
+      parameters:
+      - name: verticalSignId
+        in: query
+        schema:
+          type: string
       responses:
         default:
           description: Default response
