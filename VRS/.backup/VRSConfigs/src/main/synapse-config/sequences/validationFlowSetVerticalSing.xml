@@ -29,7 +29,7 @@
             <header name="Action" scope="default" value="urn:validateVRSFKDB"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/validateVRSFKDB/">
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -143,7 +143,7 @@
             <header name="Action" scope="default" value="urn:validateADMFKDB"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/validateADMFKDB/">
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -281,7 +281,7 @@
             <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/validateADMFKDB/">
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -415,7 +415,7 @@
             <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/validateADMFKDB/">
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -549,7 +549,7 @@
             <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/validateVRSFKDB/">
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -660,7 +660,7 @@
             <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/validateVRSFKDB/">
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -762,7 +762,7 @@
             <log level="full"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap11" method="post" uri-template="local:///services/verticalSignDBR/">
+                    <http method="post" uri-template="local:///services/verticalSignDBR/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>

@@ -21,7 +21,7 @@
                     </payloadFactory>
                     <call>
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_ConfigDB/">
+                            <http method="post" uri-template="local:///services/ADM_ConfigDB/">
                                 <suspendOnFailure>
                                     <initialDuration>-1</initialDuration>
                                     <progressionFactor>1</progressionFactor>
@@ -49,7 +49,7 @@
             </payloadFactory>
             <call>
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -252,7 +252,7 @@
             </payloadFactory>
             <call>
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -446,7 +446,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -519,7 +519,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -556,7 +556,7 @@
                     </payloadFactory>
                     <call blocking="true">
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
                                 <suspendOnFailure>
                                     <initialDuration>-1</initialDuration>
                                     <progressionFactor>1</progressionFactor>
@@ -598,7 +598,7 @@
                             <log level="full"/>
                             <call blocking="true">
                                 <endpoint>
-                                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                                    <http method="post" uri-template="local:///services/ADM_ModuleDB/">
                                         <suspendOnFailure>
                                             <initialDuration>-1</initialDuration>
                                             <progressionFactor>1</progressionFactor>
@@ -655,7 +655,7 @@
                                     <log level="full"/>
                                     <call blocking="true">
                                         <endpoint>
-                                            <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                            <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                                                 <suspendOnFailure>
                                                     <initialDuration>-1</initialDuration>
                                                     <progressionFactor>1</progressionFactor>
@@ -680,7 +680,7 @@
                                     <log level="full"/>
                                     <call blocking="true">
                                         <endpoint>
-                                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
                                                 <suspendOnFailure>
                                                     <initialDuration>-1</initialDuration>
                                                     <progressionFactor>1</progressionFactor>
@@ -733,7 +733,7 @@
                             </payloadFactory>
                             <call blocking="true">
                                 <endpoint>
-                                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                    <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                                         <suspendOnFailure>
                                             <initialDuration>-1</initialDuration>
                                             <progressionFactor>1</progressionFactor>
@@ -829,7 +829,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -911,7 +911,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                    <http method="post" uri-template="local:///services/ADM_TableDesc/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -953,7 +953,7 @@
                     </xslt>
                     <call blocking="true">
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                            <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                                 <suspendOnFailure>
                                     <initialDuration>-1</initialDuration>
                                     <progressionFactor>1</progressionFactor>
@@ -993,7 +993,7 @@
             <log level="full"/>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                    <http method="post" uri-template="local:///services/ADM_ModuleDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -1085,7 +1085,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_ModuleDB/">
+                    <http method="post" uri-template="local:///services/ADM_ModuleDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -1110,7 +1110,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                    <http method="post" uri-template="local:///services/ADM_TableDesc/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -1135,7 +1135,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                    <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>1</progressionFactor>

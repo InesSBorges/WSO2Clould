@@ -18,7 +18,7 @@
         <log level="full"/>
         <call>
             <endpoint>
-                <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDB/">
+                <http method="post" uri-template="local:///services/ADM_LanguageDB/">
                     <suspendOnFailure>
                         <initialDuration>-1</initialDuration>
                         <progressionFactor>1</progressionFactor>

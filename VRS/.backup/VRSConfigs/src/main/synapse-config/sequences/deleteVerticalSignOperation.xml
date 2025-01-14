@@ -17,7 +17,7 @@
     </payloadFactory>
     <call blocking="true">
         <endpoint>
-            <http format="soap12" method="post" uri-template="local:///services/ValidateRoadComponentPKDB/">
+            <http method="post" uri-template="local:///services/ValidateRoadComponentPKDB/">
                 <suspendOnFailure>
                     <initialDuration>0</initialDuration>
                     <progressionFactor>1</progressionFactor>
@@ -46,7 +46,7 @@
             </payloadFactory>
             <call blocking="true">
                 <endpoint>
-                    <http format="soap12" method="post" uri-template="local:///services/verticalSignDBR/">
+                    <http method="post" uri-template="local:///services/verticalSignDBR/">
                         <suspendOnFailure>
                             <initialDuration>0</initialDuration>
                             <progressionFactor>1</progressionFactor>
@@ -103,7 +103,7 @@
                     </payloadFactory>
                     <call blocking="true">
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
                                 <suspendOnFailure>
                                     <initialDuration>0</initialDuration>
                                     <progressionFactor>1</progressionFactor>
@@ -135,7 +135,7 @@
                     <log level="full"/>
                     <call blocking="true">
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_TableDesc/">
+                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
                                 <suspendOnFailure>
                                     <initialDuration>0</initialDuration>
                                     <progressionFactor>1</progressionFactor>
@@ -164,7 +164,7 @@
                     <log level="full"/>
                     <call blocking="true">
                         <endpoint>
-                            <http format="soap12" method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                            <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
                                 <suspendOnFailure>
                                     <initialDuration>0</initialDuration>
                                     <progressionFactor>1</progressionFactor>
