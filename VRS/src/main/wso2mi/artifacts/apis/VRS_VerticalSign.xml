@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/VRS_VerticalSignSemToken" name="VRS_VerticalSignSemToken" xmlns="http://ws.apache.org/ns/synapse">
+<api context="/VRS_VerticalSign" name="VRS_VerticalSign" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="POST" uri-template="/getVerticalSign">
         <inSequence>
-            <log>
-                <property expression="$ctx:EnvRoot" name="EnvRoot"/>
-            </log>
             <enrich description="EnvRoot">
                 <source clone="true" type="envelope"/>
                 <target property="EnvRoot" type="property"/>
             </enrich>
-            <log>
-                <property expression="$ctx:EnvRoot" name="EnvRoot"/>
-            </log>
+            <sequence key="validateToken"/>
             <filter regex="true" source="$ctx:EnvRoot//verticalSign/verticalSign/id != '' or $ctx:EnvRoot//verticalSign/code != '' or $ctx:EnvRoot//roadComponent/id != '' or $ctx:EnvRoot//roadComponent/code != ''">
                 <then>
                     <enrich description="EnvRoot for env">
@@ -114,6 +109,9 @@
     </resource>
     <resource methods="GET" uri-template="/verticalSign">
         <inSequence>
+            <property expression="$axis2:REST_URL_POSTFIX" name="querystrings" scope="default" type="STRING"/>
+            <sequence key="validateToken"/>
+            <property expression="get-property('querystrings')" name="REST_URL_POSTFIX" scope="axis2" type="STRING"/>
             <filter regex="true" source="$ctx:query.param.verticalSignId != '' or $ctx:query.param.verticalSignCode != '' or $ctx:query.param.roadComponentId != '' or $ctx:query.param.roadComponentCode != ''">
                 <then>
                     <payloadFactory media-type="xml">
@@ -267,6 +265,7 @@
                 <source clone="true" type="envelope"/>
                 <target property="EnvRoot" type="property"/>
             </enrich>
+            <sequence key="validateToken"/>
             <property name="totalErros" scope="default" type="STRING" value="0"/>
             <log level="custom">
                 <property expression="$ctx:EnvRoot" name="EnvRoot"/>

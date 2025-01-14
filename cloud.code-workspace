@@ -22,6 +22,10 @@
         {
             "name": "vrschanged",
             "path": "VRS"
+        },
+        {
+            "name": "vrschanged",
+            "path": "VRS"
         }
     ]
 }

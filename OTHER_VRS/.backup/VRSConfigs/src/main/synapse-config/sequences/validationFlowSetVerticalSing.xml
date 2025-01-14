@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="validationFlowSetVerticalSing" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <filter description="IfSideValidade" xpath="($ctx:envForEach//side/id and $ctx:envForEach//side/id != '') or ($ctx:envForEach//side/code and $ctx:envForEach//side/code != '')">
+        <then>
+            <payloadFactory media-type="xml">
+                <format>
+                    <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Body>
+                            <dat:validateVRSFK>
+                                <dat:fieldID>$1</dat:fieldID>
+                                <dat:fieldCode>$2</dat:fieldCode>
+                                <dat:tableName>VRS.REF_Side</dat:tableName>
+                                <dat:fieldIdName>IdSide</dat:fieldIdName>
+                                <dat:fieldCodeName>SideCode</dat:fieldCodeName>
+                            </dat:validateVRSFK>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:envForEach//side/id/text()"/>
+                    <arg evaluator="xml" expression="$ctx:envForEach//side/code/text()"/>
+                </args>
+            </payloadFactory>
+            <xslt key="RemoveEmptyTags"/>
+            <log level="custom">
+                <property name="LOG" value="IfSideValidade"/>
+            </log>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateVRSFKDB"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfSideValidade"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfSideValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0203 - Side não existe."/>
+                            <arg evaluator="xml" expression="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnSideValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnSideValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <log level="custom">
+                <property name="IfSideValidade" value="else"/>
+            </log>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0232 - Side de preenchimento obrigatório."/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfDirectionValidate" xpath="($ctx:envForEach//direction/id and $ctx:envForEach//direction/id != '') or ($ctx:envForEach//direction/code and $ctx:envForEach//direction/code != '')">
+        <then>
+            <payloadFactory media-type="xml">
+                <format>
+                    <soap:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+                        <soap:Header/>
+                        <soap:Body>
+                            <dat:validateVRSFKDB>
+                                <dat:fieldID>$1</dat:fieldID>
+                                <dat:fieldCode>$2</dat:fieldCode>
+                                <dat:tableName>MD.REF_Direction</dat:tableName>
+                                <dat:fieldIdName>IdDirection</dat:fieldIdName>
+                                <dat:fieldCodeName>DirectionCode</dat:fieldCodeName>
+                            </dat:validateVRSFKDB>
+                        </soap:Body>
+                    </soap:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:envForEach//direction/id/text()"/>
+                    <arg evaluator="xml" expression="$ctx:envForEach//direction/code/text()"/>
+                </args>
+            </payloadFactory>
+            <xslt key="RemoveEmptyTags"/>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateADMFKDB"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfDirectionValidate"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfDirectionValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0099 - Direction não existe."/>
+                            <arg value="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                    <drop/>
+                </then>
+                <else>
+                    <enrich description="returnDirectionValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnDirectionValidateVRSFK" type="property"/>
+                    </enrich>
+                    <log level="custom">
+                        <property expression="$ctx:returnDirectionValidateVRSFK" name="returnDirectionValidateVRSFK"/>
+                    </log>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0232 - Direction de preenchimento obrigatório."/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfCalculationTypeMSValidate" xpath="($ctx:envForEach//calculationTypeMS/id and $ctx:envForEach//calculationTypeMS/id != '') or ($ctx:envForEach//calculationTypeMS/code and $ctx:envForEach//calculationTypeMS/code != '')">
+        <then>
+            <filter description="IfCalculationTypeMSValidate" xpath="($ctx:envForEach//calculationTypeMS/id != '') ">
+                <then>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateADMFK>
+                                        <dat:fieldID>$1</dat:fieldID>
+                                        <dat:tableName>ADM.CalculationType</dat:tableName>
+                                        <dat:fieldIdName>IdCalculationType</dat:fieldIdName>
+                                        <dat:fieldCodeName>CalculationTypeCode</dat:fieldCodeName>
+                                    </dat:validateADMFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//calculationTypeMS/id"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateADMFK>
+                                        <dat:fieldCode>$1</dat:fieldCode>
+                                        <dat:tableName>ADM.CalculationType</dat:tableName>
+                                        <dat:fieldIdName>IdCalculationType</dat:fieldIdName>
+                                        <dat:fieldCodeName>CalculationTypeCode</dat:fieldCodeName>
+                                    </dat:validateADMFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//calculationTypeMS/code"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <log level="custom">
+                <property name="LOG" value="IfCalculationTypeMSValidate"/>
+            </log>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateADMFKDB"/>
+            <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfCalculationTypeMSValidate"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfCalculationTypeValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0148 - CalculationTypeMS não existe."/>
+                            <arg value="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnCalculationTypeValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnCalculationTypeValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0226 - CalculationTypeMS de preenchimento obrigatório."/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfCalculationTypeCSValidate" xpath="($ctx:envForEach//calculationTypeCS/id and $ctx:envForEach//calculationTypeCS/id != '') or ($ctx:envForEach//calculationTypeCS/code and $ctx:envForEach//calculationTypeCS/code != '')">
+        <then>
+            <filter description="IfCalculationTypeCSValidate" xpath="($ctx:envForEach//calculationTypeCS/id != '') ">
+                <then>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateADMFK>
+                                        <dat:fieldID>$1</dat:fieldID>
+                                        <dat:tableName>ADM.CalculationType</dat:tableName>
+                                        <dat:fieldIdName>IdCalculationType</dat:fieldIdName>
+                                        <dat:fieldCodeName>CalculationTypeCode</dat:fieldCodeName>
+                                    </dat:validateADMFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//calculationTypeCS/id"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateADMFK>
+                                        <dat:fieldCode>$1</dat:fieldCode>
+                                        <dat:tableName>ADM.CalculationType</dat:tableName>
+                                        <dat:fieldIdName>IdCalculationType</dat:fieldIdName>
+                                        <dat:fieldCodeName>CalculationTypeCode</dat:fieldCodeName>
+                                    </dat:validateADMFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//calculationTypeCS/code"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <log level="custom">
+                <property name="LOG" value="IfCalculationTypeCSValidate"/>
+            </log>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateADMFKDB"/>
+            <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateADMFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfCalculationTypeCSValidate"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfCalculationTypeValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0148 - CalculationTypeCS não existe."/>
+                            <arg value="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnCalculationTypeCSValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnCalculationTypeCSValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0226 - CalculationTypeCS de preenchimento obrigatório."/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfVerticalSignTypeValidate" xpath="($ctx:envForEach//verticalSignType/id and $ctx:envForEach//verticalSignType/id != '') or ($ctx:envForEach//verticalSignType/code and $ctx:envForEach//verticalSignType/code != '')">
+        <then>
+            <filter description="IfVerticalSignTypeValidate" xpath="($ctx:envForEach//verticalSignType/id != '')">
+                <then>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateVRSFK>
+                                        <dat:fieldID>$1</dat:fieldID>
+                                        <dat:tableName>VRS.REF_VerticalSignType</dat:tableName>
+                                        <dat:fieldIdName>IdVerticalSignType</dat:fieldIdName>
+                                        <dat:fieldCodeName>VerticalSignTypeCode</dat:fieldCodeName>
+                                    </dat:validateVRSFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSignType/id"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Body>
+                                    <dat:validateVRSFK>
+                                        <dat:fieldCode>$1</dat:fieldCode>
+                                        <dat:tableName>VRS.REF_VerticalSignType</dat:tableName>
+                                        <dat:fieldIdName>IdVerticalSignType</dat:fieldIdName>
+                                        <dat:fieldCodeName>VerticalSignTypeCode</dat:fieldCodeName>
+                                    </dat:validateVRSFK>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSignType/code"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <log level="custom">
+                <property name="LOG" value="IfVerticalSignTypeValidate"/>
+            </log>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateVRSFKDB"/>
+            <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfVerticalSignTypeValidate"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfVerticalSignTypeValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0402 - VerticalSignType não existe."/>
+                            <arg value="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnVerticalSignTypeValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnVerticalSignTypeValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="'SustIMS0401 - VerticalSignType de preenchimento obrigatório.'"/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfRoadComponentValidate" xpath="($ctx:envForEach//idRoadComponent  and $ctx:envForEach//idRoadComponent != '') ">
+        <then>
+            <payloadFactory media-type="xml">
+                <format>
+                    <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Body>
+                            <dat:validateVRSFK>
+                                <dat:fieldID>$1</dat:fieldID>
+                                <dat:tableName>MD.RoadComponent</dat:tableName>
+                                <dat:fieldIdName>IdRoadComponent</dat:fieldIdName>
+                                <dat:fieldCodeName>RoadComponentCode</dat:fieldCodeName>
+                            </dat:validateVRSFK>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:envForEach//idRoadComponent"/>
+                </args>
+            </payloadFactory>
+            <log level="custom">
+                <property name="LOG" value="IfRoadComponentValidate"/>
+            </log>
+            <log level="full"/>
+            <header name="Action" scope="default" value="urn:validateVRSFKDB"/>
+            <property name="SOAPAction" scope="transport" type="STRING" value="urn:SOAPAction"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/validateVRSFKDB/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfRoadComponentValidate2"/>
+            </log>
+            <log level="full"/>
+            <filter description="IfRoadComponentValidateOutput" xpath="(string-length(//*[local-name()='IdForeignKey']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0030 - RoadComponent não existe."/>
+                            <arg value="//*[local-name()='ErrorMessage']"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnVRoadComponentValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnRoadComponentValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else>
+            <filter description="IfCreateOperation" xpath="$ctx:envForEach//verticalSign/id/text() = ''">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0223 - RoadComponent de preenchimento obrigatório."/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else/>
+            </filter>
+        </else>
+    </filter>
+    <filter description="IfVerticalSign" xpath="($ctx:envForEach//verticalSign/id and $ctx:envForEach//verticalSign/id != '')">
+        <then>
+            <payloadFactory media-type="xml">
+                <format>
+                    <dat:selectVerticalSignRCDB xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdVerticalSign>$1</dat:IdVerticalSign>
+                    </dat:selectVerticalSignRCDB>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                </args>
+            </payloadFactory>
+            <log level="custom">
+                <property name="LOG" value="IfVerticalSign"/>
+            </log>
+            <log level="full"/>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/verticalSignDBR/">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="LOG" value="IfVerticalSign"/>
+            </log>
+            <log level="full"/>
+            <filter description="verticalSignValidate" xpath="(string-length(//*[local-name()='IdVerticalSign']) = 0)">
+                <then>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0011 - Erro ao efectuar a pesquisa (verticalSignRC)"/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <enrich description="returnVerticalSignValidateVRSFK">
+                        <source clone="true" type="envelope"/>
+                        <target property="returnVerticalSignValidateVRSFK" type="property"/>
+                    </enrich>
+                </else>
+            </filter>
+            <filter description="IfNoRecordsVerticalSignRC" xpath="((count($ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdVerticalSign']) != 0) or not($ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdVerticalSign'])) and (($ctx:envForEach//idRoadComponent != '' or not($ctx:envForEach//idRoadComponent))or ($ctx:envForEach//idRoadComponent != $ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdRoadComponent']))">
+                <then>
+                    <log level="custom">
+                        <property expression="$ctx:envForEach//idRoadComponent" name="$ctx:envForEach//idRoadComponent"/>
+                        <property expression="$ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdRoadComponent']" name="$ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdRoadComponent']"/>
+                    </log>
+                    <filter description="NotUpdateIdRoadComponent" xpath="($ctx:envForEach//idRoadComponent != '' or not($ctx:envForEach//idRoadComponent)) and ($ctx:envForEach//idRoadComponent = $ctx:returnVerticalSignValidateVRSFK//*[local-name()='IdRoadComponent'])">
+                        <then/>
+                        <else>
+                            <filter description="IfUpdate" xpath="($ctx:envForEach//verticalSign/id != '')  and (($ctx:envForEach//verticalSign/code != '')  or ($ctx:envForEach//descVerticalSign/smallDescription != '')  or ($ctx:envForEach//descVerticalSign/mediumDescription != '')  or ($ctx:envForEach//descVerticalSign/largeDescription != '')  or ($ctx:envForEach//verticalSignType != '')  or ($ctx:envForEach//calculationTypeCS != '')  or ($ctx:envForEach//calculationTypeMS != '')  or ($ctx:envForEach//direction != '')  or ($ctx:envForEach//side != '')  or ($ctx:envForEach//idRoadComponent != '')  or ($ctx:envForEach//verticalSignInfo != '')  or ($ctx:envForEach//version != ''))  and  $ctx:returnVerticalSignValidateVRSFK//*[local-name()='EndDate'] != '' ">
+                                <then>
+                                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                                        <format>
+                                            <result>
+                                                <timestamp>$1</timestamp>
+                                                <resultDescription>$2</resultDescription>
+                                                <message>$3</message>
+                                                <status>$4</status>
+                                                <id>$5</id>
+                                                <code>$6</code>
+                                            </result>
+                                        </format>
+                                        <args>
+                                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                                            <arg value="SustIMS0151 - Registo inativo ou inexistente. 2"/>
+                                            <arg value="Error"/>
+                                            <arg value="400"/>
+                                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                                        </args>
+                                    </payloadFactory>
+                                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                                    <enrich description="add module EnvVerticalSign">
+                                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                                    </enrich>
+                                </then>
+                                <else/>
+                            </filter>
+                        </else>
+                    </filter>
+                </then>
+                <else>
+                    <payloadFactory description="returnErroLanguage" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                                <id>$5</id>
+                                <code>$6</code>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0151 - Registo inativo ou inexistente. 3"/>
+                            <arg value="Error"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </else>
+            </filter>
+        </then>
+        <else/>
+    </filter>
+    <log level="custom">
+        <property name="LOG" value="fim sequence vflow"/>
+    </log>
+</sequence>

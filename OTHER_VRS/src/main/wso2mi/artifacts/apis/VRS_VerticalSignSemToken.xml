@@ -3,23 +3,23 @@
     <resource methods="POST" uri-template="/getVerticalSign">
         <inSequence>
             <log>
-                <property expression="$ctx:EnvRoot" name="EnvRoot"/>
+                <property expression="$ctx:EnvRoot" name="EnvRoot" />
             </log>
             <enrich description="EnvRoot">
-                <source clone="true" type="envelope"/>
-                <target property="EnvRoot" type="property"/>
+                <source clone="true" type="envelope" />
+                <target property="EnvRoot" type="property" />
             </enrich>
             <log>
-                <property expression="$ctx:EnvRoot" name="EnvRoot"/>
+                <property expression="$ctx:EnvRoot" name="EnvRoot" />
             </log>
             <filter regex="true" source="$ctx:EnvRoot//verticalSign/verticalSign/id != '' or $ctx:EnvRoot//verticalSign/code != '' or $ctx:EnvRoot//roadComponent/id != '' or $ctx:EnvRoot//roadComponent/code != ''">
                 <then>
                     <enrich description="EnvRoot for env">
-                        <source clone="true" property="EnvRoot" type="property"/>
-                        <target type="envelope"/>
+                        <source clone="true" property="EnvRoot" type="property" />
+                        <target type="envelope" />
                     </enrich>
-                    <xslt key="getPostVRS_XSLT"/>
-                    <log level="full"/>
+                    <xslt key="getPostVRS_XSLT" />
+                    <log level="full" />
                     <call blocking="true">
                         <endpoint>
                             <http method="post" uri-template="local:///services/verticalSignDBR/">
@@ -38,118 +38,142 @@
                             <payloadFactory description="verticalSignDBR" media-type="xml">
                                 <format>
                                     <result>
-                                        <timestamp>$1</timestamp>
+                                        <timestamp>
+                                    $1</timestamp>
                                         <resultDescription>$2</resultDescription>
                                         <totalRecords>$3</totalRecords>
                                         <hasmore>$4</hasmore>
-                                        <offset>$5</offset>
+                                        <offset>
+                                    $5</offset>
                                         <message>$6</message>
                                         <status>$7</status>
                                     </result>
                                 </format>
                                 <args>
-                                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
-                                    <arg value="SustIMS0151 - Registo inativo ou inexistente ou utilizador sem permissão de acesso aos parâmetros enviados."/>
-                                    <arg value="0"/>
-                                    <arg value="false"/>
-                                    <arg value="0"/>
-                                    <arg value="Bad Request"/>
-                                    <arg value="400"/>
+                                    <arg evaluator="xml"
+                                        expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')" />
+                                    <arg
+                                        value="SustIMS0151 - Registo inativo ou inexistente ou utilizador sem permissão de acesso aos parâmetros enviados." />
+                                    <arg value="0" />
+                                    <arg value="false" />
+                                    <arg value="0" />
+                                    <arg value="Bad Request" />
+                                    <arg value="400" />
                                 </args>
                             </payloadFactory>
-                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
-                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                            <respond/>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400" />
+                            <property name="messageType" scope="axis2" type="STRING"
+                                value="application/json" />
+                            <respond />
                         </then>
                         <else>
-                            <xslt key="getResponseVRS_XSLT"/>
+                            <xslt key="getResponseVRS_XSLT" />
                             <payloadFactory description="returnJson" media-type="json">
-                                <format>
-									$1
-								</format>
+                                <format> $1 </format>
                                 <args>
-                                    <arg evaluator="xml" expression="$body/*[local-name()='text']"/>
+                                    <arg evaluator="xml" expression="$body/*[local-name()='text']" />
                                 </args>
                             </payloadFactory>
-                            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="200" />
                         </else>
                     </filter>
-                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                    <respond/>
+                    <property name="messageType" scope="axis2" type="STRING"
+                        value="application/json" />
+                    <respond />
                 </then>
                 <else>
                     <log level="custom">
-                        <property expression="$ctx:EnvRoot" name="EnvRoot"/>
+                        <property expression="$ctx:EnvRoot" name="EnvRoot" />
                     </log>
                     <payloadFactory description="returnErroLanguage" media-type="xml">
                         <format>
                             <result>
-                                <timestamp>$1</timestamp>
+                                <timestamp>
+                            $1</timestamp>
                                 <resultDescription>$2</resultDescription>
                                 <totalRecords>$3</totalRecords>
                                 <hasmore>$4</hasmore>
                                 <offset>$5</offset>
-                                <message>$6</message>
+                                <message>
+                            $6</message>
                                 <status>$7</status>
                             </result>
                         </format>
                         <args>
-                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
-                            <arg value="SustIMS0133 - Informar id ou code do VerticalSing ou id ou code do RoadCompenent de preenchimento obrigatório."/>
-                            <arg value="0"/>
-                            <arg value="false"/>
-                            <arg value="0"/>
-                            <arg value="Bad Request"/>
-                            <arg value="400"/>
+                            <arg evaluator="xml"
+                                expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')" />
+                            <arg
+                                value="SustIMS0133 - Informar id ou code do VerticalSing ou id ou code do RoadCompenent de preenchimento obrigatório." />
+                            <arg value="0" />
+                            <arg value="false" />
+                            <arg value="0" />
+                            <arg value="Bad Request" />
+                            <arg value="400" />
                         </args>
                     </payloadFactory>
-                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
-                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                    <respond/>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400" />
+                    <property name="messageType" scope="axis2" type="STRING"
+                        value="application/json" />
+                    <respond />
                 </else>
             </filter>
         </inSequence>
-        <outSequence/>
-        <faultSequence/>
+        <outSequence />
+        <faultSequence />
     </resource>
-    <resource methods="GET" uri-template="/verticalSign">
+    <resource methods="GET" uri-template="/verticalSign?verticalSignId={verticalSignId}">
         <inSequence>
-            <filter regex="true" source="$ctx:query.param.verticalSignId != '' or $ctx:query.param.verticalSignCode != '' or $ctx:query.param.roadComponentId != '' or $ctx:query.param.roadComponentCode != ''">
+            <log level="full">
+                <property name="message" value="Processing /verticalSign request" />
+            </log>
+            <filter regex="true"
+                source="$ctx:query.param.verticalSignId != '' or $ctx:query.param.verticalSignCode != '' or $ctx:query.param.roadComponentId != '' or $ctx:query.param.roadComponentCode != ''">
                 <then>
                     <payloadFactory media-type="xml">
                         <format>
-                            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                            <soapenv:Envelope
+                                xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
                                 <soapenv:Body>
-                                    <teste/>
+                                    <teste />
                                 </soapenv:Body>
                             </soapenv:Envelope>
                         </format>
-                        <args/>
+                        <args />
                     </payloadFactory>
                     <xslt key="getVRS_XSLT">
-                        <property expression="$ctx:query.param.operationUser" name="operationUser"/>
-                        <property expression="$ctx:query.param.verticalSignId" name="verticalSignId"/>
-                        <property expression="$ctx:query.param.verticalSignCode" name="verticalSignCode"/>
-                        <property expression="$ctx:query.param.idMasterObject" name="idMasterObject"/>
-                        <property expression="$ctx:query.param.roadComponentId" name="roadComponentId"/>
-                        <property expression="$ctx:query.param.roadComponentCode" name="roadComponentCode"/>
-                        <property expression="$ctx:query.param.verticalSignTypeId" name="verticalSignTypeId"/>
-                        <property expression="$ctx:query.param.verticalSignTypeCode" name="verticalSignTypeCode"/>
-                        <property expression="$ctx:query.param.calculationTypeCSId" name="calculationTypeCSId"/>
-                        <property expression="$ctx:query.param.calculationTypeCSCode" name="calculationTypeCSCode"/>
-                        <property expression="$ctx:query.param.calculationTypeMSId" name="calculationTypeMSId"/>
-                        <property expression="$ctx:query.param.calculationTypeMSCode" name="calculationTypeMSCode"/>
-                        <property expression="$ctx:query.param.directionId" name="directionId"/>
-                        <property expression="$ctx:query.param.directionCode" name="directionCode"/>
-                        <property expression="$ctx:query.param.sideId" name="sideId"/>
-                        <property expression="$ctx:query.param.flagRegulator" name="flagRegulator"/>
-                        <property expression="$ctx:query.param.active" name="active"/>
-                        <property expression="$ctx:query.param.flagInspectionOpen" name="flagInspectionOpen"/>
-                        <property expression="$ctx:query.param.beginDateBegin" name="beginDateBegin"/>
-                        <property expression="$ctx:query.param.beginDateEnd" name="beginDateEnd"/>
-                        <property expression="$ctx:query.param.endDateBegin" name="endDateBegin"/>
-                        <property expression="$ctx:query.param.endDateEnd" name="endDateEnd"/>
-                        <property expression="$ctx:query.param.sideCode" name="sideCode"/>
+                        <property expression="$ctx:query.param.operationUser" name="operationUser" />
+                        <property expression="$ctx:query.param.verticalSignId" name="verticalSignId" />
+                        <property expression="$ctx:query.param.verticalSignCode"
+                            name="verticalSignCode" />
+                        <property expression="$ctx:query.param.idMasterObject" name="idMasterObject" />
+                        <property expression="$ctx:query.param.roadComponentId"
+                            name="roadComponentId" />
+                        <property expression="$ctx:query.param.roadComponentCode"
+                            name="roadComponentCode" />
+                        <property expression="$ctx:query.param.verticalSignTypeId"
+                            name="verticalSignTypeId" />
+                        <property expression="$ctx:query.param.verticalSignTypeCode"
+                            name="verticalSignTypeCode" />
+                        <property expression="$ctx:query.param.calculationTypeCSId"
+                            name="calculationTypeCSId" />
+                        <property expression="$ctx:query.param.calculationTypeCSCode"
+                            name="calculationTypeCSCode" />
+                        <property expression="$ctx:query.param.calculationTypeMSId"
+                            name="calculationTypeMSId" />
+                        <property expression="$ctx:query.param.calculationTypeMSCode"
+                            name="calculationTypeMSCode" />
+                        <property expression="$ctx:query.param.directionId" name="directionId" />
+                        <property expression="$ctx:query.param.directionCode" name="directionCode" />
+                        <property expression="$ctx:query.param.sideId" name="sideId" />
+                        <property expression="$ctx:query.param.flagRegulator" name="flagRegulator" />
+                        <property expression="$ctx:query.param.active" name="active" />
+                        <property expression="$ctx:query.param.flagInspectionOpen"
+                            name="flagInspectionOpen" />
+                        <property expression="$ctx:query.param.beginDateBegin" name="beginDateBegin" />
+                        <property expression="$ctx:query.param.beginDateEnd" name="beginDateEnd" />
+                        <property expression="$ctx:query.param.endDateBegin" name="endDateBegin" />
+                        <property expression="$ctx:query.param.endDateEnd" name="endDateEnd" />
+                        <property expression="$ctx:query.param.sideCode" name="sideCode" />
                     </xslt>
                     <call blocking="true">
                         <endpoint>
@@ -169,83 +193,98 @@
                             <payloadFactory description="returnErroLanguage" media-type="xml">
                                 <format>
                                     <result>
-                                        <timestamp>$1</timestamp>
+                                        <timestamp>
+                                            $1</timestamp>
                                         <resultDescription>$2</resultDescription>
                                         <totalRecords>$3</totalRecords>
                                         <hasmore>$4</hasmore>
-                                        <offset>$5</offset>
+                                        <offset>
+                                            $5</offset>
                                         <message>$6</message>
                                         <status>$7</status>
                                     </result>
                                 </format>
                                 <args>
-                                    <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
-                                    <arg value="SustIMS0151 - Registo inativo ou inexistente ou utilizador sem permissão de acesso aos parâmetros enviados."/>
-                                    <arg value="0"/>
-                                    <arg value="false"/>
-                                    <arg value="0"/>
-                                    <arg value="Bad Request"/>
-                                    <arg value="400"/>
+                                    <arg evaluator="xml"
+                                        expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')" />
+                                    <arg
+                                        value="SustIMS0151 - Registo inativo ou inexistente ou utilizador sem permissão de acesso aos parâmetros enviados." />
+                                    <arg value="0" />
+                                    <arg value="false" />
+                                    <arg value="0" />
+                                    <arg value="Bad Request" />
+                                    <arg value="400" />
                                 </args>
                             </payloadFactory>
-                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
-                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                            <respond/>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400" />
+                            <property name="messageType" scope="axis2" type="STRING"
+                                value="application/json" />
+                            <respond />
                         </then>
                         <else>
-                            <xslt key="getResponseVRS_XSLT"/>
+                            <xslt key="getResponseVRS_XSLT" />
                             <payloadFactory description="returnJson" media-type="json">
-                                <format>
-									$1
-								</format>
+                                <format> $1 </format>
                                 <args>
-                                    <arg evaluator="xml" expression="$body/*[local-name()='text']"/>
+                                    <arg evaluator="xml" expression="$body/*[local-name()='text']" />
                                 </args>
                             </payloadFactory>
-                            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="200" />
                         </else>
                     </filter>
-                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                    <respond/>
+                    <property name="messageType" scope="axis2" type="STRING"
+                        value="application/json" />
+                    <respond />
                 </then>
                 <else>
                     <log level="custom">
-                        <property expression="$ctx:EnvRoot" name="EnvRoot"/>
+                        <property expression="$ctx:EnvRoot" name="EnvRoot" />
                     </log>
                     <payloadFactory description="returnErroLanguage" media-type="xml">
                         <format>
                             <result>
-                                <timestamp>$1</timestamp>
+                                <timestamp>
+                                    $1</timestamp>
                                 <resultDescription>$2</resultDescription>
                                 <totalRecords>$3</totalRecords>
                                 <hasmore>$4</hasmore>
                                 <offset>$5</offset>
-                                <message>$6</message>
+                                <message>
+                                    $6</message>
                                 <status>$7</status>
                             </result>
                         </format>
                         <args>
-                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
-                            <arg value="SustIMS0133 - Informar id ou code do VerticalSing ou id ou code do RoadCompenent de preenchimento obrigatório."/>
-                            <arg value="0"/>
-                            <arg value="false"/>
-                            <arg value="0"/>
-                            <arg value="Bad Request"/>
-                            <arg value="400"/>
+                            <arg evaluator="xml"
+                                expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')" />
+                            <arg
+                                value="SustIMS0133 - Informar id ou code do VerticalSing ou id ou code do RoadCompenent de preenchimento obrigatório." />
+                            <arg value="0" />
+                            <arg value="false" />
+                            <arg value="0" />
+                            <arg value="Bad Request" />
+                            <arg value="400" />
                         </args>
                     </payloadFactory>
-                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
-                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
-                    <respond/>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400" />
+                    <property name="messageType" scope="axis2" type="STRING"
+                        value="application/json" />
+                    <respond />
                 </else>
             </filter>
         </inSequence>
-        <outSequence/>
+        <outSequence>
+            <send />
+        </outSequence>
         <faultSequence>
+            <log level="full">
+                <property name="message" value="Error processing /verticalSign request" />
+            </log>
             <payloadFactory description="returnError Token" media-type="xml">
                 <format>
                     <result>
-                        <timestamp>$1</timestamp>
+                        <timestamp>
+                            $1</timestamp>
                         <message>$2</message>
                         <status>$3</status>
                     </result>
@@ -303,7 +342,8 @@
                                     <soapenv:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
                                         <soapenv:Body>
                                             <dat:getVerticalSign>
-                                                <IdVerticalSign>$1</IdVerticalSign>
+                                                <IdVerticalSign>
+                                    $1</IdVerticalSign>
                                             </dat:getVerticalSign>
                                         </soapenv:Body>
                                     </soapenv:Envelope>
@@ -346,10 +386,12 @@
                                             <payloadFactory description="LanguageCode" media-type="xml">
                                                 <format>
                                                     <result>
-                                                        <timestamp>$1</timestamp>
+                                                        <timestamp>
+                                                    $1</timestamp>
                                                         <resultDescription>$2</resultDescription>
                                                         <message>$3</message>
-                                                        <status>$4</status>
+                                                        <status>
+                                                    $4</status>
                                                         <id>$5</id>
                                                         <code>$6</code>
                                                     </result>
@@ -380,9 +422,11 @@
                                                             <payloadFactory media-type="xml">
                                                                 <format>
                                                                     <dat:validateRoadComponentPKDB xmlns:dat="http://ws.wso2.org/dataservice">
-                                                                        <dat:IdRoadComponent>$1</dat:IdRoadComponent>
+                                                                        <dat:IdRoadComponent>
+                                                                    $1</dat:IdRoadComponent>
                                                                         <dat:KmStart>$2</dat:KmStart>
-                                                                        <dat:KmEnd>$2</dat:KmEnd>
+                                                                        <dat:KmEnd>
+                                                                    $2</dat:KmEnd>
                                                                     </dat:validateRoadComponentPKDB>
                                                                 </format>
                                                                 <args>
@@ -416,11 +460,14 @@
                                                                     <payloadFactory description="returnErroLanguage" media-type="xml">
                                                                         <format>
                                                                             <result>
-                                                                                <timestamp>$1</timestamp>
+                                                                                <timestamp>
+                                                                            $1</timestamp>
                                                                                 <resultDescription>$2</resultDescription>
-                                                                                <message>$3</message>
+                                                                                <message>
+                                                                            $3</message>
                                                                                 <status>$4</status>
-                                                                                <id>$5</id>
+                                                                                <id>
+                                                                            $5</id>
                                                                                 <code>$6</code>
                                                                             </result>
                                                                         </format>
@@ -451,9 +498,11 @@
                                                             <payloadFactory media-type="xml">
                                                                 <format>
                                                                     <dat:validateRoadComponentPKDB xmlns:dat="http://ws.wso2.org/dataservice">
-                                                                        <dat:IdRoadComponent>$1</dat:IdRoadComponent>
+                                                                        <dat:IdRoadComponent>
+                                                                    $1</dat:IdRoadComponent>
                                                                         <dat:KmStart>$2</dat:KmStart>
-                                                                        <dat:KmEnd>$2</dat:KmEnd>
+                                                                        <dat:KmEnd>
+                                                                    $2</dat:KmEnd>
                                                                     </dat:validateRoadComponentPKDB>
                                                                 </format>
                                                                 <args>
@@ -483,11 +532,14 @@
                                                                     <payloadFactory description="returnErroLanguage" media-type="xml">
                                                                         <format>
                                                                             <result>
-                                                                                <timestamp>$1</timestamp>
+                                                                                <timestamp>
+                                                                            $1</timestamp>
                                                                                 <resultDescription>$2</resultDescription>
-                                                                                <message>$3</message>
+                                                                                <message>
+                                                                            $3</message>
                                                                                 <status>$4</status>
-                                                                                <id>$5</id>
+                                                                                <id>
+                                                                            $5</id>
                                                                                 <code>$6</code>
                                                                             </result>
                                                                         </format>
@@ -522,9 +574,11 @@
                                                             <payloadFactory description="ValidateKmError" media-type="xml">
                                                                 <format>
                                                                     <result>
-                                                                        <timestamp>$1</timestamp>
+                                                                        <timestamp>
+                                                                    $1</timestamp>
                                                                         <resultDescription>$2</resultDescription>
-                                                                        <message>$3</message>
+                                                                        <message>
+                                                                    $3</message>
                                                                         <status>$4</status>
                                                                         <id>$5</id>
                                                                         <code>$6</code>
@@ -554,7 +608,8 @@
                                                                     <payloadFactory description="ValidateKmError" media-type="xml">
                                                                         <format>
                                                                             <result>
-                                                                                <envForEach>$1</envForEach>
+                                                                                <envForEach>
+                                                                            $1</envForEach>
                                                                                 <returnGetVerticalSign>$2</returnGetVerticalSign>
                                                                             </result>
                                                                         </format>
@@ -586,11 +641,14 @@
                                                                             <payloadFactory description="returnErroLanguage" media-type="xml">
                                                                                 <format>
                                                                                     <result>
-                                                                                        <timestamp>$1</timestamp>
+                                                                                        <timestamp>
+                                                                                    $1</timestamp>
                                                                                         <resultDescription>$2</resultDescription>
-                                                                                        <message>$3</message>
+                                                                                        <message>
+                                                                                    $3</message>
                                                                                         <status>$4</status>
-                                                                                        <id>$5</id>
+                                                                                        <id>
+                                                                                    $5</id>
                                                                                         <code>$6</code>
                                                                                     </result>
                                                                                 </format>
@@ -630,7 +688,8 @@
                                     <payloadFactory description="LanguageCode" media-type="xml">
                                         <format>
                                             <result>
-                                                <resultDescription>$1</resultDescription>
+                                                <resultDescription>
+                                            $1</resultDescription>
                                                 <message>$2</message>
                                                 <status>$3</status>
                                                 <id>$4</id>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="RetiraNamespace_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:output indent="yes" method="xml"/>
+        <!-- Plantilla para copiar todos los elementos -->
+        <xsl:template match="*">
+            <xsl:element name="{local-name()}">
+                <xsl:apply-templates select="@*|node()"/>
+            </xsl:element>
+        </xsl:template>
+        <!-- Plantilla para copiar atributos -->
+        <xsl:template match="@*">
+            <xsl:attribute name="{local-name()}">
+                <xsl:value-of select="."/>
+            </xsl:attribute>
+        </xsl:template>
+        <!-- Plantilla para copiar texto -->
+        <xsl:template match="text()">
+            <xsl:value-of select="."/>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

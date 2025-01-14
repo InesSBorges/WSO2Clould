@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="RemoveEmptyTags" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:output indent="yes" omit-xml-declaration="yes"/>
+        <!-- Template para copiar elementos e remover atributos -->
+        <xsl:template match="*">
+            <!-- excluir elementos vazios -->
+            <xsl:if test="normalize-space(.) != '' or *">
+                <xsl:copy>
+                    <!-- ignora atributos tambem para nos internos -->
+                    <xsl:apply-templates select="node()"/>
+                </xsl:copy>
+            </xsl:if>
+        </xsl:template>
+        <!-- copiar nos validos sem alterar -->
+        <xsl:template match="text()|comment()|processing-instruction()">
+            <xsl:copy/>
+        </xsl:template>
+        <!-- não copiar atributo) -->
+        <xsl:template match="@*"/>
+    </xsl:stylesheet>
+</localEntry>

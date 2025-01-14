@@ -1,0 +1,40 @@
+<data transports="http local" serviceNamespace="" serviceGroup="" name="validateADMFKDB">
+  <config id="ReaderSustIMS">
+    <property name="carbon_datasource_name">ReaderSustIMS</property>
+  </config>
+  <operation name="validateADMFKDB">
+    <call-query href="validateADMFKProc">
+      <with-param name="fieldID" query-param="fieldID" />
+      <with-param name="fieldCode" query-param="fieldCode" />
+      <with-param name="tableName" query-param="tableName" />
+      <with-param name="fieldIdName" query-param="fieldIdName" />
+      <with-param name="fieldCodeName" query-param="fieldCodeName" />      
+    </call-query>
+  </operation>
+  <query id="validateADMFKProc" useConfig="ReaderSustIMS">
+    <sql>
+            DECLARE @IdForeignKey int
+			DECLARE @result int
+			DECLARE @ErrorMessage nvarchar(4000)
+			EXEC ADM.validateADMFK :fieldID ,:fieldCode , :tableName ,:fieldIdName,:fieldCodeName, @IdForeignKey OUTPUT,
+			 @result OUTPUT
+			  ,@ErrorMessage OUTPUT
+			SELECT @IdForeignKey as IdForeignKey,
+			 @result as result,
+			 @ErrorMessage as ErrorMessage
+        </sql>
+    <param name="fieldID" sqlType="INTEGER" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="fieldCode" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="tableName" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="fieldIdName" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="fieldCodeName" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="IdForeignKey" sqlType="INTEGER" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="result" sqlType="INTEGER" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="ErrorMessage" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />    
+    <result element="validateADMFKOut" rowName="validateADMFK">
+      <element name="IdForeignKey" xsdType="integer" column="IdForeignKey" />
+      <element name="result" xsdType="integer" column="result" />
+      <element name="ErrorMessage" xsdType="string" column="ErrorMessage" />
+    </result>
+  </query>
+</data>

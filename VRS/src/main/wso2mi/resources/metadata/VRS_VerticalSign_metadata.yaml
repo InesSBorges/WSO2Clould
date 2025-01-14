@@ -1,0 +1,10 @@
+---
+key: "VRS_VerticalSign-1.0.0"
+name : "VRS_VerticalSign"
+displayName : "VRS_VerticalSign"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

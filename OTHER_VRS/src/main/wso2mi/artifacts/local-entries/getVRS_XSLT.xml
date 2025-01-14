@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="getVRS_XSLT" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet extension-element-prefixes="date" version="2.0" xmlns:dat="http://ws.wso2.org/dataservice" xmlns:date="http://exslt.org/dates-and-times" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="operationUser"/>
+        <xsl:param name="verticalSignId"/>
+        <xsl:param name="verticalSignCode"/>
+        <xsl:param name="idMasterObject"/>
+        <xsl:param name="roadComponentId"/>
+        <xsl:param name="roadComponentCode"/>
+        <xsl:param name="verticalSignTypeId"/>
+        <xsl:param name="verticalSignTypeCode"/>
+        <xsl:param name="calculationTypeCSId"/>
+        <xsl:param name="calculationTypeCSCode"/>
+        <xsl:param name="calculationTypeMSId"/>
+        <xsl:param name="calculationTypeMSCode"/>
+        <xsl:param name="directionId"/>
+        <xsl:param name="directionCode"/>
+        <xsl:param name="sideId"/>
+        <xsl:param name="flagRegulator"/>
+        <xsl:param name="active"/>
+        <xsl:param name="flagInspectionOpen"/>
+        <xsl:param name="beginDateBegin"/>
+        <xsl:param name="beginDateEnd"/>
+        <xsl:param name="endDateBegin"/>
+        <xsl:param name="endDateEnd"/>
+        <xsl:param name="sideCode"/>
+        <xsl:template match="/">
+            <dat:getVerticalSign>
+                <xsl:choose>
+                    <xsl:when test="string-length($operationUser) > 0">
+                        <dat:UserCode>
+                            <xsl:value-of select="$operationUser"/>
+                        </dat:UserCode>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($verticalSignId) > 0">
+                        <dat:IdVerticalSign>
+                            <xsl:value-of select="$verticalSignId"/>
+                        </dat:IdVerticalSign>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($verticalSignCode) > 0">
+                        <dat:VerticalSignCode>
+                            <xsl:value-of select="$verticalSignCode"/>
+                        </dat:VerticalSignCode>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($idMasterObject) > 0">
+                        <dat:IdMasterObject>
+                            <xsl:value-of select="$idMasterObject"/>
+                        </dat:IdMasterObject>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($roadComponentId) > 0">
+                        <dat:IdRoadComponent>
+                            <xsl:value-of select="$roadComponentId"/>
+                        </dat:IdRoadComponent>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($roadComponentCode) > 0">
+                        <dat:CodeComponent>
+                            <xsl:value-of select="$roadComponentCode"/>
+                        </dat:CodeComponent>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($verticalSignTypeId) > 0">
+                        <dat:IdVerticalSignType>
+                            <xsl:value-of select="$verticalSignTypeId"/>
+                        </dat:IdVerticalSignType>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($verticalSignTypeCode) > 0">
+                        <dat:VerticalSignTypeCode>
+                            <xsl:value-of select="$verticalSignTypeCode"/>
+                        </dat:VerticalSignTypeCode>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($calculationTypeCSId) > 0">
+                        <dat:IdCalculationTypeCS>
+                            <xsl:value-of select="$calculationTypeCSId"/>
+                        </dat:IdCalculationTypeCS>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($calculationTypeCSCode) > 0">
+                        <dat:CalculationTypeCodeCS>
+                            <xsl:value-of select="$calculationTypeCSCode"/>
+                        </dat:CalculationTypeCodeCS>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($calculationTypeMSId) > 0">
+                        <dat:IdCalculationTypeMS>
+                            <xsl:value-of select="$calculationTypeMSId"/>
+                        </dat:IdCalculationTypeMS>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($calculationTypeMSCode) > 0">
+                        <dat:CalculationTypeCodeMS>
+                            <xsl:value-of select="$calculationTypeMSCode"/>
+                        </dat:CalculationTypeCodeMS>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($directionId) > 0">
+                        <dat:IdDirection>
+                            <xsl:value-of select="$directionId"/>
+                        </dat:IdDirection>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($directionCode) > 0">
+                        <dat:DirectionCode>
+                            <xsl:value-of select="$directionCode"/>
+                        </dat:DirectionCode>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($sideId) > 0">
+                        <dat:IdSide>
+                            <xsl:value-of select="$sideId"/>
+                        </dat:IdSide>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($flagRegulator) > 0">
+                        <dat:FlagRegulator>
+                            <xsl:value-of select="$flagRegulator"/>
+                        </dat:FlagRegulator>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($active) > 0">
+                        <dat:Active>
+                            <xsl:value-of select="$active"/>
+                        </dat:Active>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($flagInspectionOpen) > 0">
+                        <dat:FlagInspectionOpen>
+                            <xsl:value-of select="$flagInspectionOpen"/>
+                        </dat:FlagInspectionOpen>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($beginDateBegin) > 0">
+                        <dat:StartDateBegin>
+                            <xsl:value-of select="$beginDateBegin"/>
+                        </dat:StartDateBegin>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($beginDateEnd) > 0">
+                        <dat:StartDateEnd>
+                            <xsl:value-of select="$beginDateEnd"/>
+                        </dat:StartDateEnd>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($endDateBegin) > 0">
+                        <dat:EndDateBegin>
+                            <xsl:value-of select="$endDateBegin"/>
+                        </dat:EndDateBegin>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($endDateEnd) > 0">
+                        <dat:EndDateEnd>
+                            <xsl:value-of select="$endDateEnd"/>
+                        </dat:EndDateEnd>
+                    </xsl:when>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="string-length($sideCode) > 0">
+                        <dat:SideCode>
+                            <xsl:value-of select="$sideCode"/>
+                        </dat:SideCode>
+                    </xsl:when>
+                </xsl:choose>
+            </dat:getVerticalSign>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>

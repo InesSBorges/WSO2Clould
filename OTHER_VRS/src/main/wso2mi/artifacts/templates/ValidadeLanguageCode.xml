@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="ValidadeLanguageCode" xmlns="http://ws.apache.org/ns/synapse">
+    <parameter defaultValue="" isMandatory="false" name="operationUser"/>
+    <parameter defaultValue="" isMandatory="false" name="userLanguage"/>
+    <sequence>
+        <payloadFactory description="LanguageCode" media-type="xml">
+            <format>
+                <dat:getLanguage xmlns:dat="http://ws.wso2.org/dataservice">
+                    <dat:OperationUser>$1</dat:OperationUser>
+                    <dat:UserLanguage>$2</dat:UserLanguage>
+                </dat:getLanguage>
+            </format>
+            <args>
+                <arg evaluator="xml" expression="$ctx:operationUser"/>
+                <arg evaluator="xml" expression="$ctx:userLanguage"/>
+            </args>
+        </payloadFactory>
+        <log level="full"/>
+        <call>
+            <endpoint>
+                <http method="post" uri-template="local:///services/ADM_LanguageDB/">
+                    <suspendOnFailure>
+                        <initialDuration>-1</initialDuration>
+                        <progressionFactor>1</progressionFactor>
+                    </suspendOnFailure>
+                    <markForSuspension>
+                        <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                    </markForSuspension>
+                </http>
+            </endpoint>
+        </call>
+        <log level="full"/>
+        <filter regex="true" source="count(//*[local-name() = 'LanguageCode']) = 1">
+            <then>
+                <propertyGroup>
+                    <property expression="//*[local-name() = 'LanguageCode']" name="userLanguage" scope="default" type="STRING"/>
+                    <property expression="//*[local-name() = 'IdLanguage']" name="IdLanguage" scope="default" type="STRING"/>
+                </propertyGroup>
+            </then>
+            <else>
+                <payloadFactory description="LanguageCode" media-type="xml">
+                    <format>
+                        <result>
+                            <timestamp>$1</timestamp>
+                            <resultDescription>$2</resultDescription>
+                            <totalRecords>$3</totalRecords>
+                            <hasmore>$4</hasmore>
+                            <offset>$5</offset>
+                            <message>$6</message>
+                            <status>$7</status>
+                        </result>
+                    </format>
+                    <args>
+                        <arg evaluator="xml" expression="get-property('SYSTEM_DATE','yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                        <arg value="'SustIMS0100 - Language não existe.'"/>
+                        <arg value="0"/>
+                        <arg value="false"/>
+                        <arg value="0"/>
+                        <arg value="Bad Request"/>
+                        <arg value="400"/>
+                    </args>
+                </payloadFactory>
+                <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                <respond/>
+            </else>
+        </filter>
+    </sequence>
+</template>

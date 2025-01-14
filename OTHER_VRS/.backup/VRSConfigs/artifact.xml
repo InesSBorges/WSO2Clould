@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?><artifacts>
-    <artifact name="VRS_VerticalSign" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
-        <file>src/main/synapse-config/api/VRS_VerticalSign.xml</file>
-    </artifact>
-    <artifact name="VRS_VerticalSign_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
-        <file>src/main/resources/metadata/VRS_VerticalSign_swagger.yaml</file>
-    </artifact>
-    <artifact name="VRS_VerticalSign_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
-        <file>src/main/resources/metadata/VRS_VerticalSign_metadata.yaml</file>
-    </artifact>
     <artifact name="RemoveEmptyTags" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/local-entries/RemoveEmptyTags.xml</file>
     </artifact>

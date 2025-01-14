@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="deleteVerticalSignOperation" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <payloadFactory description="verticalSignRC" media-type="xml">
+        <format>
+            <soap:Envelope xmlns:dat="http://ws.wso2.org/dataservice" xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+                <soap:Header/>
+                <soap:Body>
+                    <dat:deleteRoadComponent>
+                        <dat:IdVerticalSign>$1</dat:IdVerticalSign>
+                    </dat:deleteRoadComponent>
+                </soap:Body>
+            </soap:Envelope>
+        </format>
+        <args>
+            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+        </args>
+    </payloadFactory>
+    <call blocking="true">
+        <endpoint>
+            <http method="post" uri-template="local:///services/ValidateRoadComponentPKDB/">
+                <suspendOnFailure>
+                    <initialDuration>0</initialDuration>
+                    <progressionFactor>1</progressionFactor>
+                </suspendOnFailure>
+                <markForSuspension>
+                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                </markForSuspension>
+            </http>
+        </endpoint>
+    </call>
+    <log level="custom">
+        <property name="deleteRoadComponent" value="ok"/>
+    </log>
+    <filter regex="(1|3|4|5)\d\d" source="$axis2:HTTP_SC">
+        <then/>
+        <else>
+            <payloadFactory media-type="xml">
+                <format>
+                    <dat:deleteVerticalSign xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdVerticalSign>$1</dat:IdVerticalSign>
+                    </dat:deleteVerticalSign>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="local:///services/verticalSignDBR/">
+                        <suspendOnFailure>
+                            <initialDuration>0</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <log level="custom">
+                <property expression="$ctx:returnGetVerticalSign//*[local-name() = 'IdTableDescVerticalSign']/text()" name="returnGetVerticalSign"/>
+            </log>
+            <filter regex="(1|3|4|5)\d\d" source="$axis2:HTTP_SC">
+                <then>
+                    <log level="custom">
+                        <property name="deleteRoadComponentOutput" value="ok"/>
+                    </log>
+                    <payloadFactory description="returnErroTableDesc" media-type="xml">
+                        <format>
+                            <result>
+                                <timestamp>$1</timestamp>
+                                <resultDescription>$2</resultDescription>
+                                <message>$3</message>
+                                <status>$4</status>
+                            </result>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss.SSSXXX')"/>
+                            <arg value="SustIMS0009 - Erro ao apagar registo (verticalSignRC)"/>
+                            <arg value="Bad Request"/>
+                            <arg value="400"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id"/>
+                            <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="flagError" scope="default" type="STRING" value="true"/>
+                    <enrich description="add module EnvVerticalSign">
+                        <source clone="true" xpath="//*[local-name() = 'result']"/>
+                        <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                    </enrich>
+                </then>
+                <else>
+                    <payloadFactory description="getanguageDesc" media-type="xml">
+                        <format>
+                            <dat:getTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                <dat:IdTableDesc>$1</dat:IdTableDesc>
+                            </dat:getTableDesc>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:returnGetVerticalSign//*[local-name() = 'IdTableDescVerticalSign']/text()"/>
+                        </args>
+                    </payloadFactory>
+                    <call blocking="true">
+                        <endpoint>
+                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
+                                <suspendOnFailure>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                    <log level="custom">
+                        <property name="getVerticalSignOperation" value="TableDesc"/>
+                    </log>
+                    <enrich description="returnTableDesc">
+                        <source clone="true" type="body"/>
+                        <target property="returnTableDesc" type="property"/>
+                    </enrich>
+                    <payloadFactory description="deletdeleteTableDesc" media-type="xml">
+                        <format>
+                            <dat:deleteTableDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                <dat:IdTableDesc>$1</dat:IdTableDesc>
+                            </dat:deleteTableDesc>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:returnGetVerticalSign//*[local-name() = 'IdTableDescVerticalSign']/text()"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full"/>
+                    <call blocking="true">
+                        <endpoint>
+                            <http method="post" uri-template="local:///services/ADM_TableDesc/">
+                                <suspendOnFailure>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                    <log level="custom">
+                        <property name="deleteVerticalSignOperation" value="deleteTableDesc"/>
+                    </log>
+                    <!-- ROLLBACK LanguageDesc -->
+                    <payloadFactory description="deletLanguageDesc" media-type="xml">
+                        <format>
+                            <dat:deleteLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                                <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                            </dat:deleteLanguageDesc>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:returnTableDesc//*[local-name() = 'IdLanguageDesc']/text()"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full"/>
+                    <call blocking="true">
+                        <endpoint>
+                            <http method="post" uri-template="local:///services/ADM_LanguageDescDB/">
+                                <suspendOnFailure>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1</progressionFactor>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </call>
+                    <log level="full"/>
+                    <log level="custom">
+                        <property name="deleteVerticalSignOperation" value="deleteLanguageDesc"/>
+                    </log>
+                    <filter xpath="$ctx:flagError = 'false'">
+                        <then>
+                            <payloadFactory description="returnSucessIdRoadComponente" media-type="xml">
+                                <format>
+                                    <result>
+                                        <resultDescription>$1</resultDescription>
+                                        <id>$2</id>
+                                        <code>$3</code>
+                                    </result>
+                                </format>
+                                <args>
+                                    <arg value="SustIMS0000 - Sucesso"/>
+                                    <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/id/text()"/>
+                                    <arg evaluator="xml" expression="$ctx:envForEach//verticalSign/code/text()"/>
+                                </args>
+                            </payloadFactory>
+                            <enrich description="add module EnvVerticalSign">
+                                <source clone="true" xpath="//*[local-name() = 'result']"/>
+                                <target action="child" xpath="$ctx:EnvVerticalSign//*[local-name() = 'verticalSigns']"/>
+                            </enrich>
+                        </then>
+                        <else/>
+                    </filter>
+                </else>
+            </filter>
+        </else>
+    </filter>
+</sequence>

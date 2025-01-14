@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="verticalSignDBR" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/verticalSignDBR.dbs</file>
+    </artifact>
+    <artifact name="validateVRSFKDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/validateVRSFKDB.dbs</file>
+    </artifact>
+    <artifact name="validateADMFKDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/validateADMFKDB.dbs</file>
+    </artifact>
+    <artifact name="ValidateRoadComponentPKDB" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ValidateRoadComponentPKDB.dbs</file>
+    </artifact>
+    <artifact name="teste" groupId="com.example.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/teste.dbs</file>
+    </artifact>
+</artifacts>

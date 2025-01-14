@@ -1,0 +1,42 @@
+<data name="validateUserLanguageDB"  enableBatchRequests="true" transports="http https local">
+    <config id="CRUDSustIMS30">
+    <property name="carbon_datasource_name">CRUDSustIMS30</property>
+  </config>
+  <query id="validateUserLanguageProc" useConfig="CRUDSustIMS30">
+    <sql>DECLARE @user varchar(100)
+      DECLARE @language varchar(100)
+      DECLARE @result int
+      DECLARE @resutCode nvarchar(4000)
+      DECLARE @message nvarchar(4000)
+      DECLARE @status int
+      DECLARE @languageOut nvarchar(4000)
+      EXEC ADM.validateUserLanguage ?,?
+          ,@result OUTPUT
+          ,@resutCode OUTPUT
+          ,@message OUTPUT
+          ,@status OUTPUT
+          ,@languageOut OUTPUT
+      SELECT @result as result, @resutCode as resutCode, @message as message, @status as status, @languageOut as languageOut
+        </sql>
+    <param name="user" sqlType="STRING" paramType="SCALAR" />
+    <param name="language" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}"/>    
+    <param name="result" sqlType="INTEGER" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="resutCode" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="message" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="status" sqlType="INTEGER" paramType="SCALAR" defaultValue="#{NULL}" />
+    <param name="languageOut" sqlType="STRING" paramType="SCALAR" defaultValue="#{NULL}" />
+    <result element="validateUserLanguageOut" rowName="validateUserLanguage">     
+      <element name="result" xsdType="integer" column="result" />
+      <element name="resutCode" xsdType="string" column="resutCode" /> 
+      <element name="message" xsdType="string" column="message" />
+      <element name="status" xsdType="integer" column="status" />
+      <element name="languageOut" xsdType="string" column="languageOut" />
+    </result>
+  </query>
+   <operation name="validateUserLanguageDB">
+    <call-query href="validateUserLanguageProc">
+      <with-param name="user" query-param="user" />
+      <with-param name="language" query-param="language" />
+    </call-query>
+  </operation>
+</data>
