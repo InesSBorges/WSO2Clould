@@ -26,6 +26,10 @@
         {
             "name": "vrschanged",
             "path": "VRS"
+        },
+        {
+            "name": "vrs",
+            "path": "VRS"
         }
     ]
 }
