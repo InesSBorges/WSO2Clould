@@ -14,6 +14,10 @@
         {
             "name": "HelloWorldService",
             "path": "HelloWorldService/HelloWorldService"
+        },
+        {
+            "name": "helloworldservice",
+            "path": "HelloWorldService"
         }
     ],
     "settings": {
