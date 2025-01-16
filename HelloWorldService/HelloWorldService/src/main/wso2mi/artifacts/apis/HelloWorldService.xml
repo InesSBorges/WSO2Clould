@@ -2,13 +2,15 @@
 <api context="/helloworldservice" name="HelloWorldService" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="GET" uri-template="/">
         <inSequence>
+            <log category="DEBUG" level="full" />
             <dblookup>
                 <connection>
                     <pool>
                         <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
                         <url>
                             jdbc:sqlserver://SRVASCDBG4\DBG4;allowPortWithNamedInstance=true;trustServerCertificate=true;databaseName=SustIMSDEV</url>
-                        <user>ReaderSustIMSDEV</user>
+                        <user>
+                            ReaderSustIMSDEV</user>
                         <password>Re4der$ust!M$</password>
                     </pool>
                 </connection>
