@@ -31,5 +31,8 @@
             "name": "vrs",
             "path": "VRS"
         }
-    ]
+    ],
+    "settings": {
+        "sqltools.connections": []
+    }
 }
