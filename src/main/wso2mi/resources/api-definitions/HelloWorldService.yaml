@@ -1,0 +1,13 @@
+openapi: 3.0.1
+info:
+  title: HelloWorldService
+  description: API Definition of HelloWorldService
+  version: 1.0.0
+servers:
+- url: http://localhost:8290/helloworldservice
+paths:
+  /:
+    get:
+      responses:
+        default:
+          description: Default response

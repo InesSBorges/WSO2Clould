@@ -12,24 +12,8 @@
             "path": "VRS"
         },
         {
-            "name": "vrsnew",
-            "path": "VRS"
-        },
-        {
-            "name": "vrsnew",
-            "path": "VRS"
-        },
-        {
-            "name": "vrschanged",
-            "path": "VRS"
-        },
-        {
-            "name": "vrschanged",
-            "path": "VRS"
-        },
-        {
-            "name": "vrs",
-            "path": "VRS"
+            "name": "HelloWorldService",
+            "path": "HelloWorldService/HelloWorldService"
         }
     ],
     "settings": {
