@@ -4,20 +4,8 @@
             "path": "."
         },
         {
-            "name": "helloworld",
-            "path": "HelloWorld"
-        },
-        {
             "name": "vrs",
             "path": "VRS"
-        },
-        {
-            "name": "HelloWorldService",
-            "path": "HelloWorldService/HelloWorldService"
-        },
-        {
-            "name": "helloworldservice",
-            "path": "HelloWorldService"
         }
     ],
     "settings": {
