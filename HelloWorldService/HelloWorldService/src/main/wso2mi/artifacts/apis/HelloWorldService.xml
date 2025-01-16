@@ -22,4 +22,9 @@
         <faultSequence>
         </faultSequence>
     </resource>
-</api>
+    <resource methods="GET" uri-template="/test">
+        <inSequence>
+        </inSequence>
+        <faultSequence>
+        </faultSequence>
+    </resource></api>
