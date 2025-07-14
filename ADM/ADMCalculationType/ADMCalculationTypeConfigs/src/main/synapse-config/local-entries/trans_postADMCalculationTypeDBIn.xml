@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="trans_postADMCalculationTypeDBIn" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="2.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="idTableDesc"/>
+        <xsl:template match="/">
+            <dat:postCalculationType xmlns:dat="http://ws.wso2.org/dataservice">
+                <dat:Operation>INSERT</dat:Operation>
+                <dat:User>
+                    <xsl:value-of select="//*[local-name() = 'operationUser']"/>
+                </dat:User>
+                <xsl:if test="string-length(//*[local-name() = 'code']) > 0">
+                    <dat:CalculationTypeCode>
+                        <xsl:value-of select="//*[local-name() = 'code']"/>
+                    </dat:CalculationTypeCode>
+                </xsl:if>
+                <xsl:if test="string-length($idTableDesc) > 0">
+                    <dat:IdTableDesc>
+                        <xsl:value-of select="$idTableDesc"/>
+                    </dat:IdTableDesc>
+                </xsl:if>
+                <xsl:if test="string-length(//*[local-name() = 'formula']) > 0">
+                    <dat:Formula>
+                        <xsl:value-of select="//*[local-name() = 'formula']"/>
+                    </dat:Formula>
+                </xsl:if>
+                <xsl:if test="string-length(//*[local-name() = 'active']) > 0">
+                    <dat:Active>
+                        <xsl:value-of select="//*[local-name() = 'active']"/>
+                    </dat:Active>
+                </xsl:if>
+            </dat:postCalculationType>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>
