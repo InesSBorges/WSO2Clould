@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="api_ADMCalculationType" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/api_ADMCalculationType.xml</file>
+    </artifact>
+    <artifact name="api_ADMCalculationType_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/api_ADMCalculationType_swagger.yaml</file>
+    </artifact>
+    <artifact name="api_ADMCalculationType_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/api_ADMCalculationType_metadata.yaml</file>
+    </artifact>
+    <artifact name="trans_getADMCalculationTypeDBIn" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/trans_getADMCalculationTypeDBIn.xml</file>
+    </artifact>
+    <artifact name="trans_postADMCalculationTypeDBIn" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/trans_postADMCalculationTypeDBIn.xml</file>
+    </artifact>
+    <artifact name="trans_putADMCalculationTypeDBIn" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/trans_putADMCalculationTypeDBIn.xml</file>
+    </artifact>
+</artifacts>
