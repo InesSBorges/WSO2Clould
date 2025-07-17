@@ -19,11 +19,9 @@
                     <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_validateUserLanguage"/>
                 </endpoint>
             </call>
-            <payloadFactory media-type="xml">
-               <format>
-                  <empty/>
-               </format>
-               <args/>
+            <payloadFactory media-type="json">
+                <format>{}</format>
+                <args/>
             </payloadFactory>
             <xslt key="trans_getADMCalculationTypeDBIn">
                 <property expression="$ctx:inputId" name="inputId"/>
