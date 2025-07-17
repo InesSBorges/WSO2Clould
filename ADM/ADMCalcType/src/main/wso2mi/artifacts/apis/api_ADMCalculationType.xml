@@ -357,77 +357,58 @@
         <faultSequence/>
     </resource>
    <resource methods="DELETE" uri-template="/{id}">
-       <inSequence>
-            <!-- <sequence key="seq_validateToken"/> -->
-          <propertyGroup description="input">
-             <property name="inputId" expression="get-property('uri.var.id')" scope="default" type="STRING"/>
-             <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
-                <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
-          </propertyGroup>
-          <payloadFactory media-type="json" description="deleteUser">
-             <format>{
-                "Operation": "$1",
-                "IdCalculationType": "$2"
-             }</format>
-             <args>
-                <arg value="DELETE"/>
-                <arg evaluator="xml" expression="$ctx:inputId"/>
-             </args>
-          </payloadFactory>
-          <call blocking="true">
-             <endpoint>
-                <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module"/>
-             </endpoint>
-          </call>
-          <filter source="//*[local-name() = 'result'] = 1" regex="true">
-             <then>
-                <propertyGroup>
-                   <property name="validResultCode" expression="//*[local-name() = 'resultCode']" scope="default" type="STRING"/>
-                   <property name="validMessage" expression="//*[local-name() = 'message']" scope="default" type="STRING"/>
-                   <property name="validStatus" expression="//*[local-name() = 'status']" scope="default" type="STRING"/>
-                   <property name="totalRecords" value="1" scope="default" type="STRING"/>
-                   <property name="validId" expression="//*[local-name() = 'idOutput']" scope="default" type="STRING"/>
-                </propertyGroup>
-                <!-- Call Ballerina seq_messageOutput -->
-                <call>
-                    <endpoint>
-                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
-                    </endpoint>
-                </call>
-                <!-- Call Ballerina seq_resultOutput -->
-                <call>
-                    <endpoint>
-                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
-                    </endpoint>
-                </call>
-                <propertyGroup>
-                   <property name="HTTP_SC" value="200" scope="axis2" type="STRING"/>
-                   <property name="messageType" value="application/json" scope="axis2" type="STRING"/>
-                </propertyGroup>
-                <respond/>
-             </then>
-             <else>
-                <propertyGroup description="error">
-                   <property name="validResultCode" expression="//*[local-name() = 'resultCode']" scope="default" type="STRING"/>
-                   <property name="validMessage" expression="//*[local-name() = 'message']" scope="default" type="STRING"/>
-                   <property name="validStatus" expression="//*[local-name() = 'status']" scope="default" type="STRING"/>
-                </propertyGroup>
-                <!-- Call Ballerina seq_messageOutput -->
-                <call>
-                    <endpoint>
-                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
-                    </endpoint>
-                </call>
-                <!-- Call Ballerina seq_resultOutput -->
-                <call>
-                    <endpoint>
-                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
-                    </endpoint>
-                </call>
-             </else>
-          </filter>
-       </inSequence>
-       <outSequence/>
-       <faultSequence/>
-    </resource>
+   <inSequence>
+      <!-- <sequence key="seq_validateToken"/> -->
+      <propertyGroup description="input">
+         <property name="inputId" expression="get-property('uri.var.id')" scope="default" type="STRING"/>
+         <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+      </propertyGroup>
+      <payloadFactory media-type="json" description="deleteUser">
+         <format>{
+            "Operation": "$1",
+            "IdCalculationType": "$2"
+         }</format>
+         <args>
+            <arg value="DELETE"/>
+            <arg evaluator="xml" expression="$ctx:inputId"/>
+         </args>
+      </payloadFactory>
+      <call blocking="true">
+         <endpoint>
+            <http method="POST" uri-template="https://your-choreo-endpoint/your-delete-service"/>
+         </endpoint>
+      </call>
+      <filter source="//*[local-name() = 'result'] = 1" regex="true">
+         <then>
+            <propertyGroup>
+               <property name="HTTP_SC" value="200" scope="axis2" type="STRING"/>
+               <property name="messageType" value="application/json" scope="axis2" type="STRING"/>
+            </propertyGroup>
+            <respond/>
+         </then>
+         <else>
+            <propertyGroup description="error">
+               <property name="validResultCode" expression="//*[local-name() = 'resultCode']" scope="default" type="STRING"/>
+               <property name="validMessage" expression="//*[local-name() = 'message']" scope="default" type="STRING"/>
+               <property name="validStatus" expression="//*[local-name() = 'status']" scope="default" type="STRING"/>
+            </propertyGroup>
+            <!-- Call Ballerina seq_messageOutput -->
+            <call>
+                <endpoint>
+                    <http method="POST" uri-template="https://your-choreo-endpoint/seq_messageOutput"/>
+                </endpoint>
+            </call>
+            <!-- Call Ballerina seq_resultOutput -->
+            <call>
+                <endpoint>
+                    <http method="POST" uri-template="https://your-choreo-endpoint/seq_resultOutput"/>
+                </endpoint>
+            </call>
+         </else>
+      </filter>
+   </inSequence>
+   <outSequence/>
+   <faultSequence/>
+</resource>
 </api>
