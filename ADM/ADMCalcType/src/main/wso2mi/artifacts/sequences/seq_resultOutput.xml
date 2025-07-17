@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="seq_resultOutput" xmlns="http://ws.apache.org/ns/synapse">
+	<filter xmlns:ns="http://org.apache.synapse/xsd" xpath="$ctx:method != 'GET' or $ctx:validStatus = '401'">
+		<then>
+			<filter regex="true" source="string-length($ctx:validStatus) = 0">
+				<then>
+					<property name="validStatus" scope="default" type="STRING" value="null"/>
+				</then>
+				<else/>
+			</filter>
+			<filter regex="true" source="string-length($ctx:validId) = 0">
+				<then>
+					<property name="validId" scope="default" type="STRING" value="null"/>
+					<property name="totalRecords" scope="default" type="STRING" value="0"/>
+					<property name="totalErrors" scope="default" type="STRING" value="1"/>
+				</then>
+				<else>
+					<property name="validIdCount" expression="translate(floor(string-length($ctx:validId) - string-length(translate($ctx:validId, ',', '')) + 1),'.0','')" scope="default" type="STRING"/>
+					<property expression="$ctx:validId" name="validId" scope="default" type="STRING"/>
+					<property expression="$ctx:validIdCount" name="totalRecords" scope="default" type="STRING"/>
+					<property name="totalErrors" scope="default" type="STRING" value="0"/>
+				</else>
+			</filter>
+			<filter xpath="fn:contains($ctx:validId, '_')">
+				<then>
+					<payloadFactory media-type="json">
+						<format>
+                            {
+                                "result": {
+                                    "timestamp": "$1",
+                                    "resultCode": "$2",
+                                    "messageDescription": "$3",
+                                    "clientMessageDescription": "$4",
+                                    "totalRecords": $5,
+                                    "totalErrors": $6,
+                                    "message": "$7",
+                                    "status": $8,
+                                    "id": [
+                                        "$9"
+                                    ]
+                                }
+                            }
+						</format>
+						<args>
+							<arg evaluator="xml" expression="substring(get-property(&quot;SYSTEM_DATE&quot;,&quot;yyyyy-MM-dd'T'HH:mm:ss.SSS'+'00:00&quot;),2)" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validResultCode" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validMessageDescription" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validClientMessageDescription" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:totalRecords" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:totalErrors" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validMessage" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validStatus" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validId" literal="false"/>
+						</args>
+					</payloadFactory>
+				</then>
+				<else>
+					<payloadFactory media-type="json">
+						<format>
+                            {
+                                "result": {
+                                    "timestamp": "$1",
+                                    "resultCode": "$2",
+                                    "messageDescription": "$3",
+                                    "clientMessageDescription": "$4",
+                                    "totalRecords": $5,
+                                    "totalErrors": $6,
+                                    "message": "$7",
+                                    "status": $8,
+                                    "id": [
+                                        $9
+                                    ]
+                                }
+                            }
+						</format>
+						<args>
+							<arg evaluator="xml" expression="substring(get-property(&quot;SYSTEM_DATE&quot;,&quot;yyyyy-MM-dd'T'HH:mm:ss.SSS'+'00:00&quot;),2)" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validResultCode" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validMessageDescription" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validClientMessageDescription" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:totalRecords" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:totalErrors" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validMessage" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validStatus" literal="false"/>
+							<arg evaluator="xml" expression="$ctx:validId" literal="false"/>
+						</args>
+					</payloadFactory>
+				</else>
+			</filter>
+		</then>
+		<else>
+			<payloadFactory media-type="xml">
+				<format>
+					<result>
+						<timestamp>$1</timestamp>
+						<resultCode>$2</resultCode>
+						<messageDescription>$3</messageDescription>
+						<clientMessageDescription>$4</clientMessageDescription>
+						<totalRecords>$5</totalRecords>
+						<totalErrors>$6</totalErrors>
+						<hasmore>$7</hasmore>
+						<offset>$8</offset>
+						<message>$9</message>
+						<status>$10</status>
+					</result>
+				</format>
+				<args>
+					<arg evaluator="xml" expression="substring(get-property(&quot;SYSTEM_DATE&quot;,&quot;yyyyy-MM-dd'T'HH:mm:ss.SSS'+'00:00&quot;),2)" literal="false"/>
+					<arg evaluator="xml" expression="$ctx:validResultCode" literal="false"/>
+					<arg evaluator="xml" expression="$ctx:validMessageDescription" literal="false"/>
+					<arg evaluator="xml" expression="$ctx:validClientMessageDescription" literal="false"/>
+					<arg literal="false" value="0"/>
+					<arg literal="false" value="1"/>
+					<arg literal="false" value="false"/>
+					<arg literal="false" value="0"/>
+					<arg evaluator="xml" expression="$ctx:validMessage" literal="false"/>
+					<arg evaluator="xml" expression="$ctx:validStatus" literal="false"/>
+				</args>
+			</payloadFactory>
+		</else>
+	</filter>
+	<property name="HTTP_SC" scope="axis2" type="STRING" value="202"/>
+	<property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+	<respond/>
+</sequence>

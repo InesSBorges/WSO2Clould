@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="seq_messageOutput" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <dblookup>
+        <connection>
+            <pool>
+                <dsName>ds_sqlserver_CRUDSustIMS30</dsName>
+            </pool>
+        </connection>
+        <statement>
+            <sql><![CDATA[
+            		DECLARE @MessageDescription varchar(500),
+							@ClientMessageDescription varchar(500)
+							
+            		EXECUTE [ADM].[GetMessageResultOutput] 
+				   ?
+				  ,?
+				  ,@MessageDescription OUTPUT
+				  ,@ClientMessageDescription OUTPUT;
+				  
+				  SELECT @MessageDescription AS MessageDescription, 
+                       @ClientMessageDescription AS ClientMessageDescription;
+        ]]></sql>
+            <parameter expression="$ctx:validResultCode" type="VARCHAR" xmlns:ns="http://org.apache.synapse/xsd"/>
+            <parameter expression="$ctx:validUserLanguage" type="VARCHAR" xmlns:ns="http://org.apache.synapse/xsd"/>
+            <result column="MessageDescription" name="MessageDescription"/>
+            <result column="ClientMessageDescription" name="ClientMessageDescription"/>
+        </statement>
+    </dblookup>
+    <propertyGroup>
+        <property expression="$ctx:MessageDescription" name="validMessageDescription" scope="default" type="STRING"/>
+        <property expression="$ctx:ClientMessageDescription" name="validClientMessageDescription" scope="default" type="STRING"/>
+    </propertyGroup>
+</sequence>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="seq_languageDesc" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+    <filter regex="POST" source="$ctx:method" xmlns:ns="http://org.apache.synapse/xsd">
+        <then>
+            <xslt key="trans_postLanguageDescIn"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="inputLanguageDesc" type="property"/>
+            </enrich>
+            <sequence key="seq_language"/>
+            <payloadFactory media-type="xml">
+                <format>
+                    <result>$1</result>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:inputLanguageDesc"/>
+                </args>
+            </payloadFactory>
+            <xslt key="trans_postLanguageDescDBIn">
+                <property expression="$ctx:validIdLanguage" name="idLanguage"/>
+            </xslt>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8290/services/ds_ADMLanguageDesc">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="//*[local-name() = 'result'] = 1">
+                <then>
+                    <property expression="//*[local-name() = 'idOutput']" name="validIdLanguageDesc" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <propertyGroup>
+                        <property expression="//*[local-name() = 'resutCode']" name="validResultCode" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'message']" name="validMessage" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'status']" name="validStatus" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <sequence key="seq_messageOutput"/>
+                    <sequence key="seq_resultOutput"/>
+                </else>
+            </filter>
+        </then>
+        <else/>
+    </filter>
+    <filter regex="DELETE" source="$ctx:method" xmlns:ns="http://org.apache.synapse/xsd">
+        <then>
+            <property expression="$ctx:validIdLanguageDesc" name="validIdLanguageDesc" scope="default" type="STRING"/>
+            <payloadFactory media-type="xml">
+                <format>
+                    <dat:deleteLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:Operation>$1</dat:Operation>
+                        <dat:IdLanguageDesc>$2</dat:IdLanguageDesc>
+                    </dat:deleteLanguageDesc>
+                </format>
+                <args>
+                    <arg value="DELETE"/>
+                    <arg evaluator="xml" expression="$ctx:validIdLanguageDesc"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http format="soap12" method="post" uri-template="http://localhost:8290/services/ds_ADMLanguageDesc">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="//*[local-name() = 'result'] = 1">
+                <then>
+                    <property expression="$ctx:validIdLanguageDesc" name="validIdLanguageDesc" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <propertyGroup>
+                        <property expression="//*[local-name() = 'resutCode']" name="validResultCode" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'message']" name="validMessage" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'status']" name="validStatus" scope="default" type="STRING"/>
+                    </propertyGroup>
+                </else>
+            </filter>
+        </then>
+        <else/>
+    </filter>
+    <filter xmlns:ns="http://org.apache.synapse/xsd" xpath="$ctx:method = 'PUT'">
+        <then>
+            <xslt key="trans_putLanguageDescIn">
+                <property expression="$ctx:validUserLanguage" name="userLanguage"/>
+                <property expression="$ctx:validIdLanguage" name="idLanguage"/>
+            </xslt>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="inputLanguageDesc" type="property"/>
+            </enrich>
+            <sequence key="seq_language"/>
+            <payloadFactory media-type="xml">
+                <format>
+                    <dat:getLanguageDesc xmlns:dat="http://ws.wso2.org/dataservice">
+                        <dat:IdLanguageDesc>$1</dat:IdLanguageDesc>
+                    </dat:getLanguageDesc>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:idLanguageDesc"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8290/services/ds_ADMLanguageDesc">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="//*[local-name() = 'IdLanguageDesc'] >= 1">
+                <then>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="outputGetLanguageDesc" type="property"/>
+                    </enrich>
+                </then>
+                <else>
+                    <propertyGroup>
+                        <property name="validResultCode" scope="default" type="STRING" value="SustIMS0151"/>
+                        <property name="validMessage" scope="default" type="STRING" value="OK"/>
+                        <property name="validStatus" scope="default" type="STRING" value="202"/>
+                    </propertyGroup>
+                </else>
+            </filter>
+            <payloadFactory media-type="xml">
+                <format>
+                    <returns>
+                        <resultInput>$1</resultInput>
+                        <resultDB>$2</resultDB>
+                    </returns>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:inputLanguageDesc"/>
+                    <arg evaluator="xml" expression="$ctx:outputGetLanguageDesc"/>
+                </args>
+            </payloadFactory>
+            <xslt key="trans_putLanguageDescDBIn">
+                <property expression="$ctx:idLanguageDesc" name="idLanguageDesc"/>
+                <property expression="$ctx:validIdLanguage" name="idLanguage"/>
+            </xslt>
+            <call blocking="true">
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8290/services/ds_ADMLanguageDesc">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <filter regex="true" source="//*[local-name() = 'result'] = 1">
+                <then>
+                    <property expression="$ctx:validIdLanguageDesc" name="validIdLanguageDesc" scope="default" type="STRING"/>
+                </then>
+                <else>
+                    <propertyGroup>
+                        <property expression="//*[local-name() = 'resutCode']" name="validResultCode" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'message']" name="validMessage" scope="default" type="STRING"/>
+                        <property expression="//*[local-name() = 'status']" name="validStatus" scope="default" type="STRING"/>
+                    </propertyGroup>
+                </else>
+            </filter>
+        </then>
+        <else/>
+    </filter>
+</sequence>
