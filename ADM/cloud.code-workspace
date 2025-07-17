@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "name": "vrs",
+            "path": "../VRS"
+        },
+        {
+            "name": "admcalculationtypevscode",
+            "path": "ADMCalculationType"
+        }
+    ]
+}

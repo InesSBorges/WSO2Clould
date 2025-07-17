@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="trans_putADMCalculationTypeDBIn" xmlns="http://ws.apache.org/ns/synapse">
+    <xsl:stylesheet version="2.0" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:param name="idCalculationType"/>
+        <xsl:template match="/">
+            <dat:putCalculationType xmlns:dat="http://ws.wso2.org/dataservice">
+                <dat:Operation>UPDATE</dat:Operation>
+                <dat:User>
+                    <xsl:value-of select="//*[local-name() = 'operationUser']"/>
+                </dat:User>
+                <dat:IdCalculationType>
+                    <xsl:value-of select="$idCalculationType"/>
+                </dat:IdCalculationType>
+                <xsl:if test="string-length(//*[local-name() = 'calculationTypeCode']) > 0">
+                    <dat:CalculationTypeCode>
+                        <xsl:value-of select="//*[local-name() = 'calculationTypeCode']"/>
+                    </dat:CalculationTypeCode>
+                </xsl:if>
+                <xsl:if test="string-length(//*[local-name() = 'formula']) > 0">
+                    <dat:Formula>
+                        <xsl:value-of select="//*[local-name() = 'formula']"/>
+                    </dat:Formula>
+                </xsl:if>
+                <xsl:if test="string-length(//*[local-name() = 'active']) > 0">
+                    <dat:Active>
+                        <xsl:value-of select="//*[local-name() = 'active']"/>
+                    </dat:Active>
+                </xsl:if>
+            </dat:putCalculationType>
+        </xsl:template>
+    </xsl:stylesheet>
+</localEntry>
