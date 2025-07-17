@@ -364,13 +364,11 @@
              <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
                 <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
           </propertyGroup>
-          <payloadFactory media-type="xml" description="deleteUser">
-             <format>
-                <dat:deleteCalculationType xmlns:dat="http://ws.wso2.org/dataservice">
-                   <dat:Operation>$1</dat:Operation>
-                   <dat:IdCalculationType>$2</dat:IdCalculationType>
-                </dat:deleteCalculationType>
-             </format>
+          <payloadFactory media-type="json" description="deleteUser">
+             <format>{
+                "Operation": "$1",
+                "IdCalculationType": "$2"
+             }</format>
              <args>
                 <arg value="DELETE"/>
                 <arg evaluator="xml" expression="$ctx:inputId"/>
