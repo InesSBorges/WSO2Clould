@@ -13,7 +13,12 @@
                 <property expression="get-property('axis2', 'HTTP_METHOD')" name="method" scope="default" type="STRING"/>
                 <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
             </propertyGroup>
-            <sequence key="seq_validateUserLanguage"/>
+            <!-- Call Ballerina seq_validateUserLanguage -->
+            <call>
+                <endpoint>
+                    <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+                </endpoint>
+            </call>
             <payloadFactory media-type="xml">
                <format>
                   <empty/>
@@ -59,8 +64,18 @@
                   <property name="validMessage" value="OK" scope="default" type="STRING"/>
                   <property name="validStatus" value="202" scope="default" type="STRING"/>
                </propertyGroup>
-               <sequence key="seq_messageOutput"/>
-               <sequence key="seq_resultOutput"/>
+               <!-- Call Ballerina seq_messageOutput -->
+               <call>
+                  <endpoint>
+                     <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                  </endpoint>
+               </call>
+               <!-- Call Ballerina seq_resultOutput -->
+               <call>
+                  <endpoint>
+                     <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                  </endpoint>
+               </call>
             </else>
          </filter>
         </inSequence>
@@ -79,12 +94,22 @@
             <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
             <property name="messageType" value="application/xml" scope="axis2" type="STRING"/>
          </propertyGroup>
-         <sequence key="seq_validateUserLanguage"/>
+         <!-- Call Ballerina seq_validateUserLanguage -->
+         <call>
+            <endpoint>
+               <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+            </endpoint>
+         </call>
          <enrich description="restore input">
             <source type="property" clone="true" property="input"/>
             <target type="body"/>
          </enrich>
-         <sequence key="seq_tableDesc"/>
+         <!-- Call Ballerina seq_tableDesc -->
+         <call>
+            <endpoint>
+               <http method="POST" uri-template="http://localhost:8084/seq_tableDesc"/>
+            </endpoint>
+         </call>
          <enrich description="restore input">
             <source type="property" clone="true" property="input"/>
             <target type="body"/>
@@ -106,8 +131,18 @@
                   <property name="totalRecords" value="1" scope="default" type="STRING"/>
                   <property name="validId" expression="//*[local-name() = 'idOutput']" scope="default" type="STRING"/>
                </propertyGroup>
-               <sequence key="seq_messageOutput"/>
-               <sequence key="seq_resultOutput"/>
+               <!-- Call Ballerina seq_messageOutput -->
+               <call>
+                  <endpoint>
+                     <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                  </endpoint>
+               </call>
+               <!-- Call Ballerina seq_resultOutput -->
+               <call>
+                  <endpoint>
+                     <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                  </endpoint>
+               </call>
                <propertyGroup>
                   <property name="HTTP_SC" value="200" scope="axis2" type="STRING"/>
                   <property name="messageType" value="application/json" scope="axis2" type="STRING"/>
@@ -125,16 +160,30 @@
                      <property name="idTableDesc" expression="$ctx:validIdTableDesc" scope="default" type="STRING"/>
                      <property name="method" value="DELETE" scope="default" type="STRING"/>
                   </propertyGroup>
-                  <!-- output -->
-                     <sequence key="seq_tableDesc"/>
-                     <sequence key="seq_messageOutput"/>
-                     <sequence key="seq_resultOutput"/>
-                  </else>
-               </filter>
-            </inSequence>
-            <outSequence/>
-            <faultSequence/>
-         </resource>
+                  <!-- Call Ballerina seq_tableDesc for rollback -->
+                  <call>
+                     <endpoint>
+                        <http method="DELETE" uri-template="http://localhost:8084/seq_tableDesc"/>
+                     </endpoint>
+                  </call>
+                  <!-- Call Ballerina seq_messageOutput -->
+                  <call>
+                     <endpoint>
+                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                     </endpoint>
+                  </call>
+                  <!-- Call Ballerina seq_resultOutput -->
+                  <call>
+                     <endpoint>
+                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                     </endpoint>
+                  </call>
+            </else>
+         </filter>
+      </inSequence>
+      <outSequence/>
+      <faultSequence/>
+   </resource>
    <resource methods="PUT" uri-template="/{id}">
         <inSequence>
             <property name="inputId" expression="get-property('uri.var.id')" scope="default" type="STRING"/>
@@ -170,7 +219,12 @@
                 <source type="body" clone="true"/>
                 <target type="property" property="input"/>
             </enrich>
-            <sequence key="seq_validateUserLanguage"/>
+            <!-- Call Ballerina seq_validateUserLanguage -->
+            <call>
+                <endpoint>
+                    <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+                </endpoint>
+            </call>
             <enrich description="restore input">
                 <source type="property" clone="true" property="input"/>
                 <target type="body"/>
@@ -196,15 +250,30 @@
                                 <property name="validMessage" value="OK" scope="default" type="STRING"/>
                                 <property name="validStatus" value="202" scope="default" type="STRING"/>
                             </propertyGroup>
-                            <sequence key="seq_messageOutput"/>
-                            <sequence key="seq_resultOutput"/>
+                            <!-- Call Ballerina seq_messageOutput -->
+                            <call>
+                                <endpoint>
+                                    <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                                </endpoint>
+                            </call>
+                            <!-- Call Ballerina seq_resultOutput -->
+                            <call>
+                                <endpoint>
+                                    <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                                </endpoint>
+                            </call>
                         </else>
                     </filter>
                     <enrich description="restore input">
                         <source type="property" clone="true" property="input"/>
                         <target type="body"/>
                     </enrich>
-                    <sequence key="seq_tableDesc"/>
+                    <!-- Call Ballerina seq_tableDesc -->
+                    <call>
+                        <endpoint>
+                            <http method="PUT" uri-template="http://localhost:8084/seq_tableDesc"/>
+                        </endpoint>
+                    </call>
                     <enrich description="restore input">
                         <source type="property" clone="true" property="input"/>
                         <target type="body"/>
@@ -234,8 +303,18 @@
                         <property name="totalRecords" value="1" scope="default" type="STRING"/>
                         <property name="validId" expression="//*[local-name() = 'idOutput']" scope="default" type="STRING"/>
                     </propertyGroup>
-                    <sequence key="seq_messageOutput"/>
-                    <sequence key="seq_resultOutput"/>
+                    <!-- Call Ballerina seq_messageOutput -->
+                    <call>
+                        <endpoint>
+                            <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                        </endpoint>
+                    </call>
+                    <!-- Call Ballerina seq_resultOutput -->
+                    <call>
+                        <endpoint>
+                            <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                        </endpoint>
+                    </call>
                     <propertyGroup>
                         <property name="HTTP_SC" value="200" scope="axis2" type="STRING"/>
                         <property name="messageType" value="application/json" scope="axis2" type="STRING"/>
@@ -252,12 +331,27 @@
                     <filter source="$ctx:updateTableDesc = 'true'" regex="true">
                         <then>
                             <property name="idTableDesc" expression="$ctx:validIdTableDesc" scope="default" type="STRING"/>
-                            <sequence key="seq_tableDesc"/>
+                            <!-- Call Ballerina seq_tableDesc for rollback -->
+                            <call>
+                                <endpoint>
+                                    <http method="DELETE" uri-template="http://localhost:8084/seq_tableDesc"/>
+                                </endpoint>
+                            </call>
                         </then>
                         <else/>
                     </filter>
-                    <sequence key="seq_messageOutput"/>
-                    <sequence key="seq_resultOutput"/>
+                    <!-- Call Ballerina seq_messageOutput -->
+                    <call>
+                        <endpoint>
+                            <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                        </endpoint>
+                    </call>
+                    <!-- Call Ballerina seq_resultOutput -->
+                    <call>
+                        <endpoint>
+                            <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                        </endpoint>
+                    </call>
                 </else>
             </filter>
         </inSequence>
@@ -298,8 +392,18 @@
                    <property name="totalRecords" value="1" scope="default" type="STRING"/>
                    <property name="validId" expression="//*[local-name() = 'idOutput']" scope="default" type="STRING"/>
                 </propertyGroup>
-                <sequence key="seq_messageOutput"/>
-                <sequence key="seq_resultOutput"/>
+                <!-- Call Ballerina seq_messageOutput -->
+                <call>
+                    <endpoint>
+                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                    </endpoint>
+                </call>
+                <!-- Call Ballerina seq_resultOutput -->
+                <call>
+                    <endpoint>
+                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                    </endpoint>
+                </call>
                 <propertyGroup>
                    <property name="HTTP_SC" value="200" scope="axis2" type="STRING"/>
                    <property name="messageType" value="application/json" scope="axis2" type="STRING"/>
@@ -312,8 +416,18 @@
                    <property name="validMessage" expression="//*[local-name() = 'message']" scope="default" type="STRING"/>
                    <property name="validStatus" expression="//*[local-name() = 'status']" scope="default" type="STRING"/>
                 </propertyGroup>
-                <sequence key="seq_messageOutput"/>
-                <sequence key="seq_resultOutput"/>
+                <!-- Call Ballerina seq_messageOutput -->
+                <call>
+                    <endpoint>
+                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                    </endpoint>
+                </call>
+                <!-- Call Ballerina seq_resultOutput -->
+                <call>
+                    <endpoint>
+                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                    </endpoint>
+                </call>
              </else>
           </filter>
        </inSequence>
