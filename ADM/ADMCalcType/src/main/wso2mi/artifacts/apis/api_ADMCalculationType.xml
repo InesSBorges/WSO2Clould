@@ -16,7 +16,7 @@
             <!-- Call Ballerina seq_validateUserLanguage -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_validateUserLanguage"/>
                 </endpoint>
             </call>
             <payloadFactory media-type="xml">
@@ -35,7 +35,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="post" uri-template="http://localhost:8080/dsADMCalculationType-module">
+                    <http method="post" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>-1</progressionFactor>
@@ -67,13 +67,13 @@
                <!-- Call Ballerina seq_messageOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                     <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                   </endpoint>
                </call>
                <!-- Call Ballerina seq_resultOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                     <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                   </endpoint>
                </call>
             </else>
@@ -97,7 +97,7 @@
          <!-- Call Ballerina seq_validateUserLanguage -->
          <call>
             <endpoint>
-               <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+               <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_validateUserLanguage"/>
             </endpoint>
          </call>
          <enrich description="restore input">
@@ -107,7 +107,7 @@
          <!-- Call Ballerina seq_tableDesc -->
          <call>
             <endpoint>
-               <http method="POST" uri-template="http://localhost:8084/seq_tableDesc"/>
+               <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_tableDesc"/>
             </endpoint>
          </call>
          <enrich description="restore input">
@@ -119,7 +119,7 @@
          </xslt>
          <call blocking="true">
             <endpoint>
-               <http method="POST" uri-template="http://localhost:8080/dsADMCalculationType-module"/>
+               <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module"/>
             </endpoint>
          </call>
          <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -134,13 +134,13 @@
                <!-- Call Ballerina seq_messageOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                     <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                   </endpoint>
                </call>
                <!-- Call Ballerina seq_resultOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                     <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                   </endpoint>
                </call>
                <propertyGroup>
@@ -163,19 +163,19 @@
                   <!-- Call Ballerina seq_tableDesc for rollback -->
                   <call>
                      <endpoint>
-                        <http method="DELETE" uri-template="http://localhost:8084/seq_tableDesc"/>
+                        <http method="DELETE" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_tableDesc"/>
                      </endpoint>
                   </call>
                   <!-- Call Ballerina seq_messageOutput -->
                   <call>
                      <endpoint>
-                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                      </endpoint>
                   </call>
                   <!-- Call Ballerina seq_resultOutput -->
                   <call>
                      <endpoint>
-                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                      </endpoint>
                   </call>
             </else>
@@ -222,7 +222,7 @@
             <!-- Call Ballerina seq_validateUserLanguage -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="http://localhost:8085/seq_validateUserLanguage"/>
+                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_validateUserLanguage"/>
                 </endpoint>
             </call>
             <enrich description="restore input">
@@ -253,13 +253,13 @@
                             <!-- Call Ballerina seq_messageOutput -->
                             <call>
                                 <endpoint>
-                                    <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                                 </endpoint>
                             </call>
                             <!-- Call Ballerina seq_resultOutput -->
                             <call>
                                 <endpoint>
-                                    <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                                 </endpoint>
                             </call>
                         </else>
@@ -271,7 +271,7 @@
                     <!-- Call Ballerina seq_tableDesc -->
                     <call>
                         <endpoint>
-                            <http method="PUT" uri-template="http://localhost:8084/seq_tableDesc"/>
+                            <http method="PUT" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_tableDesc"/>
                         </endpoint>
                     </call>
                     <enrich description="restore input">
@@ -291,7 +291,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="POST" uri-template="http://localhost:8080/dsADMCalculationType-module"/>
+                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module"/>
                 </endpoint>
             </call>
             <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -306,13 +306,13 @@
                     <!-- Call Ballerina seq_messageOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                            <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                         </endpoint>
                     </call>
                     <!-- Call Ballerina seq_resultOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                            <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                         </endpoint>
                     </call>
                     <propertyGroup>
@@ -334,7 +334,7 @@
                             <!-- Call Ballerina seq_tableDesc for rollback -->
                             <call>
                                 <endpoint>
-                                    <http method="DELETE" uri-template="http://localhost:8084/seq_tableDesc"/>
+                                    <http method="DELETE" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_tableDesc"/>
                                 </endpoint>
                             </call>
                         </then>
@@ -343,13 +343,13 @@
                     <!-- Call Ballerina seq_messageOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                            <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                         </endpoint>
                     </call>
                     <!-- Call Ballerina seq_resultOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                            <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                         </endpoint>
                     </call>
                 </else>
@@ -380,7 +380,7 @@
           </payloadFactory>
           <call blocking="true">
              <endpoint>
-                <http method="POST" uri-template="http://localhost:8080/dsADMCalculationType-module"/>
+                <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module"/>
              </endpoint>
           </call>
           <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -395,13 +395,13 @@
                 <!-- Call Ballerina seq_messageOutput -->
                 <call>
                     <endpoint>
-                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                     </endpoint>
                 </call>
                 <!-- Call Ballerina seq_resultOutput -->
                 <call>
                     <endpoint>
-                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                     </endpoint>
                 </call>
                 <propertyGroup>
@@ -419,13 +419,13 @@
                 <!-- Call Ballerina seq_messageOutput -->
                 <call>
                     <endpoint>
-                        <http method="POST" uri-template="http://localhost:8082/seq_messageOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                     </endpoint>
                 </call>
                 <!-- Call Ballerina seq_resultOutput -->
                 <call>
                     <endpoint>
-                        <http method="POST" uri-template="http://localhost:8083/seq_resultOutput"/>
+                        <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                     </endpoint>
                 </call>
              </else>
