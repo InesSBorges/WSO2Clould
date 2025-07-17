@@ -30,7 +30,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="post" uri-template="http://localhost:8290/services/ds_ADMCalculationType/">
+                    <http method="post" uri-template="dsADMCalculationType-module">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>-1</progressionFactor>
@@ -94,7 +94,7 @@
          </xslt>
          <call blocking="true">
             <endpoint>
-               <http method="POST" uri-template="http://localhost:8290/services/ds_ADMCalculationType/"/>
+               <http method="POST" uri-template="dsADMCalculationType-module"/>
             </endpoint>
          </call>
          <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -222,7 +222,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="POST" uri-template="http://localhost:8290/services/ds_ADMCalculationType/"/>
+                    <http method="POST" uri-template="dsADMCalculationType-module"/>
                 </endpoint>
             </call>
             <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -286,7 +286,7 @@
           </payloadFactory>
           <call blocking="true">
              <endpoint>
-                <http method="POST" uri-template="http://localhost:8290/services/ds_ADMCalculationType/"/>
+                <http method="POST" uri-template="dsADMCalculationType-module"/>
              </endpoint>
           </call>
           <filter source="//*[local-name() = 'result'] = 1" regex="true">
