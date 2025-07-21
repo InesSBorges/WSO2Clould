@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/ADM_REST/CalculationType" name="api_ADMCalculationType" xmlns="http://ws.apache.org/ns/synapse">
+<api xmlns="http://ws.apache.org/ns/synapse" context="/ADM_REST/CalculationType" name="api_ADMCalculationType">
    <resource methods="GET">
         <inSequence>
             <propertyGroup description="input">
@@ -376,7 +376,7 @@
       </payloadFactory>
       <call blocking="true">
          <endpoint>
-            <http method="POST" uri-template="https://your-choreo-endpoint/your-delete-service"/>
+            <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/dsADMCalculationType-module"/>
          </endpoint>
       </call>
       <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -396,13 +396,13 @@
             <!-- Call Ballerina seq_messageOutput -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://your-choreo-endpoint/seq_messageOutput"/>
+                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_messageOutput"/>
                 </endpoint>
             </call>
             <!-- Call Ballerina seq_resultOutput -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://your-choreo-endpoint/seq_resultOutput"/>
+                    <http method="POST" uri-template="https://89b92d45-608d-44ce-8133-88e683e51def-dev.e1-eu-north-azure.choreoapis.dev/seq_resultOutput"/>
                 </endpoint>
             </call>
          </else>
