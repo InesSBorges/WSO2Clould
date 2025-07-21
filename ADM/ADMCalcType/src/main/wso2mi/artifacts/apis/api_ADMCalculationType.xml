@@ -16,7 +16,7 @@
             <!-- Call Ballerina seq_validateUserLanguage -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://localhost/seq_validateUserLanguage"/>
+                    <http method="POST" uri-template="https://localhost:8085/validateUserLanguage"/>
                 </endpoint>
             </call>
             <payloadFactory media-type="json">
@@ -33,7 +33,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="post" uri-template="https://localhost/dsADMCalculationType-module">
+                    <http method="post" uri-template="https://localhost:8080/calculation">
                         <suspendOnFailure>
                             <initialDuration>-1</initialDuration>
                             <progressionFactor>-1</progressionFactor>
@@ -65,13 +65,13 @@
                <!-- Call Ballerina seq_messageOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                     <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                   </endpoint>
                </call>
                <!-- Call Ballerina seq_resultOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                     <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                   </endpoint>
                </call>
             </else>
@@ -95,7 +95,7 @@
          <!-- Call Ballerina seq_validateUserLanguage -->
          <call>
             <endpoint>
-               <http method="POST" uri-template="https://localhost/seq_validateUserLanguage"/>
+               <http method="POST" uri-template="https://localhost:8085/validateUserLanguage"/>
             </endpoint>
          </call>
          <enrich description="restore input">
@@ -105,7 +105,7 @@
          <!-- Call Ballerina seq_tableDesc -->
          <call>
             <endpoint>
-               <http method="POST" uri-template="https://localhost/seq_tableDesc"/>
+               <http method="POST" uri-template="https://localhost:8084/tableDesc"/>
             </endpoint>
          </call>
          <enrich description="restore input">
@@ -117,7 +117,7 @@
          </xslt>
          <call blocking="true">
             <endpoint>
-               <http method="POST" uri-template="https://localhost/dsADMCalculationType-module"/>
+               <http method="POST" uri-template="https://localhost:8080/calculation"/>
             </endpoint>
          </call>
          <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -132,13 +132,13 @@
                <!-- Call Ballerina seq_messageOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                     <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                   </endpoint>
                </call>
                <!-- Call Ballerina seq_resultOutput -->
                <call>
                   <endpoint>
-                     <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                     <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                   </endpoint>
                </call>
                <propertyGroup>
@@ -161,19 +161,19 @@
                   <!-- Call Ballerina seq_tableDesc for rollback -->
                   <call>
                      <endpoint>
-                        <http method="DELETE" uri-template="https://localhost/seq_tableDesc"/>
+                        <http method="DELETE" uri-template="https://localhost:8084/tableDesc"/>
                      </endpoint>
                   </call>
                   <!-- Call Ballerina seq_messageOutput -->
                   <call>
                      <endpoint>
-                        <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                        <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                      </endpoint>
                   </call>
                   <!-- Call Ballerina seq_resultOutput -->
                   <call>
                      <endpoint>
-                        <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                        <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                      </endpoint>
                   </call>
             </else>
@@ -220,7 +220,7 @@
             <!-- Call Ballerina seq_validateUserLanguage -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://localhost/seq_validateUserLanguage"/>
+                    <http method="POST" uri-template="https://localhost:8085/validateUserLanguage"/>
                 </endpoint>
             </call>
             <enrich description="restore input">
@@ -251,13 +251,13 @@
                             <!-- Call Ballerina seq_messageOutput -->
                             <call>
                                 <endpoint>
-                                    <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                                    <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                                 </endpoint>
                             </call>
                             <!-- Call Ballerina seq_resultOutput -->
                             <call>
                                 <endpoint>
-                                    <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                                    <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                                 </endpoint>
                             </call>
                         </else>
@@ -269,7 +269,7 @@
                     <!-- Call Ballerina seq_tableDesc -->
                     <call>
                         <endpoint>
-                            <http method="PUT" uri-template="https://localhost/seq_tableDesc"/>
+                            <http method="PUT" uri-template="https://localhost:8084/tableDesc"/>
                         </endpoint>
                     </call>
                     <enrich description="restore input">
@@ -289,7 +289,7 @@
             </xslt>
             <call blocking="true">
                 <endpoint>
-                    <http method="POST" uri-template="https://localhost/dsADMCalculationType-module"/>
+                    <http method="POST" uri-template="https://localhost:8080/calculation"/>
                 </endpoint>
             </call>
             <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -304,13 +304,13 @@
                     <!-- Call Ballerina seq_messageOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                            <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                         </endpoint>
                     </call>
                     <!-- Call Ballerina seq_resultOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                            <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                         </endpoint>
                     </call>
                     <propertyGroup>
@@ -332,7 +332,7 @@
                             <!-- Call Ballerina seq_tableDesc for rollback -->
                             <call>
                                 <endpoint>
-                                    <http method="DELETE" uri-template="https://localhost/seq_tableDesc"/>
+                                    <http method="DELETE" uri-template="https://localhost:8084/tableDesc"/>
                                 </endpoint>
                             </call>
                         </then>
@@ -341,13 +341,13 @@
                     <!-- Call Ballerina seq_messageOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                            <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                         </endpoint>
                     </call>
                     <!-- Call Ballerina seq_resultOutput -->
                     <call>
                         <endpoint>
-                            <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                            <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                         </endpoint>
                     </call>
                 </else>
@@ -376,7 +376,7 @@
       </payloadFactory>
       <call blocking="true">
          <endpoint>
-            <http method="POST" uri-template="https://localhost/dsADMCalculationType-module"/>
+            <http method="POST" uri-template="https://localhost:8080/calculation"/>
          </endpoint>
       </call>
       <filter source="//*[local-name() = 'result'] = 1" regex="true">
@@ -396,13 +396,13 @@
             <!-- Call Ballerina seq_messageOutput -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://localhost/seq_messageOutput"/>
+                    <http method="POST" uri-template="https://localhost:8082/messageOutput"/>
                 </endpoint>
             </call>
             <!-- Call Ballerina seq_resultOutput -->
             <call>
                 <endpoint>
-                    <http method="POST" uri-template="https://localhost/seq_resultOutput"/>
+                    <http method="POST" uri-template="https://localhost:8083/resultOutput"/>
                 </endpoint>
             </call>
          </else>
