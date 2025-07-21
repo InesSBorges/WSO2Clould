@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api xmlns="http://ws.apache.org/ns/synapse" context="/ADM_REST/CalculationType" name="api_ADMCalculationType">
+<api xmlns="http://ws.apache.org/ns/synapse" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ws.apache.org/ns/synapse http://ws.apache.org/ns/synapse/synapse_api.xsd" context="/ADM_REST/CalculationType" name="api_ADMCalculationType">
    <resource methods="GET">
         <inSequence>
             <propertyGroup description="input">
@@ -11,7 +11,7 @@
                 <property expression="$ctx:query.param.pageSize" name="inputPageSize" scope="default" type="STRING"/>
                 <property expression="$ctx:query.param.active" name="inputActive" scope="default" type="STRING"/>
                 <property expression="get-property('axis2', 'HTTP_METHOD')" name="method" scope="default" type="STRING"/>
-                <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+                <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
             </propertyGroup>
             <!-- Call Ballerina seq_validateUserLanguage -->
             <call>
@@ -90,7 +90,7 @@
             <property name="operationUser" expression="//*[local-name() = 'operationUser']" scope="default" type="STRING"/>
             <property name="userLanguage" expression="//*[local-name() = 'userLanguage']" scope="default" type="STRING"/>
             <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
-            <property name="messageType" value="application/xml" scope="axis2" type="STRING"/>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
          </propertyGroup>
          <!-- Call Ballerina seq_validateUserLanguage -->
          <call>
@@ -210,7 +210,7 @@
                 <property name="operationUser" expression="//*[local-name() = 'operationUser']" scope="default" type="STRING"/>
                 <property name="userLanguage" expression="//*[local-name() = 'userLanguage']" scope="default" type="STRING"/>
                 <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
-                <property name="messageType" value="application/xml" scope="axis2" type="STRING"/>
+                <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                 <property name="ds_ADMTableDesc" value="http://localhost:8290/services/ds_ADMTableDesc" scope="default" type="STRING"/>
             </propertyGroup>
             <enrich description="input">
@@ -362,7 +362,7 @@
       <propertyGroup description="input">
          <property name="inputId" expression="get-property('uri.var.id')" scope="default" type="STRING"/>
          <property name="method" expression="get-property('axis2', 'HTTP_METHOD')" scope="default" type="STRING"/>
-            <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+         <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
       </propertyGroup>
       <payloadFactory media-type="json" description="deleteUser">
          <format>{
